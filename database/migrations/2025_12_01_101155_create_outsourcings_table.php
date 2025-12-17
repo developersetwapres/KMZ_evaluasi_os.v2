@@ -1,0 +1,37 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('outsourcings', function (Blueprint $table) {
+            $table->id();
+
+            $table->uuid('uuid')->unique();
+            $table->string('name', 250);
+            $table->string('image', 255);
+            $table->foreignId('jabatan_id')->nullable()->constrained()->nullOnDelete();
+            // $table->foreignId('nrp_os', 100)->constrained('users')->unique();
+            $table->string('nrp_os', 191)->nullable();
+            $table->string('kode_biro', 191)->nullable();
+            $table->enum('status', ['aktif', 'nonaktif'])->default('aktif');
+
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('outsourcings');
+    }
+};

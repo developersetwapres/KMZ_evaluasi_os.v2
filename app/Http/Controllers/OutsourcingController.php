@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\outsourcing;
-use App\Http\Requests\StoreoutsourcingRequest;
-use App\Http\Requests\UpdateoutsourcingRequest;
+use App\Models\Outsourcing;
+use App\Http\Requests\StoreOutsourcingRequest;
+use App\Http\Requests\UpdateOutsourcingRequest;
+use App\Services\Penilaian\AspectEvaluationService;
+use App\Services\Penilaian\RekapHasilService;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class OutsourcingController extends Controller
 {
@@ -27,7 +31,7 @@ class OutsourcingController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreoutsourcingRequest $request)
+    public function store(StoreOutsourcingRequest $request)
     {
         //
     }
@@ -35,7 +39,7 @@ class OutsourcingController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(outsourcing $outsourcing)
+    public function show(Outsourcing $Outsourcing)
     {
         //
     }
@@ -43,7 +47,7 @@ class OutsourcingController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(outsourcing $outsourcing)
+    public function edit(Outsourcing $Outsourcing)
     {
         //
     }
@@ -51,7 +55,7 @@ class OutsourcingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateoutsourcingRequest $request, outsourcing $outsourcing)
+    public function update(UpdateOutsourcingRequest $request, Outsourcing $Outsourcing)
     {
         //
     }
@@ -59,8 +63,67 @@ class OutsourcingController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(outsourcing $outsourcing)
+    public function destroy(Outsourcing $Outsourcing)
     {
         //
+    }
+
+    public function rekaphasil(): Response
+    {
+        $Outsourcings = Outsourcing::with([
+            'penugasan.bobotSkor',
+            'penugasan.penilian.kriteria.aspek.bobotSkor',
+        ])->where('status', 'aktif')->get();
+
+        $evaluationResults = $Outsourcings->map(function ($os) {
+            return [
+                'id' => $os->id,
+                'name' => $os->name,
+                'uuid' => $os->uuid,
+                'image' => $os->image,
+                'jabatan' => $os->jabatan->nama_jabatan,
+                ...app(RekapHasilService::class)->hitung($os->penugasan),
+            ];
+        });
+
+        $data = [
+            'evaluationResults' => $evaluationResults,
+        ];
+
+        return Inertia::render('admin/rekaphasil/page', $data);
+    }
+
+
+    public function detailByAspekEvaluator(Outsourcing $outsourcing): Response
+    {
+        $outsourcing->load([
+            'penugasan.bobotSkor',
+            'penugasan.penilian.kriteria.aspek.bobotSkor',
+        ]);
+
+
+        $data = [
+            'rekapAspekEvaluator' => [
+                'id' => $outsourcing->id,
+                'name' => $outsourcing->name,
+                'uuid' => $outsourcing->uuid,
+                'image' => $outsourcing->image,
+                'jabatan' => $outsourcing->jabatan->nama_jabatan,
+                ...app(RekapHasilService::class)
+                    ->hitung($outsourcing->penugasan->load('evaluators'))
+            ]
+        ];
+
+        return Inertia::render('admin/detail/detailaspekevaluator', $data);
+    }
+
+    public function detailByAspek(Outsourcing $outsourcing, AspectEvaluationService $service): Response
+    {
+
+        $data = [
+            'peraspek' =>  $service->getDetailByAspek($outsourcing)
+        ];
+
+        return Inertia::render('admin/detail/detailperaspek', $data);
     }
 }

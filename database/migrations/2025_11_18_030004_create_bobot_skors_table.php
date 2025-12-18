@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('aspeks', function (Blueprint $table) {
+        Schema::create('bobot_skors', function (Blueprint $table) {
             $table->id();
 
-            $table->string('title', 100)->unique();
-            $table->foreignId('bobot_skor_id')->constrained('bobot_skors')->onDelete('cascade')->onUpdate('cascade');
-            $table->text('deskripsi')->nullable();
+            $table->foreignId('siklus_id')->constrained('sikluses')->cascadeOnDelete();
+            $table->string('title');
+            $table->decimal('bobot', 5, 2)->comment('Bobot penilai dalam persen');
 
             $table->timestamps();
         });
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('aspeks');
+        Schema::dropIfExists('bobot_skors');
     }
 };

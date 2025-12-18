@@ -16,8 +16,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Jabatan::factory(50)->create();
+        Siklus::factory(5)->create();
 
         $this->call([
+            BobotSkorSeeder::class,
             AspekSeeder::class,
             KriteriaSeeder::class,
             JabatanSeeder::class,
@@ -31,7 +33,6 @@ class DatabaseSeeder extends Seeder
         User::factory(30)->asOutsourcing()->create();
         User::factory(30)->asPegawai()->create();
 
-        Siklus::factory(5)->create();
         // PenugasanPenilai::factory(100)->create();
     }
 }

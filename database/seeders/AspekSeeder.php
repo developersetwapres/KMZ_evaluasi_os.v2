@@ -15,24 +15,19 @@ class AspekSeeder extends Seeder
     {
         $datas = [
             [
-                'title' => 'Aspek Perilaku',
-                'bobot' => 0.4,
-                'deskripsi' => 'Penilaian terhadap sikap, disiplin, dan perilaku kerja sehari-hari.',
-            ],
-            [
                 'title' => 'Aspek teknis dan kualitas kerja',
-                'bobot' => 0.6,
+                'bobot_skor_id' => 1,
                 'deskripsi' => 'Penilaian terhadap kemampuan teknis dan profesional dalam menjalankan tugas.',
             ],
-
+            [
+                'title' => 'Aspek Perilaku',
+                'bobot_skor_id' => 2,
+                'deskripsi' => 'Penilaian terhadap sikap, disiplin, dan perilaku kerja sehari-hari.',
+            ],
         ];
 
         foreach ($datas as $key => $value) {
-            Aspek::create([
-                'title' => $value['title'],
-                'bobot' => $value['bobot'],
-                'deskripsi' => $value['deskripsi'],
-            ]);
+            Aspek::create($value);
         }
     }
 }

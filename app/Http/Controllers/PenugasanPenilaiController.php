@@ -21,7 +21,7 @@ class PenugasanPenilaiController extends Controller
 
     public function index(): Response
     {
-        $siklus = Siklus::where('aktif', 1)->first();
+        $siklus = Siklus::where('is_active', 1)->first();
 
         if (!$siklus) {
             ['message' => 'Tidak ada siklus aktif'];

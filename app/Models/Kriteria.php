@@ -14,11 +14,15 @@ class Kriteria extends Model
     use HasFactory;
     use HasUuid;
 
+    //--------------- BelongsTo-----------------------
     public function aspek(): BelongsTo
     {
         return $this->belongsTo(Aspek::class, 'aspek_id');
     }
 
+
+
+    //--------------- HasMany------------------------------
     public function penilaian(): HasMany
     {
         return $this->hasMany(Penilaian::class);

@@ -15,11 +15,12 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
 
+            $table->foreignId('bobot_skor_id')->constrained('bobot_skors')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('siklus_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('outsourcing_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('penilai_id')->nullable()->constrained('users')->nullOnDelete()->onUpdate('cascade');
+            $table->foreignId('penilai_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
             $table->enum('tipe_penilai', ['atasan', 'penerima_layanan', 'teman']);
-            $table->decimal('bobot_penilai', 5, 2)->default('0.00');
+            // $table->decimal('bobot_penilai', 5, 2)->default('0.00');
             $table->enum('status', ['completed', 'draft', 'incomplete'])->default('incomplete');
             $table->text('catatan')->nullable();
 

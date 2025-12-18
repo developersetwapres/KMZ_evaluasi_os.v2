@@ -219,6 +219,8 @@ export default function PeerAssignment({ outsourcing }: initialData) {
                                             (e) => e.name && e.jabatan,
                                         ).length;
 
+                                        console.log(penugasan);
+
                                         const completionPercentage =
                                             (assignedCount / 3) * 100;
 
@@ -386,16 +388,17 @@ export default function PeerAssignment({ outsourcing }: initialData) {
                                                                                 <span className="text-xs font-medium text-green-700">
                                                                                     {
                                                                                         penugasan
-                                                                                            .evaluators
-                                                                                            .atasan
-                                                                                            .name
+                                                                                            ?.evaluators
+                                                                                            ?.atasan
+                                                                                            ?.name
                                                                                     }{' '}
                                                                                     -{' '}
                                                                                     {
                                                                                         penugasan
-                                                                                            .evaluators
-                                                                                            .atasan
-                                                                                            .jabatan
+                                                                                            ?.evaluators
+                                                                                            ?.atasan
+                                                                                            ?.jabatan
+                                                                                            ?.nama_jabatan
                                                                                     }
                                                                                 </span>
                                                                             </div>

@@ -15,13 +15,22 @@ class Outsourcing extends Model
 
     public function jabatan(): BelongsTo
     {
-        return $this->belongsTo(Jabatan::class, 'jabatan_id', 'id');
+        return $this->belongsTo(Jabatan::class, 'jabatan_id');
     }
+
+    public function biro(): BelongsTo
+    {
+        return $this->belongsTo(Biro::class, 'kode_biro', 'kode_biro');
+    }
+
+
 
     public function penugasan(): HasMany
     {
         return $this->hasMany(PenugasanPenilai::class, 'outsourcing_id');
     }
+
+
 
     public function user(): MorphOne
     {

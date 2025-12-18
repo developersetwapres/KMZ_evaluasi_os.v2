@@ -2,6 +2,7 @@
 
 import { EmployeeHeader } from '@/components/penilaian/detail/employee-header';
 import { EmployeeNavigation } from '@/components/penilaian/detail/employee-navigation';
+import { Badge } from '@/components/ui/badge';
 import {
     Card,
     CardContent,
@@ -9,7 +10,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
-import { Badge, Calculator } from 'lucide-react';
+import { Calculator } from 'lucide-react';
 
 const getScoreLabel = (score: number) => {
     if (score >= 91) return 'Sangat Baik';
@@ -109,7 +110,13 @@ export default function detailPeraspek({ peraspek }) {
                                                         {penilai?.evaluatorName}
                                                     </h4>
                                                     <p className="text-sm text-green-600">
-                                                        {penilai?.evaluatorType}
+                                                        {penilai?.evaluatorType ==
+                                                        'atasan'
+                                                            ? 'Atasan'
+                                                            : penilai?.evaluatorType ==
+                                                                'penerima_layanan'
+                                                              ? 'Penerima Layanan'
+                                                              : 'Teman Setingkat'}
                                                     </p>
                                                 </div>
                                             </div>
@@ -122,29 +129,27 @@ export default function detailPeraspek({ peraspek }) {
                                                     <span
                                                         className={`text-lg font-bold ${getScoreColor(penilai?.weightedScore)}`}
                                                     >
-                                                        {penilai?.weightedScore}
+                                                        {penilai?.averageScore}
                                                     </span>
                                                     <Badge
-                                                        className={`${getScoreBadgeColor(penilai?.weightedScore)} text-xs`}
+                                                        className={`${getScoreBadgeColor(penilai?.averageScore)} text-xs`}
                                                     >
                                                         {getScoreLabel(
-                                                            penilai?.weightedScore,
+                                                            penilai?.averageScore,
                                                         )}
-                                                        ss
                                                     </Badge>
                                                 </div>
                                             </div>
 
                                             <div className="rounded-4xl bg-white p-4 text-center">
                                                 <div className="mb-2 text-center font-mono text-xs text-green-600">
-                                                    {penilai?.weightedScore} ×{' '}
-                                                    {(
-                                                        penilai.bobot * 100
-                                                    ).toFixed(0)}
-                                                    % =
+                                                    {penilai?.averageScore}
+                                                    {' × '}
+                                                    {penilai.bobot}
+                                                    {'% = '}
                                                 </div>
                                                 <div className="text-4xl font-bold text-red-500">
-                                                    {penilai?.bobot?.toFixed(2)}
+                                                    {penilai?.weightedScore}
                                                 </div>
                                                 <div className="mt-1 text-xs text-green-500">
                                                     Kontribusi ke nilai akhir
@@ -152,6 +157,32 @@ export default function detailPeraspek({ peraspek }) {
                                             </div>
                                         </div>
                                     ))}
+
+                                    {/* Total */}
+                                    <div className="rounded-lg border border-blue-400 bg-gradient-to-r from-blue-100 to-blue-200 p-6">
+                                        <div className="text-center">
+                                            <h4 className="mb-2 text-xl font-bold text-blue-800">
+                                                {aspek.aspectTitle}
+                                            </h4>
+                                            <div className="mt-2 mb-3 text-xs text-blue-600">
+                                                {aspek.totalByEvaluator
+                                                    .map((e, i) => e)
+                                                    .join(' + ')}
+                                                {' ='}
+                                            </div>
+                                            <div className="text-5xl font-bold text-blue-900">
+                                                <div className="text-5xl font-bold text-blue-900">
+                                                    {aspek.totalByEvaluator
+                                                        ?.reduce(
+                                                            (total, val) =>
+                                                                total + val,
+                                                            0,
+                                                        )
+                                                        .toFixed(2)}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </CardContent>
                             </Card>
                         ))}

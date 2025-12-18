@@ -11,57 +11,67 @@ class AspectEvaluationService
     {
         $evaluatorTypes = ['atasan', 'penerima_layanan', 'teman_setingkat'];
 
-        $aspects = Aspek::with(['kriteria', 'bobotSkor'])->get();
+        $aspects = Aspek::with('kriteria')->get();
 
         $penugasans = $outsourcing->penugasan()
             ->with([
                 'penilian',
+                'bobotSkor',
                 'evaluators.userable.biro',
             ])
             ->get();
+
         $finalTotalScore = 0;
         $aspectsResult = [];
 
         foreach ($aspects as $aspect) {
             $kriteriaIds = $aspect->kriteria->pluck('id')->toArray();
-            $aspectWeight = optional($aspect->bobotSkor)->bobot;
-
             $evaluators = [];
+            $totalByEvaluator = [];
 
             foreach ($evaluatorTypes as $type) {
                 $nilai = collect();
                 $evaluatorName = null;
                 $biroName = null;
+                $bobot = null;
 
-                $penugasans->where('tipe_penilai', $type)->each(function ($penugasan) use (
-                    &$nilai,
-                    &$evaluatorName,
-                    &$biroName,
-                    $kriteriaIds
-                ) {
-                    // ambil nama evaluator & biro (cukup sekali)
-                    if ($penugasan->evaluators) {
-                        $userable = $penugasan->evaluators->userable;
+                $penugasans->where('tipe_penilai', $type)->each(
+                    function ($penugasan) use (
+                        &$nilai,
+                        &$evaluatorName,
+                        &$biroName,
+                        &$bobot,
+                        $kriteriaIds
+                    ) {
+                        // ambil bobot dari penugasan
+                        $bobot ??= optional($penugasan->bobotSkor)->bobot;
 
-                        $evaluatorName ??= $userable->name ?? $userable->nama ?? null;
-                        $biroName ??= optional($userable->biro)->nama_biro;
+                        // evaluator info
+                        if ($penugasan->evaluators) {
+                            $userable = $penugasan->evaluators->userable;
+                            $evaluatorName ??= $userable->name ?? $userable->nama ?? null;
+                            $biroName ??= optional($userable->biro)->nama_biro;
+                        }
+
+                        // nilai per kriteria
+                        $penugasan->penilian
+                            ->whereIn('kriteria_id', $kriteriaIds)
+                            ->each(
+                                fn($p) => $p->nilai !== null
+                                    ? $nilai->push((float) $p->nilai)
+                                    : null
+                            );
                     }
+                );
 
-                    $penugasan->penilian
-                        ->whereIn('kriteria_id', $kriteriaIds)
-                        ->each(
-                            fn($p) => $p->nilai !== null
-                                ? $nilai->push((float) $p->nilai)
-                                : null
-                        );
-                });
+                $averageScore = $nilai->count() ? round($nilai->avg(), 2) : null;
 
-                $averageScore = $nilai->count() ? $nilai->avg() : null;
-                $weight = $aspectWeight ? (float) $aspectWeight : null;
-
-                $weightedScore = ($averageScore !== null && $weight !== null)
-                    ? $averageScore * ($weight / 100)
+                // bobot diasumsikan DESIMAL (mis: 0.3, 0.4, 0.3)
+                $weightedScore = ($averageScore !== null && $bobot !== null)
+                    ? round($averageScore * ($bobot / 100), 2)
                     : null;
+
+                $totalByEvaluator[] = $weightedScore ?? 0;
 
                 $finalTotalScore += $weightedScore ?? 0;
 
@@ -69,14 +79,15 @@ class AspectEvaluationService
                     'evaluatorType' => $type,
                     'evaluatorName' => $evaluatorName,
                     'biro' => $biroName,
-                    'averageScore' => $averageScore ? round($averageScore, 2) : null,
-                    'bobot' => $weight ? round($weight, 2) : null,
-                    'weightedScore' => $weightedScore ? round($weightedScore, 4) : null,
+                    'averageScore' => $averageScore,
+                    'bobot' => $bobot / 100,
+                    'weightedScore' => $weightedScore,
                 ];
             }
 
             $aspectsResult[] = [
                 'aspectTitle' => $aspect->title,
+                'totalByEvaluator' =>  $totalByEvaluator,
                 'evaluators' => $evaluators,
             ];
         }

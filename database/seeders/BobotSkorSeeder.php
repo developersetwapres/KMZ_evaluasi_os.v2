@@ -17,26 +17,31 @@ class BobotSkorSeeder extends Seeder
             [
                 'siklus_id'  => 1,
                 'title' => 'Aspek teknis dan kualitas kerja',
+                'kode_bobot' => 'aspek-teknis-dan-kualitas-kerja',
                 'bobot' => 60.00,
             ],
             [
                 'siklus_id'  => 1,
                 'title' => 'Aspek Perilaku',
+                'kode_bobot' => 'aspek-perilaku',
                 'bobot' => 60.00,
             ],
             [
                 'siklus_id'  => 1,
-                'title' => 'Tipe penilai Atasan',
+                'title' => 'Penilai Atasan',
+                'kode_bobot' => 'atasan',
                 'bobot' => 50.00,
             ],
             [
                 'siklus_id'  => 1,
-                'title' => 'Tipe penilai Penerima Layanan',
+                'title' => 'Penilai Penerima Layanan',
+                'kode_bobot' => 'penerima_layanan',
                 'bobot' => 30.00,
             ],
             [
                 'siklus_id'  => 1,
-                'title' => 'Tipe penilai Teman',
+                'title' => 'Penilai Teman',
+                'kode_bobot' => 'teman',
                 'bobot' => 20.00,
             ]
         ];

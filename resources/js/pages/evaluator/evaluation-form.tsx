@@ -661,7 +661,7 @@ export default function EvaluationForm({
                                     {/* Unit Badge */}
                                     <div className="mt-4">
                                         <Badge className="border-white/30 bg-white/20 px-4 py-2 text-sm font-semibold text-white">
-                                            {outsourcing?.unit_kerja}
+                                            {outsourcing?.biro?.nama_biro}
                                         </Badge>
                                     </div>
                                 </CardContent>

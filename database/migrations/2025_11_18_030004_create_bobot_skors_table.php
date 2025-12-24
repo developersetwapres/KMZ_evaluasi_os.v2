@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('bobot_skors', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('siklus_id')->constrained('sikluses')->cascadeOnDelete();
+            $table->foreignId('siklus_id')->nullable()->constrained('sikluses');
             $table->string('title');
+            $table->string('kode_bobot')->unique();
             $table->decimal('bobot', 5, 2)->comment('Bobot penilai dalam persen');
 
             $table->timestamps();

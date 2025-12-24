@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('master_pegawais', function (Blueprint $table) {
             $table->id();
 
-            // $table->foreignId('nip', 100)->constrained('users')->unique();
+            $table->uuid('uuid')->unique();
+
             $table->string('nip')->unique();
             $table->string('name');
 

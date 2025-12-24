@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('image', 255);
             $table->foreignId('jabatan_id')->nullable()->constrained()->nullOnDelete();
             // $table->foreignId('nrp_os', 100)->constrained('users')->unique();
-            $table->string('nrp_os', 191)->nullable();
+            $table->string('nip', 191)->nullable();
             $table->string('kode_biro', 191)->nullable();
             $table->enum('status', ['aktif', 'nonaktif'])->default('aktif');
 

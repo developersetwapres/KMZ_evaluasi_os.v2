@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\PenugasanPenilai;
 use App\Http\Requests\StorePenugasanPenilaiRequest;
 use App\Http\Requests\UpdatePenugasanPenilaiRequest;
+use App\Models\BobotSkor;
+use App\Models\MasterPegawai;
 use App\Models\Outsourcing;
 use App\Models\Siklus;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -30,7 +32,9 @@ class PenugasanPenilaiController extends Controller
         $outsourcings = Outsourcing::where('status', 'aktif')
             ->with([
                 'penugasan' => fn($q) =>
-                $q->where('siklus_id', $siklus->id)->with('evaluators.userable')
+                $q->where('siklus_id', $siklus->id)->with('evaluators.userable'),
+                'biro',
+                'jabatan'
             ])
             ->get()
             ->map(function ($os) {
@@ -52,6 +56,8 @@ class PenugasanPenilaiController extends Controller
 
                 return [
                     'uuid'      => $os->uuid,
+                    'jabatan'      => $os->jabatan?->nama_jabatan,
+                    'biro'      => $os->biro?->nama_biro,
                     'name'    => $os->name,
                     'nama_jabatan'    => $os->jabatan->nama_jabatan,
                     'evaluators' => $evaluators,
@@ -60,6 +66,11 @@ class PenugasanPenilaiController extends Controller
 
         $data = [
             'outsourcing' =>  $outsourcings,
+            'evaluators' => MasterPegawai::select(['name', 'jabatan', 'kode_biro', 'uuid'])
+                ->where('kode_unit', '02')
+                ->with('biro')
+                ->orderBy('name', 'asc')
+                ->get()
         ];
 
         return Inertia::render('admin/penugasan/page', $data);
@@ -77,14 +88,49 @@ class PenugasanPenilaiController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePenugasanPenilaiRequest $request)
+    public function store(Outsourcing $outsourcing, StorePenugasanPenilaiRequest $request)
     {
-        $data = $request->validated();
-        $data['uuid'] = Str::uuid();
+        DB::transaction(function () use ($outsourcing, $request) {
 
-        $outsourcing = Outsourcing::create($data);
+            $siklus = Siklus::where('is_active', 1)->firstOrFail();
 
-        return redirect()->back()->with('success', 'Data outsourcing berhasil disimpan.');
+            foreach ($request->validated() as $tipePenilai => $penilaiUuid) {
+
+                // 1. Bobot skor
+                $bobotSkor = BobotSkor::where('kode_bobot', $tipePenilai)
+                    ->firstOrFail();
+
+                // 2. Tentukan penilai berdasarkan tipe
+                $penilaiUserId = match ($tipePenilai) {
+                    'teman' => Outsourcing::where('uuid', $penilaiUuid)
+                        ->with('user')
+                        ->firstOrFail()
+                        ->user
+                        ->id,
+
+                    'atasan', 'penerima_layanan' => MasterPegawai::where('uuid', $penilaiUuid)
+                        ->with('user')
+                        ->firstOrFail()
+                        ->user
+                        ->id,
+                };
+
+                // 3. Simpan penugasan
+                PenugasanPenilai::updateOrCreate(
+                    [
+                        'siklus_id'      => $siklus->id,
+                        'outsourcing_id' => $outsourcing->id,
+                        'penilai_id'     => $penilaiUserId,
+                        'tipe_penilai'   => $tipePenilai,
+                    ],
+                    [
+                        'bobot_skor_id' => $bobotSkor->id,
+                    ]
+                );
+            }
+        });
+
+        return back()->with('success', 'Penugasan penilai berhasil dibuat.');
     }
 
     /**
@@ -126,6 +172,7 @@ class PenugasanPenilaiController extends Controller
 
     public function card(): Response
     {
+        // dd(Hash::make('password'));
         $data = [
             'penugasanPeer' => Auth::user()->penugasan()
                 ->select(['outsourcing_id', 'siklus_id', 'status', 'uuid'])

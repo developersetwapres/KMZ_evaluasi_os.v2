@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,16 +12,27 @@ class PenugasanPenilai extends Model
 {
     /** @use HasFactory<\Database\Factories\PenugasanPenilaiFactory> */
     use HasFactory;
+    use HasUuid;
 
     protected $fillable = [
         'uuid',
+        'bobot_skor_id',
         'siklus_id',
         'outsourcing_id',
         'penilai_id',
         'tipe_penilai',
-        'bobot_penilai',
         'status',
         'catatan',
+    ];
+
+
+    protected $with = [
+        'bobotSkor',
+        'siklus',
+        'outsourcings',
+        'evaluators',
+
+        'penilian',
     ];
 
 

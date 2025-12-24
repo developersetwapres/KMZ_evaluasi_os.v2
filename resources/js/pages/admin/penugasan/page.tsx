@@ -27,7 +27,8 @@ import {
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import AdminLayout from '@/layouts/app/app-adminkmz-layout';
-import { Outsourcing, PenugasanPeer } from '@/types';
+import { store } from '@/routes/penugasan';
+import { PenugasanPeer } from '@/types';
 import { router } from '@inertiajs/react';
 import { Separator } from '@radix-ui/react-separator';
 import {
@@ -45,26 +46,40 @@ import {
 import { useState } from 'react';
 
 interface initialData {
+    evaluators: any;
     outsourcing: PenugasanPeer[];
 }
 
-export default function PeerAssignment({ outsourcing }: initialData) {
-    console.log(outsourcing);
-
+export default function PeerAssignment({
+    outsourcing,
+    evaluators,
+}: initialData) {
     const [searchTerm, setSearchTerm] = useState('');
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [selectedEmployee, setSelectedEmployee] = useState<{
         uuid: string;
         name: string;
-        unit_kerja: string;
+        biro: string;
         jabatan: string;
     } | null>(null);
 
     const [selectedEvaluators, setSelectedEvaluators] = useState({
-        atasan: {},
-        penerima_layanan: {},
-        teman: {},
+        atasan: '',
+        penerima_layanan: '',
+        teman: '',
     });
+
+    const selectedAtasan = evaluators?.find(
+        (e: any) => e.uuid === selectedEvaluators.atasan,
+    );
+
+    const selectedPenerimaLayanan = evaluators?.find(
+        (e: any) => e.uuid === selectedEvaluators.penerima_layanan,
+    );
+
+    const selectedTeman = evaluators?.find(
+        (e: any) => e.uuid === selectedEvaluators.teman,
+    );
 
     const { toast } = useToast();
 
@@ -82,58 +97,27 @@ export default function PeerAssignment({ outsourcing }: initialData) {
                 selectedEvaluators.penerima_layanan ||
                 selectedEvaluators.teman)
         ) {
-            router.post(
-                route('penugasan.store'),
-                {
-                    outsourcing: selectedEmployee,
-                    penilai: selectedEvaluators,
+            router.post(store.url(selectedEmployee.uuid), selectedEvaluators, {
+                onSuccess: () => {
+                    setIsDialogOpen(false);
+                    setSelectedEmployee(null);
+                    setSelectedEvaluators({
+                        atasan: '',
+                        penerima_layanan: '',
+                        teman: '',
+                    });
+
+                    // Show success message
+                    toast({
+                        title: 'Penugasan Berhasil',
+                        description: `Berhasil menugaskan ................ untuk menilai ................`,
+                    });
                 },
-                {
-                    onSuccess: () => {
-                        setIsDialogOpen(false);
-                        setSelectedEmployee(null);
-                        setSelectedEvaluators({
-                            atasan: {},
-                            penerima_layanan: {},
-                            teman: {},
-                        });
-
-                        // Show success message
-                        toast({
-                            title: 'Penugasan Berhasil',
-                            description: `Berhasil menugaskan ................ untuk menilai ................`,
-                        });
-                    },
-                    onError: (err) => {
-                        console.log(err);
-                    },
+                onError: (err) => {
+                    console.log(err);
                 },
-            );
+            });
         }
-    };
-
-    const getAvailableEvaluators = (
-        type: 'atasan' | 'penerima_layanan' | 'teman',
-        penugasan: any,
-    ) => {
-        if (type === 'atasan') {
-            return outsourcing.filter(
-                (evaluator: any) => evaluator.role === 'atasan',
-            );
-        } else if (type === 'penerima_layanan') {
-            return outsourcing.filter(
-                (evaluator: any) => evaluator.role === 'penerima_layanan',
-            );
-        }
-    };
-
-    const getAvailableEvaluatorsTeman = (penugasan: Outsourcing) => {
-        return outsourcing.filter(
-            (peer: any) =>
-                peer.uuid !== penugasan.uuid &&
-                peer.unit_kerja === penugasan.unit_kerja &&
-                peer.role === 'outsourcing',
-        );
     };
 
     function hitungEvaluator(employees: PenugasanPeer[]) {
@@ -153,6 +137,8 @@ export default function PeerAssignment({ outsourcing }: initialData) {
     }
 
     const { sudah, belum } = hitungEvaluator(outsourcing);
+
+    console.log(outsourcing);
 
     return (
         <AdminLayout>
@@ -218,8 +204,6 @@ export default function PeerAssignment({ outsourcing }: initialData) {
                                         ).filter(
                                             (e) => e.name && e.jabatan,
                                         ).length;
-
-                                        console.log(penugasan);
 
                                         const completionPercentage =
                                             (assignedCount / 3) * 100;
@@ -324,8 +308,7 @@ export default function PeerAssignment({ outsourcing }: initialData) {
                                                                                 {
                                                                                     uuid: penugasan.uuid,
                                                                                     name: penugasan.name,
-                                                                                    unit_kerja:
-                                                                                        penugasan.unit_kerja,
+                                                                                    biro: penugasan.biro,
                                                                                     jabatan:
                                                                                         penugasan.nama_jabatan,
                                                                                 },
@@ -336,17 +319,17 @@ export default function PeerAssignment({ outsourcing }: initialData) {
                                                                                         penugasan
                                                                                             ?.evaluators
                                                                                             ?.atasan ||
-                                                                                        {},
+                                                                                        '',
                                                                                     penerima_layanan:
                                                                                         penugasan
                                                                                             ?.evaluators
                                                                                             ?.penerima_layanan ||
-                                                                                        {},
+                                                                                        '',
                                                                                     teman:
                                                                                         penugasan
                                                                                             ?.evaluators
                                                                                             ?.teman ||
-                                                                                        {},
+                                                                                        '',
                                                                                 },
                                                                             );
                                                                             setIsDialogOpen(
@@ -543,7 +526,7 @@ export default function PeerAssignment({ outsourcing }: initialData) {
                                                 {selectedEmployee.name}
                                             </h3>
                                             <p className="mb-1.5 text-sm text-gray-50">
-                                                {selectedEmployee.unit_kerja}
+                                                {selectedEmployee.biro}
                                             </p>
                                             <Badge className="bg-blue-200 text-xs text-blue-800">
                                                 {selectedEmployee.jabatan}
@@ -564,86 +547,67 @@ export default function PeerAssignment({ outsourcing }: initialData) {
                                             <Select
                                                 value={
                                                     selectedEvaluators.atasan
-                                                        ?.id
-                                                        ? JSON.stringify(
-                                                              selectedEvaluators.atasan,
-                                                          )
-                                                        : undefined
                                                 }
-                                                onValueChange={(value) => {
-                                                    const parsed =
-                                                        JSON.parse(value);
+                                                onValueChange={(value) =>
                                                     setSelectedEvaluators(
                                                         (prev) => ({
                                                             ...prev,
-                                                            atasan: parsed,
+                                                            atasan: value,
                                                         }),
-                                                    );
-                                                }}
+                                                    )
+                                                }
                                             >
                                                 <SelectTrigger className="ml-7">
                                                     <SelectValue placeholder="Pilih atasan sebagai evaluator...">
-                                                        {selectedEvaluators.atasan &&
-                                                            (() => {
-                                                                return selectedEvaluators
-                                                                    .atasan
-                                                                    ?.name ? (
-                                                                    <span>
-                                                                        {
-                                                                            selectedEvaluators
-                                                                                .atasan
-                                                                                .name
-                                                                        }
-                                                                        <span className="text-gray-500">
-                                                                            {' '}
-                                                                            -{' '}
-                                                                            {
-                                                                                selectedEvaluators
-                                                                                    .atasan
-                                                                                    .jabatan
-                                                                            }
-                                                                        </span>
-                                                                    </span>
-                                                                ) : (
-                                                                    ''
-                                                                );
-                                                            })()}
+                                                        {selectedAtasan && (
+                                                            <span>
+                                                                {
+                                                                    selectedAtasan.name
+                                                                }
+                                                                <span className="text-gray-500">
+                                                                    {' '}
+                                                                    -{' '}
+                                                                    {
+                                                                        selectedAtasan.jabatan
+                                                                    }
+                                                                </span>
+                                                            </span>
+                                                        )}
                                                     </SelectValue>
                                                 </SelectTrigger>
+
                                                 <SelectContent>
-                                                    {getAvailableEvaluators(
-                                                        'atasan',
-                                                        selectedEmployee,
-                                                    ).map((evaluator: any) => (
-                                                        <SelectItem
-                                                            key={evaluator.id}
-                                                            value={JSON.stringify(
-                                                                {
-                                                                    id: evaluator.id,
-                                                                    name: evaluator.name,
-                                                                    jabatan:
-                                                                        evaluator.jabatan,
-                                                                },
-                                                            )}
-                                                        >
-                                                            <div className="flex flex-col">
-                                                                <span className="font-medium">
-                                                                    {
-                                                                        evaluator.name
-                                                                    }
-                                                                </span>
-                                                                <span className="text-xs text-gray-500">
-                                                                    {
-                                                                        evaluator.jabatan
-                                                                    }{' '}
-                                                                    •{' '}
-                                                                    {
-                                                                        evaluator.unit_kerja
-                                                                    }
-                                                                </span>
-                                                            </div>
-                                                        </SelectItem>
-                                                    ))}
+                                                    {evaluators?.map(
+                                                        (evaluator: any) => (
+                                                            <SelectItem
+                                                                key={
+                                                                    evaluator.uuid
+                                                                }
+                                                                value={
+                                                                    evaluator.uuid
+                                                                }
+                                                            >
+                                                                <div className="flex flex-col">
+                                                                    <span className="font-medium">
+                                                                        {
+                                                                            evaluator.name
+                                                                        }
+                                                                    </span>
+                                                                    <span className="text-xs text-gray-500">
+                                                                        {
+                                                                            evaluator.jabatan
+                                                                        }{' '}
+                                                                        •{' '}
+                                                                        {
+                                                                            evaluator
+                                                                                .biro
+                                                                                ?.nama_biro
+                                                                        }
+                                                                    </span>
+                                                                </div>
+                                                            </SelectItem>
+                                                        ),
+                                                    )}
                                                 </SelectContent>
                                             </Select>
                                         </div>
@@ -662,88 +626,68 @@ export default function PeerAssignment({ outsourcing }: initialData) {
 
                                             <Select
                                                 value={
-                                                    selectedEvaluators
-                                                        .penerima_layanan?.id
-                                                        ? JSON.stringify(
-                                                              selectedEvaluators.penerima_layanan,
-                                                          )
-                                                        : undefined
+                                                    selectedEvaluators.penerima_layanan
                                                 }
                                                 onValueChange={(value) => {
-                                                    const parsed =
-                                                        JSON.parse(value);
                                                     setSelectedEvaluators(
                                                         (prev) => ({
                                                             ...prev,
                                                             penerima_layanan:
-                                                                parsed,
+                                                                value,
                                                         }),
                                                     );
                                                 }}
                                             >
                                                 <SelectTrigger className="ml-7">
-                                                    <SelectValue placeholder="Pilih penerima layanan sebagai evaluator...">
-                                                        {selectedEvaluators.penerima_layanan &&
-                                                            (() => {
-                                                                return selectedEvaluators
-                                                                    .penerima_layanan
-                                                                    .name ? (
-                                                                    <span>
-                                                                        {
-                                                                            selectedEvaluators
-                                                                                .penerima_layanan
-                                                                                .name
-                                                                        }
-                                                                        <span className="text-gray-500">
-                                                                            {' '}
-                                                                            -{' '}
-                                                                            {
-                                                                                selectedEvaluators
-                                                                                    .penerima_layanan
-                                                                                    .jabatan
-                                                                            }
-                                                                        </span>
-                                                                    </span>
-                                                                ) : (
-                                                                    ''
-                                                                );
-                                                            })()}
+                                                    <SelectValue placeholder="Pilih atasan sebagai evaluator...">
+                                                        {selectedPenerimaLayanan && (
+                                                            <span>
+                                                                {
+                                                                    selectedPenerimaLayanan.name
+                                                                }
+                                                                <span className="text-gray-500">
+                                                                    {' '}
+                                                                    -{' '}
+                                                                    {
+                                                                        selectedPenerimaLayanan.jabatan
+                                                                    }
+                                                                </span>
+                                                            </span>
+                                                        )}
                                                     </SelectValue>
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    {getAvailableEvaluators(
-                                                        'penerima_layanan',
-                                                        selectedEmployee,
-                                                    ).map((evaluator: any) => (
-                                                        <SelectItem
-                                                            key={evaluator.id}
-                                                            value={JSON.stringify(
-                                                                {
-                                                                    id: evaluator.id,
-                                                                    name: evaluator.name,
-                                                                    jabatan:
-                                                                        evaluator.jabatan,
-                                                                },
-                                                            )}
-                                                        >
-                                                            <div className="flex flex-col">
-                                                                <span className="font-medium">
-                                                                    {
-                                                                        evaluator.name
-                                                                    }
-                                                                </span>
-                                                                <span className="text-xs text-gray-500">
-                                                                    {
-                                                                        evaluator.jabatan
-                                                                    }{' '}
-                                                                    •{' '}
-                                                                    {
-                                                                        evaluator.unit_kerja
-                                                                    }
-                                                                </span>
-                                                            </div>
-                                                        </SelectItem>
-                                                    ))}
+                                                    {evaluators?.map(
+                                                        (evaluator: any) => (
+                                                            <SelectItem
+                                                                key={
+                                                                    evaluator.id
+                                                                }
+                                                                value={
+                                                                    evaluator.uuid
+                                                                }
+                                                            >
+                                                                <div className="flex flex-col">
+                                                                    <span className="font-medium">
+                                                                        {
+                                                                            evaluator.name
+                                                                        }
+                                                                    </span>
+                                                                    <span className="text-xs text-gray-500">
+                                                                        {
+                                                                            evaluator.jabatan
+                                                                        }{' '}
+                                                                        •{' '}
+                                                                        {
+                                                                            evaluator
+                                                                                ?.biro
+                                                                                ?.nama_biro
+                                                                        }
+                                                                    </span>
+                                                                </div>
+                                                            </SelectItem>
+                                                        ),
+                                                    )}
                                                 </SelectContent>
                                             </Select>
                                         </div>
@@ -760,92 +704,67 @@ export default function PeerAssignment({ outsourcing }: initialData) {
                                             </div>
 
                                             <Select
-                                                value={
-                                                    selectedEvaluators.teman?.id
-                                                        ? JSON.stringify(
-                                                              selectedEvaluators.teman,
-                                                          )
-                                                        : undefined
-                                                }
+                                                value={selectedEvaluators.teman}
                                                 onValueChange={(value) => {
-                                                    const parsed =
-                                                        JSON.parse(value);
                                                     setSelectedEvaluators(
                                                         (prev) => ({
                                                             ...prev,
-                                                            teman: parsed,
+                                                            teman: value,
                                                         }),
                                                     );
                                                 }}
                                             >
                                                 <SelectTrigger className="ml-7">
-                                                    <SelectValue placeholder="Pilih teman setingkat sebagai evaluator...">
-                                                        {selectedEvaluators.teman &&
-                                                            (() => {
-                                                                return selectedEvaluators
-                                                                    .teman
-                                                                    .name ? (
-                                                                    <span>
-                                                                        {
-                                                                            selectedEvaluators
-                                                                                .teman
-                                                                                .name
-                                                                        }
-                                                                        <span className="text-gray-500">
-                                                                            {' '}
-                                                                            -{' '}
-                                                                            {
-                                                                                selectedEvaluators
-                                                                                    .teman
-                                                                                    .jabatan
-                                                                            }
-                                                                        </span>
-                                                                    </span>
-                                                                ) : (
-                                                                    ''
-                                                                );
-                                                            })()}
+                                                    <SelectValue placeholder="Pilih atasan sebagai evaluator...">
+                                                        {selectedTeman && (
+                                                            <span>
+                                                                {
+                                                                    selectedTeman.name
+                                                                }
+                                                                <span className="text-gray-500">
+                                                                    {' '}
+                                                                    -{' '}
+                                                                    {
+                                                                        selectedTeman.jabatan
+                                                                    }
+                                                                </span>
+                                                            </span>
+                                                        )}
                                                     </SelectValue>
                                                 </SelectTrigger>
 
                                                 <SelectContent>
-                                                    {getAvailableEvaluators(
-                                                        'teman',
-                                                        selectedEmployee,
-                                                    ).map((peer: any) => (
-                                                        <SelectItem
-                                                            key={peer.id}
-                                                            value={JSON.stringify(
-                                                                {
-                                                                    id: peer.id,
-                                                                    name: peer.name,
-                                                                    jabatan:
-                                                                        peer.jabatan,
-                                                                },
-                                                            )}
-                                                        >
-                                                            <div className="flex flex-col">
-                                                                <span className="font-medium">
-                                                                    {peer.name}
-                                                                </span>
-                                                                <span className="text-xs text-gray-500">
-                                                                    {
-                                                                        peer.jabatan
-                                                                    }{' '}
-                                                                    •{' '}
-                                                                    {
-                                                                        peer.unit_kerja
-                                                                    }
-                                                                </span>
-                                                            </div>
-                                                        </SelectItem>
-                                                    ))}
+                                                    {outsourcing?.map(
+                                                        (peer: any) => (
+                                                            <SelectItem
+                                                                key={peer.id}
+                                                                value={
+                                                                    peer.uuid
+                                                                }
+                                                            >
+                                                                <div className="flex flex-col">
+                                                                    <span className="font-medium">
+                                                                        {
+                                                                            peer.name
+                                                                        }
+                                                                    </span>
+                                                                    <span className="text-xs text-gray-500">
+                                                                        {
+                                                                            peer?.jabatan
+                                                                        }{' '}
+                                                                        •{' '}
+                                                                        {
+                                                                            peer?.biro
+                                                                        }
+                                                                    </span>
+                                                                </div>
+                                                            </SelectItem>
+                                                        ),
+                                                    )}
                                                 </SelectContent>
                                             </Select>
-                                            {getAvailableEvaluators(
-                                                'teman',
-                                                selectedEmployee,
-                                            ).length === 0 && (
+
+                                            {outsourcing.length === 0 && (
                                                 <div className="mt-2 ml-7 rounded-md border border-yellow-200 bg-yellow-50 p-3">
                                                     <p className="text-sm text-yellow-800">
                                                         Tidak ada teman

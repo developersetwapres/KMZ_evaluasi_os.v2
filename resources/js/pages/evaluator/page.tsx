@@ -97,7 +97,7 @@ export default function EvaluatorPage({ penugasanPeer }: any) {
                                                 ?.replace(/\b\w/g, (char) =>
                                                     char.toUpperCase(),
                                                 )}{' '}
-                                            - {user.jabatan}
+                                            - {user?.userable?.jabatan}
                                         </CardDescription>
                                     </div>
                                 </div>

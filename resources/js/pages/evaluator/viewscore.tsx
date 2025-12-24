@@ -53,6 +53,7 @@ interface ViewScoreProps {
     evaluator: any;
     evaluationData: any;
     overallNotes: string;
+    rekapPerAspek: any;
 }
 
 export default function ViewScore({
@@ -60,9 +61,9 @@ export default function ViewScore({
     evaluator,
     evaluationData,
     overallNotes,
+    rekapPerAspek,
 }: ViewScoreProps) {
     const aspects = Object.keys(evaluationData);
-    console.log(evaluationData);
 
     // Average per aspect (kept for compatibility if needed elsewhere)
     const calculateAspectScore = (aspectKey: string) => {
@@ -84,17 +85,15 @@ export default function ViewScore({
     function getAspectStats(aspectKey: string) {
         const aspect = evaluationData[aspectKey as keyof typeof evaluationData];
         if (!aspect) return { total: 0, count: 0, avg: 0 };
-        const scoresList = aspect.kriteria.map((c: any) => c.score || 0);
+        const scoresList = aspect.kriteria.map(
+            (c: any) => c.penilaian?.nilai || 0,
+        );
+
         const total = scoresList.reduce((a: number, b: number) => a + b, 0);
         const count = aspect.kriteria.length;
         const avg = count ? parseFloat((total / count).toFixed(2)) : 0;
         return { total, count, avg };
     }
-
-    const overallScore =
-        aspects.reduce((total, aspectKey) => {
-            return total + calculateAspectScore(aspectKey);
-        }, 0) / (aspects.length || 1);
 
     const getScoreColor = (score: number) => {
         if (score >= 91) return 'text-green-600 bg-green-50';
@@ -102,14 +101,6 @@ export default function ViewScore({
         if (score >= 71) return 'text-yellow-600 bg-yellow-50';
         if (score >= 61) return 'text-orange-600 bg-orange-50';
         return 'text-red-600 bg-red-50';
-    };
-
-    const getScoreLabel = (score: number) => {
-        if (score >= 91) return 'Sangat Baik';
-        if (score >= 81) return 'Baik';
-        if (score >= 71) return 'Butuh Perbaikan';
-        if (score >= 61) return 'Kurang';
-        return 'Sangat Kurang';
     };
 
     return (
@@ -226,14 +217,14 @@ export default function ViewScore({
 
                                     <div className="mt-3">
                                         <Badge className="border-white/30 bg-white/20 px-4 py-2 text-sm font-semibold text-white">
-                                            {outsourcing.unit_kerja}
+                                            {outsourcing?.biro?.nama_biro}
                                         </Badge>
                                     </div>
                                 </CardContent>
                             </Card>
                         </div>
 
-                        <div className="space-y-8">
+                        <div className="space-y-5">
                             {/* Overall Summary Card - UPDATED to match evaluation-form.tsx concept */}
                             <Card className="gap-0 bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
                                 <CardHeader>
@@ -247,78 +238,62 @@ export default function ViewScore({
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    {(() => {
-                                        const aspectAKey = aspects[0];
-                                        const aspectBKey = aspects[1];
+                                    <div className="grid gap-6 md:grid-cols-3">
+                                        {rekapPerAspek?.aspects?.map(
+                                            (aspek, index) => {
+                                                const nilaiAkhir =
+                                                    aspek.nilai * aspek.bobot;
 
-                                        const weightA = 60;
-                                        const weightB = 40;
+                                                return (
+                                                    <div
+                                                        key={index}
+                                                        className="text-center"
+                                                    >
+                                                        <div className="text-sm text-blue-100">
+                                                            {aspek.title}
+                                                        </div>
 
-                                        const a = aspectAKey
-                                            ? getAspectStats(aspectAKey)
-                                            : { total: 0, count: 0, avg: 0 };
-                                        const b = aspectBKey
-                                            ? getAspectStats(aspectBKey)
-                                            : { total: 0, count: 0, avg: 0 };
+                                                        <div className="text-xs text-blue-100">
+                                                            {aspek.nilai.toFixed(
+                                                                2,
+                                                            )}{' '}
+                                                            ×{' '}
+                                                            {aspek.bobot * 100}%
+                                                        </div>
 
-                                        const aContribution = parseFloat(
-                                            ((a.avg * weightA) / 100).toFixed(
-                                                2,
-                                            ),
-                                        );
-                                        const bContribution = parseFloat(
-                                            ((b.avg * weightB) / 100).toFixed(
-                                                2,
-                                            ),
-                                        );
-                                        const combinedContribution = parseFloat(
-                                            (
-                                                aContribution + bContribution
-                                            ).toFixed(2),
-                                        );
-
-                                        return (
-                                            <div className="grid gap-6 md:grid-cols-3">
-                                                <div className="text-center">
-                                                    <div className="text-sm text-blue-100">
-                                                        {aspectAKey
-                                                            ? evaluationData[
-                                                                  aspectAKey as keyof typeof evaluationData
-                                                              ].title
-                                                            : 'Aspek 1'}
+                                                        <div className="mt-1 text-3xl font-extrabold tracking-tight">
+                                                            {nilaiAkhir.toFixed(
+                                                                2,
+                                                            )}
+                                                        </div>
                                                     </div>
-                                                    <div className="text-xs text-blue-100">{`${a.avg} x ${weightA}% =`}</div>
-                                                    <div className="mt-1 text-3xl font-extrabold tracking-tight">{`${aContribution}`}</div>
-                                                </div>
+                                                );
+                                            },
+                                        )}
 
-                                                <div className="text-center">
-                                                    <div className="text-sm text-blue-100">
-                                                        {aspectBKey
-                                                            ? evaluationData[
-                                                                  aspectBKey as keyof typeof evaluationData
-                                                              ].title
-                                                            : 'Aspek 2'}
-                                                    </div>
-                                                    <div className="text-xs text-blue-100">
-                                                        {`${b.avg} x ${weightB}%`}{' '}
-                                                        =
-                                                    </div>
-                                                    <div className="mt-1 text-3xl font-extrabold tracking-tight">{`${bContribution}`}</div>
-                                                </div>
-
-                                                <div className="text-center">
-                                                    <div className="text-sm text-blue-100">
-                                                        Skor Akhir
-                                                    </div>
-                                                    <div className="text-xs text-blue-100">
-                                                        {`${aContribution} + ${bContribution}`}{' '}
-                                                        =
-                                                    </div>
-                                                    <div className="mt-1 text-3xl font-extrabold tracking-tight">{`${combinedContribution}`}</div>
-                                                </div>
+                                        {/* SKOR AKHIR */}
+                                        <div className="text-center">
+                                            <div className="text-sm text-blue-100">
+                                                Skor Akhir
                                             </div>
-                                        );
-                                    })()}
+
+                                            <div className="text-xs text-blue-100">
+                                                {rekapPerAspek?.aspects
+                                                    ?.map((a) =>
+                                                        (
+                                                            a.nilai * a.bobot
+                                                        ).toFixed(2),
+                                                    )
+                                                    .join(' + ')}
+                                            </div>
+
+                                            <div className="mt-1 text-3xl font-extrabold tracking-tight">
+                                                {rekapPerAspek.finalTotalScore.toFixed(
+                                                    2,
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </CardContent>
                             </Card>
 
@@ -363,11 +338,11 @@ export default function ViewScore({
                                                         <div
                                                             className={`rounded-xl px-6 py-3 ${getScoreColor(avg)}`}
                                                         >
-                                                            <div className="">
+                                                            <div className="text-sm">
                                                                 Total Skor:{' '}
                                                                 {total}
                                                             </div>
-                                                            <div className="font-semibold">
+                                                            <div className="text-sm font-semibold">
                                                                 Rata-Rata :{' '}
                                                                 {avg}
                                                             </div>
@@ -385,8 +360,7 @@ export default function ViewScore({
                                                         criterionIndex: number,
                                                     ) => {
                                                         const score =
-                                                            criterion
-                                                                .penilaian[0]
+                                                            criterion.penilaian
                                                                 ?.nilai || 0;
 
                                                         const classification =

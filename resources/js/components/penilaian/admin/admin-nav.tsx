@@ -2,17 +2,19 @@
 
 import { index } from '@/actions/App/Http/Controllers/PenugasanPenilaiController';
 import { cn } from '@/lib/utils';
+import { dashboard } from '@/routes';
+import { ranking } from '@/routes/os';
 import { Link, usePage } from '@inertiajs/react';
-import { BarChart3, Settings, UserCog, Users } from 'lucide-react';
+import { BarChart3, UserCog, Users } from 'lucide-react';
 
 const navItems = [
     {
-        href: '/admin',
+        href: dashboard.url(),
         label: 'Rekap Hasil',
         icon: BarChart3,
     },
     {
-        href: '/admin/ranking',
+        href: ranking.url(),
         label: 'Ranking Skor',
         icon: BarChart3,
     },
@@ -21,11 +23,11 @@ const navItems = [
         label: 'Penugasan Peer',
         icon: Users,
     },
-    {
-        href: '/admin/evaluasi-360',
-        label: 'Evaluasi 360',
-        icon: Settings,
-    },
+    // {
+    //     href: '/admin/evaluasi-360',
+    //     label: 'Evaluasi 360',
+    //     icon: Settings,
+    // },
     {
         href: '/admin/users',
         label: 'Kelola User',
@@ -37,7 +39,9 @@ export function AdminNav() {
     const { url } = usePage();
 
     return (
-        <nav className="grid h-12 w-full grid-cols-5 rounded-lg bg-muted p-1">
+        <nav
+            className={`grid h-12 w-full grid-cols-${navItems.length} rounded-lg bg-muted p-1`}
+        >
             {navItems.map((item) => {
                 const Icon = item.icon;
                 const pathname = url; // mirip usePathname()

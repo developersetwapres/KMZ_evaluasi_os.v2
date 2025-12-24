@@ -28,9 +28,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [OutsourcingController::class, 'rekaphasil'])->name('dashboard');
     Route::get('/dashboard/deatil-skor/{outsourcing:uuid}', [OutsourcingController::class, 'detailByAspekEvaluator'])->name('os.rekapaspekevaluator');
     Route::get('/dashboard/deatil-skor-peraspek/{outsourcing:uuid}', [OutsourcingController::class, 'detailByAspek'])->name('os.detailperaspek');
+    Route::get('/dashboard/ranking-skor', [OutsourcingController::class, 'ranking'])->name('os.ranking');
 
 
     Route::get('/dashboard/penugasan-peer', [PenugasanPenilaiController::class, 'index'])->name('penugasan.index');
+    Route::post('/dashboard/penugasan-peer/store/{outsourcing:uuid}', [PenugasanPenilaiController::class, 'store'])->name('penugasan.store');
 });
 
 require __DIR__ . '/settings.php';

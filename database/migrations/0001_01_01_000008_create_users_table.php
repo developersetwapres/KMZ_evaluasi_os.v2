@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
 
             // kolom polymorphic
-            $table->unsignedBigInteger('userable_id')->nullable();
+            $table->string('userable_id', 50)->nullable();
             $table->string('userable_type')->nullable();
 
-            $table->string('nip')->nullable();
+            $table->string('nip')->nullable()->unique();
             $table->string('nip_sso')->nullable();
             $table->boolean('is_ldap');
             $table->string('email')->unique()->nullable();

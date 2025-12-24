@@ -7,6 +7,9 @@ use App\Http\Requests\UpdatepenilaianRequest;
 use App\Models\Aspek;
 use App\Models\Penilaian;
 use App\Models\PenugasanPenilai;
+use Illuminate\Http\RedirectResponse;
+use App\Services\Penilaian\ViewScore;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -23,32 +26,39 @@ class PenilaianController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(PenugasanPenilai $penugasan): Response
+    public function create(PenugasanPenilai $penugasan, ViewScore $service): Response | RedirectResponse
     {
+        abort_if(!$penugasan->outsourcings, 404);
+
+        if ($penugasan->evaluators->id !== Auth::id()) {
+            return to_route('home');
+        }
+
 
         $jabatanId = $penugasan->outsourcings->jabatan_id;
 
         $data = [
-            'outsourcing' => $penugasan->outsourcings->load('jabatan'),
+            'outsourcing' => $penugasan->outsourcings->load(['jabatan', 'biro']),
             'evaluator' => $penugasan->evaluators?->userable,
+            'rekapPerAspek' => $service->getDetailByAspek($penugasan->outsourcings),
             'uuidPenugasanPeer' => $penugasan->uuid,
+            'overallNotes' =>  $penugasan->catatan,
             'evaluationData' => Aspek::select(['id', 'title'])
                 ->with([
-                    'kriteria' => function ($q) use ($jabatanId) {
-                        $q->with([
-                            'penilaian',
-                            'indikators' => function ($q2) use ($jabatanId) {
-                                $q2->where('jabatan_id', $jabatanId)
-                                    ->orWhere('jabatan_id', 16);
-                            },
-                        ]);
-                    },
-                ])
-                ->get()
+                    'kriteria' => fn($q) =>
+                    $q->with([
+                        'penilaian' => fn($qPenilaian) =>
+                        $qPenilaian->where('penugasan_id', $penugasan->id),
 
+                        'indikators' => fn($q2) =>
+                        $q2->where('jabatan_id', $jabatanId)
+                            ->orWhere('jabatan_id', 16),
+                    ]),
+                ])
+                ->get(),
         ];
 
-        if ($penugasan->status == 'completed') {
+        if ($penugasan->status === 'completed') {
             return Inertia::render('evaluator/viewscore', $data);
         }
 

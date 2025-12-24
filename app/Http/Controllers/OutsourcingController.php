@@ -6,6 +6,7 @@ use App\Models\Outsourcing;
 use App\Http\Requests\StoreOutsourcingRequest;
 use App\Http\Requests\UpdateOutsourcingRequest;
 use App\Services\Penilaian\AspectEvaluationService;
+use App\Services\Penilaian\RankingScoreByJabatan;
 use App\Services\Penilaian\RekapHasilService;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -125,5 +126,14 @@ class OutsourcingController extends Controller
         ];
 
         return Inertia::render('admin/detail/detailperaspek', $data);
+    }
+
+    public function ranking(RankingScoreByJabatan $service): Response
+    {
+        $data = [
+            'outsourcingData' => $service->ranking()
+        ];
+
+        return Inertia::render('admin/ranking/page', $data);
     }
 }

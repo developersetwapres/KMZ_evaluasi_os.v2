@@ -7,12 +7,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Kriteria extends Model
 {
     /** @use HasFactory<\Database\Factories\KriteriaFactory> */
     use HasFactory;
     use HasUuid;
+
+    protected $with = [
+        'aspek',
+
+        'penilaian',
+        'indikators'
+    ];
 
     //--------------- BelongsTo-----------------------
     public function aspek(): BelongsTo
@@ -22,12 +30,14 @@ class Kriteria extends Model
 
 
 
-    //--------------- HasMany------------------------------
-    public function penilaian(): HasMany
+    //--------------- HasOne------------------------------
+    public function penilaian(): HasOne
     {
-        return $this->hasMany(Penilaian::class);
+        return $this->hasOne(Penilaian::class);
     }
 
+
+    //--------------- HasMany------------------------------
     public function indikators(): HasMany
     {
         return $this->hasMany(Indikator::class, 'kriteria_id');

@@ -18,17 +18,10 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import AdminLayout from '@/layouts/app/app-adminkmz-layout';
 import { store } from '@/routes/penugasan';
-import { PenugasanPeer } from '@/types';
+import type { PenugasanPeer } from '@/types';
 import { router } from '@inertiajs/react';
 import { Separator } from '@radix-ui/react-separator';
 import {
@@ -50,6 +43,95 @@ interface initialData {
     outsourcing: PenugasanPeer[];
 }
 
+interface SearchableSelectProps {
+    items: any[];
+    value: string;
+    onValueChange: (value: string) => void;
+    placeholder: string;
+    getLabel: (item: any) => string;
+    getSubLabel?: (item: any) => string;
+}
+
+function SearchableSelect({
+    items,
+    value,
+    onValueChange,
+    placeholder,
+    getLabel,
+    getSubLabel,
+}: SearchableSelectProps) {
+    const [searchTerm, setSearchTerm] = useState('');
+    const [isOpen, setIsOpen] = useState(false);
+
+    const filteredItems = items.filter((item) =>
+        getLabel(item).toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+
+    const selectedItem = items.find((item) => item.uuid === value);
+
+    const handleSelect = (uuid: string) => {
+        onValueChange(uuid);
+        setSearchTerm('');
+        setIsOpen(false);
+    };
+
+    return (
+        <div className="relative">
+            <Input
+                placeholder={
+                    selectedItem ? getLabel(selectedItem) : placeholder
+                }
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onClick={() => setIsOpen(true)}
+                className="mb-2"
+            />
+            {isOpen && (
+                <div className="absolute top-12 right-0 left-0 z-50 max-h-48 overflow-y-auto rounded-md border border-gray-200 bg-white shadow-lg">
+                    {filteredItems.length > 0 ? (
+                        filteredItems.map((item) => (
+                            <div
+                                key={item.uuid}
+                                onClick={() => handleSelect(item.uuid)}
+                                className={`cursor-pointer border-b px-4 py-2 last:border-b-0 hover:bg-gray-100 ${
+                                    value === item.uuid ? 'bg-blue-50' : ''
+                                }`}
+                            >
+                                <div className="flex flex-col">
+                                    <span className="text-sm font-medium">
+                                        {getLabel(item)}
+                                    </span>
+                                    {getSubLabel && (
+                                        <span className="text-xs text-gray-500">
+                                            {getSubLabel(item)}
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <div className="px-4 py-2 text-sm text-gray-500">
+                            Tidak ada hasil
+                        </div>
+                    )}
+                </div>
+            )}
+            {selectedItem && (
+                <div className="mt-2 rounded border border-blue-200 bg-blue-50 p-2">
+                    <p className="text-sm font-medium text-blue-900">
+                        {getLabel(selectedItem)}
+                    </p>
+                    {getSubLabel && (
+                        <p className="text-xs text-blue-700">
+                            {getSubLabel(selectedItem)}
+                        </p>
+                    )}
+                </div>
+            )}
+        </div>
+    );
+}
+
 export default function PeerAssignment({
     outsourcing,
     evaluators,
@@ -68,18 +150,6 @@ export default function PeerAssignment({
         penerima_layanan: '',
         teman: '',
     });
-
-    const selectedAtasan = evaluators?.find(
-        (e: any) => e.uuid === selectedEvaluators.atasan,
-    );
-
-    const selectedPenerimaLayanan = evaluators?.find(
-        (e: any) => e.uuid === selectedEvaluators.penerima_layanan,
-    );
-
-    const selectedTeman = evaluators?.find(
-        (e: any) => e.uuid === selectedEvaluators.teman,
-    );
 
     const { toast } = useToast();
 
@@ -126,7 +196,11 @@ export default function PeerAssignment({
 
         for (const emp of employees) {
             const ev = emp.evaluators || {};
-            if (ev.atasan.name && ev.penerima_layanan.name && ev.teman.name) {
+            if (
+                ev.atasan?.name &&
+                ev.penerima_layanan?.name &&
+                ev.teman?.name
+            ) {
                 sudah++;
             } else {
                 belum++;
@@ -157,7 +231,7 @@ export default function PeerAssignment({
                 {/* Peer Assignment Management */}
                 <Card>
                     <CardHeader>
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between gap-4">
                             <div className="relative w-full sm:w-80">
                                 <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
                                 <Input
@@ -170,7 +244,7 @@ export default function PeerAssignment({
                                 />
                             </div>
 
-                            <div className="flex items-center space-x-4">
+                            <div className="flex items-center gap-4">
                                 <div className="text-center">
                                     <div className="text-2xl font-bold text-green-600">
                                         {sudah}
@@ -198,8 +272,8 @@ export default function PeerAssignment({
                                 {filteredSearchEmployees?.map(
                                     (penugasan: PenugasanPeer, index) => {
                                         const assignedCount = Object.values(
-                                            penugasan.evaluators,
-                                        ).filter((e) => e.name).length;
+                                            penugasan.evaluators || {},
+                                        ).filter((e: any) => e?.name).length;
 
                                         const completionPercentage =
                                             (assignedCount / 3) * 100;
@@ -216,7 +290,7 @@ export default function PeerAssignment({
                                                                 <Avatar className="h-12 w-12">
                                                                     <AvatarImage
                                                                         src={
-                                                                            `/storage/${penugasan.image}` ||
+                                                                            `/storage/${penugasan.image || '/placeholder.svg'}` ||
                                                                             '/placeholder.svg'
                                                                         }
                                                                         alt={
@@ -314,17 +388,20 @@ export default function PeerAssignment({
                                                                                     atasan:
                                                                                         penugasan
                                                                                             ?.evaluators
-                                                                                            ?.atasan ||
+                                                                                            ?.atasan
+                                                                                            ?.uuid ||
                                                                                         '',
                                                                                     penerima_layanan:
                                                                                         penugasan
                                                                                             ?.evaluators
-                                                                                            ?.penerima_layanan ||
+                                                                                            ?.penerima_layanan
+                                                                                            ?.uuid ||
                                                                                         '',
                                                                                     teman:
                                                                                         penugasan
                                                                                             ?.evaluators
-                                                                                            ?.teman ||
+                                                                                            ?.teman
+                                                                                            ?.uuid ||
                                                                                         '',
                                                                                 },
                                                                             );
@@ -333,9 +410,6 @@ export default function PeerAssignment({
                                                                             );
                                                                         }}
                                                                         className="flex items-center space-x-2"
-                                                                        disabled={
-                                                                            false
-                                                                        } // Remove the disabled condition
                                                                     >
                                                                         {assignedCount >
                                                                         0 ? (
@@ -361,23 +435,23 @@ export default function PeerAssignment({
                                                                         </div>
                                                                         {penugasan
                                                                             ?.evaluators
-                                                                            ?.atasan ? (
+                                                                            ?.atasan
+                                                                            ?.name ? (
                                                                             <div className="flex items-center space-x-1">
                                                                                 <CheckCircle className="h-3 w-3 text-green-600" />
                                                                                 <span className="text-xs font-medium text-green-700">
                                                                                     {
                                                                                         penugasan
-                                                                                            ?.evaluators
-                                                                                            ?.atasan
-                                                                                            ?.name
+                                                                                            .evaluators
+                                                                                            .atasan
+                                                                                            .name
                                                                                     }{' '}
                                                                                     -{' '}
                                                                                     {
                                                                                         penugasan
-                                                                                            ?.evaluators
-                                                                                            ?.atasan
+                                                                                            .evaluators
+                                                                                            .atasan
                                                                                             ?.jabatan
-                                                                                            ?.nama_jabatan
                                                                                     }
                                                                                 </span>
                                                                             </div>
@@ -403,7 +477,8 @@ export default function PeerAssignment({
                                                                         </div>
                                                                         {penugasan
                                                                             ?.evaluators
-                                                                            ?.penerima_layanan ? (
+                                                                            ?.penerima_layanan
+                                                                            ?.name ? (
                                                                             <div className="flex items-center space-x-1">
                                                                                 <CheckCircle className="h-3 w-3 text-green-600" />
                                                                                 <span className="text-xs font-medium text-green-700">
@@ -418,7 +493,7 @@ export default function PeerAssignment({
                                                                                         penugasan
                                                                                             .evaluators
                                                                                             .penerima_layanan
-                                                                                            .jabatan
+                                                                                            ?.jabatan
                                                                                     }
                                                                                 </span>
                                                                             </div>
@@ -444,7 +519,8 @@ export default function PeerAssignment({
                                                                         </div>
                                                                         {penugasan
                                                                             ?.evaluators
-                                                                            ?.teman ? (
+                                                                            ?.teman
+                                                                            ?.name ? (
                                                                             <div className="flex items-center space-x-1">
                                                                                 <CheckCircle className="h-3 w-3 text-green-600" />
                                                                                 <span className="text-xs font-medium text-green-700">
@@ -459,7 +535,7 @@ export default function PeerAssignment({
                                                                                         penugasan
                                                                                             .evaluators
                                                                                             .teman
-                                                                                            .jabatan
+                                                                                            ?.jabatan
                                                                                     }
                                                                                 </span>
                                                                             </div>
@@ -540,72 +616,27 @@ export default function PeerAssignment({
                                                 </label>
                                             </div>
 
-                                            <Select
-                                                value={
-                                                    selectedEvaluators.atasan
-                                                }
-                                                onValueChange={(value) =>
-                                                    setSelectedEvaluators(
-                                                        (prev) => ({
-                                                            ...prev,
-                                                            atasan: value,
-                                                        }),
-                                                    )
-                                                }
-                                            >
-                                                <SelectTrigger className="ml-7">
-                                                    <SelectValue placeholder="Pilih atasan sebagai evaluator...">
-                                                        {selectedAtasan && (
-                                                            <span>
-                                                                {
-                                                                    selectedAtasan.name
-                                                                }
-                                                                <span className="text-gray-500">
-                                                                    {' '}
-                                                                    -{' '}
-                                                                    {
-                                                                        selectedAtasan.jabatan
-                                                                    }
-                                                                </span>
-                                                            </span>
-                                                        )}
-                                                    </SelectValue>
-                                                </SelectTrigger>
-
-                                                <SelectContent>
-                                                    {evaluators?.map(
-                                                        (evaluator: any) => (
-                                                            <SelectItem
-                                                                key={
-                                                                    evaluator.uuid
-                                                                }
-                                                                value={
-                                                                    evaluator.uuid
-                                                                }
-                                                            >
-                                                                <div className="flex flex-col">
-                                                                    <span className="font-medium">
-                                                                        {
-                                                                            evaluator.name
-                                                                        }
-                                                                    </span>
-                                                                    <span className="text-xs text-gray-500">
-                                                                        {
-                                                                            evaluator.jabatan
-                                                                        }{' '}
-                                                                        •{' '}
-                                                                        {
-                                                                            evaluator
-                                                                                .biro
-                                                                                ?.nama_biro
-                                                                        }
-                                                                    </span>
-                                                                </div>
-                                                            </SelectItem>
-                                                        ),
-                                                    )}
-                                                </SelectContent>
-                                            </Select>
+                                            <div className="ml-7">
+                                                <SearchableSelect
+                                                    items={evaluators || []}
+                                                    value={
+                                                        selectedEvaluators.atasan
+                                                    }
+                                                    onValueChange={(value) =>
+                                                        setSelectedEvaluators(
+                                                            (prev) => ({
+                                                                ...prev,
+                                                                atasan: value,
+                                                            }),
+                                                        )
+                                                    }
+                                                    placeholder="Cari dan pilih atasan sebagai evaluator..."
+                                                    getLabel={(e) => e.name}
+                                                    getSubLabel={(e) =>
+                                                        `${e.jabatan} • ${e.biro?.nama_biro || ''}`
+                                                    }
+                                                />
+                                            </div>
                                         </div>
 
                                         <Separator />
@@ -620,72 +651,28 @@ export default function PeerAssignment({
                                                 </label>
                                             </div>
 
-                                            <Select
-                                                value={
-                                                    selectedEvaluators.penerima_layanan
-                                                }
-                                                onValueChange={(value) => {
-                                                    setSelectedEvaluators(
-                                                        (prev) => ({
-                                                            ...prev,
-                                                            penerima_layanan:
-                                                                value,
-                                                        }),
-                                                    );
-                                                }}
-                                            >
-                                                <SelectTrigger className="ml-7">
-                                                    <SelectValue placeholder="Pilih atasan sebagai evaluator...">
-                                                        {selectedPenerimaLayanan && (
-                                                            <span>
-                                                                {
-                                                                    selectedPenerimaLayanan.name
-                                                                }
-                                                                <span className="text-gray-500">
-                                                                    {' '}
-                                                                    -{' '}
-                                                                    {
-                                                                        selectedPenerimaLayanan.jabatan
-                                                                    }
-                                                                </span>
-                                                            </span>
-                                                        )}
-                                                    </SelectValue>
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    {evaluators?.map(
-                                                        (evaluator: any) => (
-                                                            <SelectItem
-                                                                key={
-                                                                    evaluator.id
-                                                                }
-                                                                value={
-                                                                    evaluator.uuid
-                                                                }
-                                                            >
-                                                                <div className="flex flex-col">
-                                                                    <span className="font-medium">
-                                                                        {
-                                                                            evaluator.name
-                                                                        }
-                                                                    </span>
-                                                                    <span className="text-xs text-gray-500">
-                                                                        {
-                                                                            evaluator.jabatan
-                                                                        }{' '}
-                                                                        •{' '}
-                                                                        {
-                                                                            evaluator
-                                                                                ?.biro
-                                                                                ?.nama_biro
-                                                                        }
-                                                                    </span>
-                                                                </div>
-                                                            </SelectItem>
-                                                        ),
-                                                    )}
-                                                </SelectContent>
-                                            </Select>
+                                            <div className="ml-7">
+                                                <SearchableSelect
+                                                    items={evaluators || []}
+                                                    value={
+                                                        selectedEvaluators.penerima_layanan
+                                                    }
+                                                    onValueChange={(value) => {
+                                                        setSelectedEvaluators(
+                                                            (prev) => ({
+                                                                ...prev,
+                                                                penerima_layanan:
+                                                                    value,
+                                                            }),
+                                                        );
+                                                    }}
+                                                    placeholder="Cari dan pilih penerima layanan sebagai evaluator..."
+                                                    getLabel={(e) => e.name}
+                                                    getSubLabel={(e) =>
+                                                        `${e.jabatan} • ${e.biro?.nama_biro || ''}`
+                                                    }
+                                                />
+                                            </div>
                                         </div>
 
                                         <Separator />
@@ -699,66 +686,27 @@ export default function PeerAssignment({
                                                 </label>
                                             </div>
 
-                                            <Select
-                                                value={selectedEvaluators.teman}
-                                                onValueChange={(value) => {
-                                                    setSelectedEvaluators(
-                                                        (prev) => ({
-                                                            ...prev,
-                                                            teman: value,
-                                                        }),
-                                                    );
-                                                }}
-                                            >
-                                                <SelectTrigger className="ml-7">
-                                                    <SelectValue placeholder="Pilih atasan sebagai evaluator...">
-                                                        {selectedTeman && (
-                                                            <span>
-                                                                {
-                                                                    selectedTeman.name
-                                                                }
-                                                                <span className="text-gray-500">
-                                                                    {' '}
-                                                                    -{' '}
-                                                                    {
-                                                                        selectedTeman.jabatan
-                                                                    }
-                                                                </span>
-                                                            </span>
-                                                        )}
-                                                    </SelectValue>
-                                                </SelectTrigger>
-
-                                                <SelectContent>
-                                                    {outsourcing?.map(
-                                                        (peer: any) => (
-                                                            <SelectItem
-                                                                key={peer.id}
-                                                                value={
-                                                                    peer.uuid
-                                                                }
-                                                            >
-                                                                <div className="flex flex-col">
-                                                                    <span className="font-medium">
-                                                                        {
-                                                                            peer.name
-                                                                        }
-                                                                    </span>
-                                                                    <span className="text-xs text-gray-500">
-                                                                        {
-                                                                            peer?.jabatan
-                                                                        }{' '}
-                                                                        •{' '}
-                                                                        {
-                                                                            peer?.biro
-                                                                        }
-                                                                    </span>
-                                                                </div>
-                                                            </SelectItem>
-                                                        ),
-                                                    )}
-                                                </SelectContent>
-                                            </Select>
+                                            <div className="ml-7">
+                                                <SearchableSelect
+                                                    items={outsourcing || []}
+                                                    value={
+                                                        selectedEvaluators.teman
+                                                    }
+                                                    onValueChange={(value) => {
+                                                        setSelectedEvaluators(
+                                                            (prev) => ({
+                                                                ...prev,
+                                                                teman: value,
+                                                            }),
+                                                        );
+                                                    }}
+                                                    placeholder="Cari dan pilih teman setingkat sebagai evaluator..."
+                                                    getLabel={(e) => e.name}
+                                                    getSubLabel={(e) =>
+                                                        `${e?.nama_jabatan || ''} • ${e?.biro || ''}`
+                                                    }
+                                                />
+                                            </div>
 
                                             {outsourcing.length === 0 && (
                                                 <div className="mt-2 ml-7 rounded-md border border-yellow-200 bg-yellow-50 p-3">
@@ -780,7 +728,9 @@ export default function PeerAssignment({
                         <DialogFooter>
                             <Button
                                 variant="outline"
-                                onClick={() => setIsDialogOpen(false)}
+                                onClick={() => {
+                                    setIsDialogOpen(false);
+                                }}
                             >
                                 Batal
                             </Button>

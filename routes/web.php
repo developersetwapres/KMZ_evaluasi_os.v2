@@ -4,6 +4,7 @@ use App\Http\Controllers\MorePages;
 use App\Http\Controllers\OutsourcingController;
 use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\PenugasanPenilaiController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -30,6 +31,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard/deatil-skor-peraspek/{outsourcing:uuid}', [OutsourcingController::class, 'detailByAspek'])->name('os.detailperaspek');
     Route::get('/dashboard/ranking-skor', [OutsourcingController::class, 'ranking'])->name('os.ranking');
 
+    Route::get('/dashboard/user-management', [UserController::class, 'index'])->name('user.index');
 
     Route::get('/dashboard/penugasan-peer', [PenugasanPenilaiController::class, 'index'])->name('penugasan.index');
     Route::post('/dashboard/penugasan-peer/store/{outsourcing:uuid}', [PenugasanPenilaiController::class, 'store'])->name('penugasan.store');

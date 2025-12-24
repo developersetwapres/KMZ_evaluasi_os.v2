@@ -133,10 +133,10 @@ class PenugasanPenilaiController extends Controller
                     [
                         'siklus_id'      => $siklus->id,
                         'outsourcing_id' => $outsourcing->id,
-                        'penilai_id'     => $penilaiUserId,
                         'tipe_penilai'   => $tipePenilai,
                     ],
                     [
+                        'penilai_id'    => $penilaiUserId,
                         'bobot_skor_id' => $bobotSkor->id,
                     ]
                 );

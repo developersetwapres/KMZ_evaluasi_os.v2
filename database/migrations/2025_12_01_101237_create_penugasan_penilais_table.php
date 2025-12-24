@@ -25,7 +25,7 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->unique(['siklus_id', 'outsourcing_id', 'penilai_id', 'tipe_penilai'], 'uq_penugasan');
+            $table->unique(['siklus_id', 'outsourcing_id', 'tipe_penilai'], 'uq_penugasan');
             $table->index('outsourcing_id', 'idx_penugasan_pekerja');
             $table->index('penilai_id', 'idx_penugasan_penilai');
         });

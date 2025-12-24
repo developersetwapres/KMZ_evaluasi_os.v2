@@ -56,8 +56,6 @@ export default function ResultsRecapPage({ evaluationResults }) {
 
     const units = [...new Set(evaluationResults.map((r: any) => r.unit_kerja))];
 
-    console.log(filteredResults);
-
     return (
         <AdminLayout>
             <div className="space-y-6">

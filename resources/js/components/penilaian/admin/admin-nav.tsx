@@ -1,9 +1,10 @@
 'use client';
 
-import { index } from '@/actions/App/Http/Controllers/PenugasanPenilaiController';
+import { index as indexPenugasan } from '@/actions/App/Http/Controllers/PenugasanPenilaiController';
 import { cn } from '@/lib/utils';
 import { dashboard } from '@/routes';
 import { ranking } from '@/routes/os';
+import { index as userIndex } from '@/routes/user';
 import { Link, usePage } from '@inertiajs/react';
 import { BarChart3, UserCog, Users } from 'lucide-react';
 
@@ -19,7 +20,7 @@ const navItems = [
         icon: BarChart3,
     },
     {
-        href: index.url(),
+        href: indexPenugasan.url(),
         label: 'Penugasan Peer',
         icon: Users,
     },
@@ -29,7 +30,7 @@ const navItems = [
     //     icon: Settings,
     // },
     {
-        href: '/admin/users',
+        href: userIndex.url(),
         label: 'Kelola User',
         icon: UserCog,
     },

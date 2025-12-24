@@ -126,7 +126,7 @@ export default function PeerAssignment({
 
         for (const emp of employees) {
             const ev = emp.evaluators || {};
-            if (ev.atasan && ev.penerima_layanan && ev.teman) {
+            if (ev.atasan.name && ev.penerima_layanan.name && ev.teman.name) {
                 sudah++;
             } else {
                 belum++;
@@ -137,8 +137,6 @@ export default function PeerAssignment({
     }
 
     const { sudah, belum } = hitungEvaluator(outsourcing);
-
-    console.log(outsourcing);
 
     return (
         <AdminLayout>
@@ -201,9 +199,7 @@ export default function PeerAssignment({
                                     (penugasan: PenugasanPeer, index) => {
                                         const assignedCount = Object.values(
                                             penugasan.evaluators,
-                                        ).filter(
-                                            (e) => e.name && e.jabatan,
-                                        ).length;
+                                        ).filter((e) => e.name).length;
 
                                         const completionPercentage =
                                             (assignedCount / 3) * 100;

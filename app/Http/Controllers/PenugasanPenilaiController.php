@@ -46,20 +46,34 @@ class PenugasanPenilaiController extends Controller
                 ];
 
                 foreach ($os->penugasan as $p) {
-                    if (array_key_exists($p->tipe_penilai, $evaluators)) {
-                        if ($evaluators[$p->tipe_penilai]['name'] === null) {
-                            $evaluators[$p->tipe_penilai]['name'] = $p->evaluators?->userable?->name;
-                            $evaluators[$p->tipe_penilai]['jabatan'] = $p->evaluators?->userable?->jabatan;
-                        }
+                    if (! array_key_exists($p->tipe_penilai, $evaluators)) {
+                        continue;
                     }
+
+                    if ($evaluators[$p->tipe_penilai]['name'] !== null) {
+                        continue;
+                    }
+
+                    $userable = $p->evaluators?->userable;
+
+                    if (! $userable) {
+                        continue;
+                    }
+
+                    $evaluators[$p->tipe_penilai] = [
+                        'name' => $userable->name,
+                        'jabatan' => method_exists($userable, 'displayJabatan')
+                            ? $userable->displayJabatan()
+                            : null,
+                    ];
                 }
 
                 return [
-                    'uuid'      => $os->uuid,
-                    'jabatan'      => $os->jabatan?->nama_jabatan,
-                    'biro'      => $os->biro?->nama_biro,
-                    'name'    => $os->name,
-                    'nama_jabatan'    => $os->jabatan->nama_jabatan,
+                    'uuid' => $os->uuid,
+                    'name' => $os->name,
+                    'jabatan' => $os->jabatan?->nama_jabatan,
+                    'biro' => $os->biro?->nama_biro,
+                    'nama_jabatan' => $os->jabatan?->nama_jabatan,
                     'evaluators' => $evaluators,
                 ];
             });
@@ -75,7 +89,6 @@ class PenugasanPenilaiController extends Controller
 
         return Inertia::render('admin/penugasan/page', $data);
     }
-
 
     /**
      * Show the form for creating a new resource.

@@ -64,7 +64,12 @@ class User extends Authenticatable
 
     public function userable(): MorphTo
     {
-        return $this->morphTo();
+        return $this->morphTo(
+            name: null,
+            type: 'userable_type',
+            id: 'userable_id',
+            ownerKey: 'nip'
+        );
     }
 
     public function penugasan()

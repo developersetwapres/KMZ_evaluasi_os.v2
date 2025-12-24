@@ -30,4 +30,10 @@ class MasterPegawai extends Model
             'nip'
         );
     }
+
+
+    public function displayJabatan(): ?string
+    {
+        return $this->jabatan;
+    }
 }

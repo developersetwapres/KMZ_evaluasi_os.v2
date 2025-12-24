@@ -203,9 +203,9 @@ class OutsourcingSeeder extends Seeder
         }
 
         foreach ($data as $key => $value) {
-            $emailName = strtolower($value['name']);          // lowercase
-            $emailName = preg_replace('/[^a-z0-9 ]/', '', $emailName); // hapus karakter aneh
-            $emailName = str_replace(' ', '.', $emailName);   // spasi jadi titik
+            $emailName = strtolower($value['name']);
+            $emailName = preg_replace('/[^a-z0-9 ]/', '', $emailName);
+            $emailName = str_replace(' ', '.', $emailName);
 
             User::create([
                 'nip'            => $value['nrp_os'],

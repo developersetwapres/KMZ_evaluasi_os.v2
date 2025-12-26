@@ -7,6 +7,8 @@ use App\Http\Requests\Storenilai_kriteriaRequest;
 use App\Http\Requests\Updatenilai_kriteriaRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\NilaiKriteria;
+use App\Models\Outsourcing;
+use App\Services\Penilaian\RekapHasilService;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -66,5 +68,30 @@ class NilaiKriteriaController extends Controller
     public function destroy(NilaiKriteria $nilai_kriteria)
     {
         //
+    }
+
+    public function rekaphasil(): Response
+    {
+        $Outsourcings = Outsourcing::with([
+            'penugasan.bobotSkor',
+            'penugasan.penilian.kriteria.aspek.bobotSkor',
+        ])->where('status', 'aktif')->get();
+
+        $evaluationResults = $Outsourcings->map(function ($os) {
+            return [
+                'id' => $os->id,
+                'name' => $os->name,
+                'uuid' => $os->uuid,
+                'image' => $os->image,
+                'jabatan' => $os->jabatan->nama_jabatan,
+                ...app(RekapHasilService::class)->hitung($os->penugasan),
+            ];
+        });
+
+        $data = [
+            'evaluationResults' => $evaluationResults,
+        ];
+
+        return Inertia::render('admin/rekaphasil/page', $data);
     }
 }

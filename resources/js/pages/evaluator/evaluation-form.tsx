@@ -93,6 +93,7 @@ interface EvaluationFormProps {
     evaluator: any;
     evaluationData: any;
     uuidPenugasanPeer: string;
+    tipePenilai: string;
 }
 
 export default function EvaluationForm({
@@ -100,6 +101,7 @@ export default function EvaluationForm({
     evaluator,
     evaluationData,
     uuidPenugasanPeer,
+    tipePenilai,
 }: EvaluationFormProps) {
     const [currentStep, setCurrentStep] = useState(0);
     const [scores, setScores] = useState<Record<string, number>>({});
@@ -217,14 +219,6 @@ export default function EvaluationForm({
             if (score > 70) return 'text-yellow-600 bg-yellow-50';
             if (score > 60) return 'text-orange-600 bg-orange-50';
             return 'text-red-600 bg-red-50';
-        };
-
-        const getScoreLabel = (score: number) => {
-            if (score > 90) return 'Sangat Baik';
-            if (score > 80) return 'Baik';
-            if (score > 70) return 'Butuh Perbaikan';
-            if (score > 60) return 'Kurang';
-            return 'Sangat Kurang';
         };
 
         return (
@@ -597,15 +591,17 @@ export default function EvaluationForm({
                                         {evaluator?.name}
                                     </h3>
                                     <p className="text-lg font-medium text-green-100">
-                                        {evaluator?.jabatan}
+                                        {evaluator?.jabatan_id
+                                            ? evaluator?.jabatan?.nama_jabatan
+                                            : evaluator?.jabatan}
                                     </p>
 
                                     {/* Role Badge */}
                                     <div className="mt-4">
                                         <Badge className="border-white/30 bg-white/20 px-4 py-2 text-sm font-semibold text-white">
-                                            {evaluator?.role === 'atasan'
+                                            {tipePenilai == 'atasan'
                                                 ? 'Atasan'
-                                                : evaluator?.role ===
+                                                : tipePenilai ==
                                                     'penerima_layanan'
                                                   ? 'Penerima Layanan'
                                                   : 'Teman Setingkat'}

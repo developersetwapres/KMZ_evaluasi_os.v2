@@ -3,6 +3,7 @@
 import { EmployeeHeader } from '@/components/penilaian/detail/employee-header';
 import { EmployeeNavigation } from '@/components/penilaian/detail/employee-navigation';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
     Card,
     CardContent,
@@ -10,33 +11,64 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
+import { router } from '@inertiajs/react';
 import { BarChart3, Calculator, Users } from 'lucide-react';
+import { useState } from 'react';
 
-const getScoreLabel = (score: number) => {
-    if (score >= 91) return 'Sangat Baik';
-    if (score >= 81) return 'Baik';
-    if (score >= 71) return 'Butuh Perbaikan';
-    if (score >= 61) return 'Kurang';
-    return 'Sangat Kurang';
-};
+export default function nilaiAkhir({ rekapAspekEvaluator }) {
+    const [isResetNilaiOpen, setIsResetNilaiOpen] = useState(false);
+    const [selectedPenilaian, setSelectedPenilaian] = useState<any>(null);
 
-const getScoreBadgeColor = (score: number) => {
-    if (score >= 91) return 'bg-green-100 text-green-800 border-green-200';
-    if (score >= 81) return 'bg-blue-100 text-blue-800 border-blue-200';
-    if (score >= 71) return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-    if (score >= 61) return 'bg-orange-100 text-orange-800 border-orange-200';
-    return 'bg-red-100 text-red-800 border-red-200';
-};
+    const getScoreLabel = (score: number) => {
+        if (score >= 91) return 'Sangat Baik';
+        if (score >= 81) return 'Baik';
+        if (score >= 71) return 'Butuh Perbaikan';
+        if (score >= 61) return 'Kurang';
+        return 'Sangat Kurang';
+    };
 
-const getScoreColor = (score: number) => {
-    if (score >= 91) return 'text-green-600';
-    if (score >= 81) return 'text-blue-600';
-    if (score >= 71) return 'text-yellow-600';
-    if (score >= 61) return 'text-orange-600';
-    return 'text-red-600';
-};
+    const getScoreBadgeColor = (score: number) => {
+        if (score >= 91) return 'bg-green-100 text-green-800 border-green-200';
+        if (score >= 81) return 'bg-blue-100 text-blue-800 border-blue-200';
+        if (score >= 71)
+            return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+        if (score >= 61)
+            return 'bg-orange-100 text-orange-800 border-orange-200';
+        return 'bg-red-100 text-red-800 border-red-200';
+    };
 
-export default function detailAspekEvaluator({ rekapAspekEvaluator }) {
+    const getScoreColor = (score: number) => {
+        if (score >= 91) return 'text-green-600';
+        if (score >= 81) return 'text-blue-600';
+        if (score >= 71) return 'text-yellow-600';
+        if (score >= 61) return 'text-orange-600';
+        return 'text-red-600';
+    };
+
+    const handleResetNilai = () => {
+        setIsResetNilaiOpen(false);
+        setSelectedPenilaian(null);
+
+        console.log(selectedPenilaian);
+
+        return;
+        router.post(route('evaluasi.resetscore'), idPenugasan, {
+            onSuccess: () => {
+                toast({
+                    title: 'Berhasil',
+                    description: 'Nilai sudah direset',
+                });
+            },
+        });
+    };
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
             <EmployeeHeader />
@@ -190,14 +222,27 @@ export default function detailAspekEvaluator({ rekapAspekEvaluator }) {
                                                 className="transform rounded-lg border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-blue-100 p-6 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
                                             >
                                                 <div className="mb-4 text-center">
-                                                    <h4 className="text-lg font-bold text-blue-800">
+                                                    <h4 className="mb-2 text-lg font-bold text-blue-800">
                                                         {
                                                             evaluator.evaluatorName
                                                         }
                                                     </h4>
-                                                    <p className="text-sm text-blue-600">
-                                                        {evaluatorType}
-                                                    </p>
+
+                                                    <div
+                                                        className="mb-4 inline-block rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700 backdrop-blur-sm"
+                                                        onDoubleClick={() => {
+                                                            (setIsResetNilaiOpen(
+                                                                true,
+                                                            ),
+                                                                setSelectedPenilaian(
+                                                                    evaluator,
+                                                                ));
+                                                        }}
+                                                    >
+                                                        <button>
+                                                            {evaluatorType}
+                                                        </button>
+                                                    </div>
                                                 </div>
 
                                                 <div className="mb-4 rounded-lg bg-white p-3 text-center">
@@ -242,6 +287,40 @@ export default function detailAspekEvaluator({ rekapAspekEvaluator }) {
                         </CardContent>
                     </Card>
                 </div>
+
+                {/* ResetNilai Confirmation Dialog */}
+                <Dialog
+                    open={isResetNilaiOpen}
+                    onOpenChange={setIsResetNilaiOpen}
+                >
+                    <DialogContent className="sm:max-w-md">
+                        <DialogHeader>
+                            <DialogTitle>Reset Nilai</DialogTitle>
+                            <DialogDescription>
+                                Apakah Anda yakin ingin mereset penilaian{' '}
+                                {selectedPenilaian?.evaluatorName}?
+                            </DialogDescription>
+                        </DialogHeader>
+
+                        <DialogFooter>
+                            <Button
+                                variant="outline"
+                                onClick={() => {
+                                    (setIsResetNilaiOpen(false),
+                                        setSelectedPenilaian(null));
+                                }}
+                            >
+                                Batal
+                            </Button>
+                            <Button
+                                variant="destructive"
+                                onClick={handleResetNilai}
+                            >
+                                Reset Nilai
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
             </main>
         </div>
     );

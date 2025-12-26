@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\MorePages;
+use App\Http\Controllers\NilaiKriteriaController;
 use App\Http\Controllers\OutsourcingController;
 use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\PenugasanPenilaiController;
 use App\Http\Controllers\UserController;
+use App\Models\NilaiKriteria;
 use Illuminate\Support\Facades\Route;
 
 
@@ -26,12 +28,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', [OutsourcingController::class, 'rekaphasil'])->name('dashboard');
-    Route::get('/dashboard/deatil-skor/{outsourcing:uuid}', [OutsourcingController::class, 'detailByAspekEvaluator'])->name('os.rekapaspekevaluator');
-    Route::get('/dashboard/deatil-skor-peraspek/{outsourcing:uuid}', [OutsourcingController::class, 'detailByAspek'])->name('os.detailperaspek');
+    Route::get('/dashboard', [NilaiKriteriaController::class, 'rekaphasil'])->name('dashboard');
+
+    Route::get('/dashboard/nilai-akhir/{outsourcing:uuid}', [OutsourcingController::class, 'nilaiAkhir'])->name('os.rekapaspekevaluator');
+    Route::get('/dashboard/rekap-nilai/{outsourcing:uuid}', [OutsourcingController::class, 'rekapNilai'])->name('os.detailperaspek');
+    Route::get('/dashboard/catatan-evaluator/{outsourcing:uuid}', [OutsourcingController::class, 'catatanEvaluator'])->name('os.catatanEvaluator');
+    Route::get('/dashboard/nilai-perkriteria/{outsourcing:uuid}/{tipePenilai?}', [OutsourcingController::class, 'nilaiPerkriteria'])->name('os.nilaiPerkriteria');
+
     Route::get('/dashboard/ranking-skor', [OutsourcingController::class, 'ranking'])->name('os.ranking');
 
-    Route::get('/dashboard/user-management', [UserController::class, 'index'])->name('user.index');
+    Route::get('/dashboard/user-management/{user}', [UserController::class, 'index'])->name('user.index');
 
     Route::get('/dashboard/penugasan-peer', [PenugasanPenilaiController::class, 'index'])->name('penugasan.index');
     Route::post('/dashboard/penugasan-peer/store/{outsourcing:uuid}', [PenugasanPenilaiController::class, 'store'])->name('penugasan.store');

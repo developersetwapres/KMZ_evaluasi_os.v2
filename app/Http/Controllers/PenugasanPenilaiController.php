@@ -188,7 +188,7 @@ class PenugasanPenilaiController extends Controller
         // dd(Hash::make('password'));
         $data = [
             'penugasanPeer' => Auth::user()->penugasan()
-                ->select(['outsourcing_id', 'siklus_id', 'status', 'uuid'])
+                ->select(['outsourcing_id', 'siklus_id', 'status', 'uuid', 'tipe_penilai'])
                 ->whereHas('siklus', function ($q) {
                     $q->where('is_active', true);
                 })

@@ -36,9 +36,7 @@ const getScoreColor = (score: number) => {
     return 'text-red-600';
 };
 
-export default function detailPeraspek({ peraspek }) {
-    console.log(peraspek);
-
+export default function rekapNilai({ peraspek }) {
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
             <EmployeeHeader />
@@ -145,7 +143,7 @@ export default function detailPeraspek({ peraspek }) {
                                                 <div className="mb-2 text-center font-mono text-xs text-green-600">
                                                     {penilai?.averageScore}
                                                     {' × '}
-                                                    {penilai.bobot}
+                                                    {penilai.bobot * 100}
                                                     {'% = '}
                                                 </div>
                                                 <div className="text-4xl font-bold text-red-500">

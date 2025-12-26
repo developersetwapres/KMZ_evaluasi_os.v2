@@ -13,35 +13,41 @@ use function Termwind\render;
 
 class UserController extends Controller
 {
-    public function index(): Response
+    public function index($user): Response
     {
-        $masterPegawais = MasterPegawai::where('kode_unit', 02)
-            ->orderBy('name', 'asc')
-            ->with('biro')
-            ->get()
-            ->map(fn($p) => [
-                'id'   => $p->uuid,
-                'name' => $p->name,
-                'type' => 'pegawai',
-                'biro' => $p->biro?->name,
-                'jabatan' => $p->jabatan,
-            ]);
-
-        $outsourcings = Outsourcing::with(['biro', 'jabatan'])
-            ->orderBy('name', 'asc')
-            ->get()
-            ->map(fn($o) => [
-                'id'      => $o->uuid,
-                'name'    => $o->name,
-                'type'    => 'outsourcing',
-                'biro'    => $o->biro?->nama_biro,
-                'jabatan' => $o->jabatan?->nama_jabatan,
-            ]);
+        if ($user == 'outsourcings') {
+            $initialUsers = Outsourcing::with(['biro', 'jabatan'])
+                ->orderBy('name', 'asc')
+                ->with('user')
+                ->get()
+                ->map(fn($o) => [
+                    'id'      => $o->uuid,
+                    'name'    => $o->name,
+                    'nip'     => $o->user?->email,
+                    'type'    => 'outsourcing',
+                    'biro'    => $o->biro?->nama_biro,
+                    'jabatan' => $o->jabatan?->nama_jabatan,
+                ]);
+        } elseif ($user == 'evaluators') {
+            $initialUsers = MasterPegawai::where('kode_unit', '02')
+                ->orderBy('name', 'asc')
+                ->with(['biro', 'user'])
+                ->get()
+                ->map(fn($p) => [
+                    'id'        => $p->uuid,
+                    'name'      => $p->name,
+                    'type'      => 'pegawai',
+                    'nip'       => $p->user?->nip_sso,
+                    'biro'      => $p->biro?->name,
+                    'jabatan'   => $p->jabatan,
+                ]);
+        } else {
+            $initialUsers = [];
+        }
 
         $data = [
-            'initialUsers' => $outsourcings->concat($masterPegawais),
+            'initialUsers' => $initialUsers,
         ];
-
 
         return Inertia::render('admin/user/page', $data);
     }

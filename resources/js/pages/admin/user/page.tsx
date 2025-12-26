@@ -31,6 +31,7 @@ import {
 } from '@/components/ui/select';
 import AdminLayout from '@/layouts/app/app-adminkmz-layout';
 import { cn } from '@/lib/utils';
+import { index } from '@/routes/user';
 import { Link, router, usePage } from '@inertiajs/react';
 import {
     Building2,
@@ -39,8 +40,6 @@ import {
     Eye,
     EyeOff,
     Mail,
-    MapPin,
-    Phone,
     Plus,
     Search,
     Shield,
@@ -255,8 +254,8 @@ export default function UserManagement({ initialUsers }: any) {
     };
 
     const { url } = usePage();
-    const isOutsourcing = url.startsWith('/users/outsourcing');
-    const isEvaluator = url.startsWith('/users/evaluator');
+    const isOutsourcing = url.startsWith(index.url('outsourcings'));
+    const isEvaluator = url.startsWith(index.url('evaluators'));
 
     return (
         <AdminLayout>
@@ -276,7 +275,7 @@ export default function UserManagement({ initialUsers }: any) {
                 </Card>
 
                 {/* Stats Cards */}
-                <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+                {/* <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
                     {roleOptions.map((role) => {
                         const count = users?.filter(
                             (u: any) => u.role === role.value,
@@ -302,11 +301,11 @@ export default function UserManagement({ initialUsers }: any) {
                             </Card>
                         );
                     })}
-                </div>
+                </div> */}
 
-                <nav className="grid h-12 w-full grid-cols-2 rounded-lg bg-muted p-1">
+                <nav className="grid h-10 w-full grid-cols-2 rounded-lg bg-muted p-1">
                     <Link
-                        href="/users/outsourcing"
+                        href={index.url('outsourcings')}
                         className={cn(
                             'flex items-center justify-center space-x-2 rounded-md px-3 py-2 text-sm font-medium transition-all',
                             isOutsourcing
@@ -321,7 +320,7 @@ export default function UserManagement({ initialUsers }: any) {
                     </Link>
 
                     <Link
-                        href="/users/evaluator"
+                        href={index.url('evaluators')}
                         className={cn(
                             'flex items-center justify-center space-x-2 rounded-md px-3 py-2 text-sm font-medium transition-all',
                             isEvaluator
@@ -430,7 +429,7 @@ export default function UserManagement({ initialUsers }: any) {
                                                         <CardTitle className="text-lg">
                                                             {user.name}
                                                         </CardTitle>
-                                                        <CardDescription className="flex items-center space-x-1">
+                                                        {/* <CardDescription className="flex items-center space-x-1">
                                                             <div
                                                                 className={`rounded-full p-1 ${roleInfo.color}`}
                                                             >
@@ -439,7 +438,7 @@ export default function UserManagement({ initialUsers }: any) {
                                                             <span>
                                                                 {user.jabatan}
                                                             </span>
-                                                        </CardDescription>
+                                                        </CardDescription> */}
                                                     </div>
                                                 </div>
                                                 <Badge
@@ -467,31 +466,19 @@ export default function UserManagement({ initialUsers }: any) {
                                                 <div className="flex items-center space-x-2">
                                                     <Mail className="h-3 w-3" />
                                                     <span className="truncate">
-                                                        {user.email}
+                                                        {user.nip}
                                                     </span>
                                                 </div>
                                                 <div className="flex items-center space-x-2">
                                                     <Building2 className="h-3 w-3" />
                                                     <span className="text-xs">
-                                                        {user.unit_kerja}
+                                                        {user.biro}
                                                     </span>
                                                 </div>
                                                 <div className="flex items-center space-x-2">
-                                                    <MapPin className="h-3 w-3" />
+                                                    <Icon className="h-3 w-3" />
                                                     <span className="text-xs">
-                                                        {user.lokasi_kerja}
-                                                    </span>
-                                                </div>
-                                                <div className="flex items-center space-x-2">
-                                                    <Phone className="h-3 w-3" />
-                                                    <span>{user.phone}</span>
-                                                </div>
-                                                <div className="flex items-center space-x-2">
-                                                    <span className="text-xs font-medium">
-                                                        Perusahaan:
-                                                    </span>
-                                                    <span className="text-xs">
-                                                        {user.perusahaan}
+                                                        {user.jabatan}
                                                     </span>
                                                 </div>
                                             </div>

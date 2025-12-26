@@ -52,15 +52,10 @@ class User extends Authenticatable
         ];
     }
 
-    // public function pegawai(): BelongsTo
-    // {
-    //     return $this->belongsTo(MasterPegawai::class, 'nip', 'nip');
-    // }
+    protected $casts = [
+        'role' => 'array'
+    ];
 
-    // public function getKodeUnitAttribute()
-    // {
-    //     return $this->pegawai?->unit?->kode_unit;
-    // }
 
     public function userable(): MorphTo
     {

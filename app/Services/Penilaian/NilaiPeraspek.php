@@ -2,18 +2,13 @@
 
 namespace App\Services\Penilaian;
 
-use App\Models\Outsourcing;
 use App\Models\Aspek;
 
-class ViewScore
+class NilaiPeraspek
 {
-    public function getDetailByAspek(Outsourcing $outsourcing): array
+    public function getDetailByAspek($penilaian): array
     {
         $aspects = Aspek::with(['kriteria', 'bobotSkor'])->get();
-
-        $penugasans = $outsourcing->penugasan()
-            ->with(['penilian'])
-            ->get();
 
         $finalTotalScore = 0;
         $aspectResults = [];
@@ -23,21 +18,16 @@ class ViewScore
 
             // kumpulkan semua nilai kriteria dalam 1 aspek
             $nilai = collect();
-            $bobot = null;
+            $bobot = optional($aspect->bobotSkor)->bobot;
 
-            $penugasans->each(function ($penugasan) use (&$nilai, &$bobot, $kriteriaIds, $aspect) {
-                // ambil bobot pertama yang ada
-                $bobot ??= optional($aspect->bobotSkor)->bobot;
-
-                $penugasan->penilian
-                    ->whereIn('kriteria_id', $kriteriaIds)
-                    ->each(
-                        fn($p) =>
-                        $p->nilai !== null
-                            ? $nilai->push((float) $p->nilai)
-                            : null
-                    );
-            });
+            $penilaian
+                ->whereIn('kriteria_id', $kriteriaIds)
+                ->each(
+                    fn($p) =>
+                    $p->nilai !== null
+                        ? $nilai->push((float) $p->nilai)
+                        : null
+                );
 
             if ($nilai->isEmpty() || $bobot === null) {
                 continue;
@@ -51,12 +41,12 @@ class ViewScore
             $aspectResults[] = [
                 'title' => $aspect->title,
                 'nilai' => $average,
+                'avg' => round($nilai->avg(), 2),
                 'bobot' => $bobot / 100,
             ];
         }
 
         return [
-            'name' => $outsourcing->name,
             'finalTotalScore' => round($finalTotalScore, 2),
             'aspects' => $aspectResults,
         ];

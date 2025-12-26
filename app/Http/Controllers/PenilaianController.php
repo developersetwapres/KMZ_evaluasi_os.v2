@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorepenilaianRequest;
 use App\Http\Requests\UpdatepenilaianRequest;
 use App\Models\Aspek;
+use App\Models\MasterPegawai;
+use App\Models\Outsourcing;
 use App\Models\Penilaian;
 use App\Models\PenugasanPenilai;
+use App\Services\Penilaian\NilaiPeraspek;
 use Illuminate\Http\RedirectResponse;
 use App\Services\Penilaian\ViewScore;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +29,7 @@ class PenilaianController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(PenugasanPenilai $penugasan, ViewScore $service): Response | RedirectResponse
+    public function create(PenugasanPenilai $penugasan, NilaiPeraspek $service): Response | RedirectResponse
     {
         abort_if(!$penugasan->outsourcings, 404);
 
@@ -34,14 +37,20 @@ class PenilaianController extends Controller
             return to_route('home');
         }
 
-
         $jabatanId = $penugasan->outsourcings->jabatan_id;
+
+        $evaluator = $penugasan->evaluators?->userable;
+
+        if ($penugasan->evaluators?->userable instanceof Outsourcing) {
+            $evaluator->load('jabatan');
+        }
 
         $data = [
             'outsourcing' => $penugasan->outsourcings->load(['jabatan', 'biro']),
-            'evaluator' => $penugasan->evaluators?->userable,
-            'rekapPerAspek' => $service->getDetailByAspek($penugasan->outsourcings),
+            'evaluator' => $evaluator,
+            'rekapPerAspek' => $service->getDetailByAspek($penugasan->penilian),
             'uuidPenugasanPeer' => $penugasan->uuid,
+            'tipePenilai' => $penugasan->tipe_penilai,
             'overallNotes' =>  $penugasan->catatan,
             'evaluationData' => Aspek::select(['id', 'title'])
                 ->with([
@@ -55,6 +64,7 @@ class PenilaianController extends Controller
                             ->orWhere('jabatan_id', 16),
                     ]),
                 ])
+                ->latest()
                 ->get(),
         ];
 

@@ -30,7 +30,7 @@ const navItems = [
     //     icon: Settings,
     // },
     {
-        href: userIndex.url(),
+        href: userIndex.url('outsourcings'),
         label: 'Kelola User',
         icon: UserCog,
     },

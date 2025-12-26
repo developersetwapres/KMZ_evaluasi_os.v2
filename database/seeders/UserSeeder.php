@@ -6,6 +6,7 @@ use App\Models\MasterPegawai;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -7648,6 +7649,19 @@ class UserSeeder extends Seeder
             ['id' => '4114', 'nip' => '198507192025212034', 'nip_sso' => '198507192025212034', 'is_ldap' => '1', 'email' => NULL, 'password' => NULL,],
             ['id' => '4115', 'nip' => '199011292025211051', 'nip_sso' => '199011292025211051', 'is_ldap' => '1', 'email' => NULL, 'password' => NULL,]
         ];
+
+        User::create(
+            [
+                'nip'      => '7777777333',
+                'nip_sso'  => null,
+                'userable_id'    => '7777777333',
+                'userable_type'  => MasterPegawai::class,
+                'role'  => 'administrator',
+                'is_ldap'  => false,
+                'email'  => 'it@set.wapresri.go.id',
+                'password'  => Hash::make('7777777333'),
+            ]
+        );
 
         foreach ($users  as $key => $value) {
             User::create(

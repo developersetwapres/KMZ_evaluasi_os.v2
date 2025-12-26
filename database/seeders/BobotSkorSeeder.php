@@ -24,7 +24,7 @@ class BobotSkorSeeder extends Seeder
                 'siklus_id'  => 1,
                 'title' => 'Aspek Perilaku',
                 'kode_bobot' => 'aspek-perilaku',
-                'bobot' => 60.00,
+                'bobot' => 40.00,
             ],
             [
                 'siklus_id'  => 1,

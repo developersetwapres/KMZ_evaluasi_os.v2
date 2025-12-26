@@ -1,7 +1,6 @@
 'use client';
 
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import {
     Card,
     CardContent,
@@ -9,7 +8,9 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
+import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
 import { useToast } from '@/hooks/use-toast';
+import { logout } from '@/routes';
 import { create } from '@/routes/penilaian';
 import { SharedData } from '@/types';
 import { Head, Link, router, usePage } from '@inertiajs/react';
@@ -21,24 +22,12 @@ export default function EvaluatorPage({ penugasanPeer }: any) {
 
     const { toast } = useToast();
 
+    const cleanup = useMobileNavigation();
+
     const handleLogout = () => {
+        cleanup();
         router.flushAll();
-
-        router.post(
-            route('logout'),
-            {},
-            {
-                onSuccess: () => {
-                    toast({
-                        title: 'Logout Berhasil',
-                        description: 'Anda telah keluar dari sistem',
-                    });
-                },
-            },
-        );
     };
-
-    console.log(penugasanPeer);
 
     return (
         <>
@@ -62,14 +51,15 @@ export default function EvaluatorPage({ penugasanPeer }: any) {
                                 </div>
                             </div>
 
-                            <Button
-                                variant="outline"
+                            <Link
+                                className="flex inline-flex items-center justify-center gap-2 space-x-2 rounded-md border bg-transparent px-3 py-2 text-sm font-medium whitespace-nowrap hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+                                href={logout()}
                                 onClick={handleLogout}
-                                className="flex items-center space-x-2 bg-transparent hover:border-red-200 hover:bg-red-50 hover:text-red-600 dark:bg-gray-900"
+                                data-test="logout-button"
                             >
                                 <LogOut className="h-4 w-4" />
-                                <span className="">Logout</span>
-                            </Button>
+                                Log out
+                            </Link>
                         </div>
                     </div>
                 </header>
@@ -92,12 +82,10 @@ export default function EvaluatorPage({ penugasanPeer }: any) {
                                             {user?.userable?.name}
                                         </CardTitle>
                                         <CardDescription className="text-green-100">
-                                            {user?.role
-                                                ?.replace(/_/g, ' ') // ubah _ jadi spasi
-                                                ?.replace(/\b\w/g, (char) =>
-                                                    char.toUpperCase(),
-                                                )}{' '}
-                                            - {user?.userable?.jabatan}
+                                            {user?.is_ldap == '0'
+                                                ? user?.userable?.jabatan
+                                                      ?.nama_jabatan
+                                                : user?.userable?.jabatan}
                                         </CardDescription>
                                     </div>
                                 </div>
@@ -224,6 +212,14 @@ export default function EvaluatorPage({ penugasanPeer }: any) {
                                                 </span>
                                             </div>
                                         </Link>
+
+                                        <span className="text-xs text-gray-600">
+                                            Nilai sebagai{' '}
+                                            {employee.tipe_penilai?.replace(
+                                                /_/g,
+                                                ' ',
+                                            )}
+                                        </span>
                                     </CardContent>
 
                                     {/* Hover Effect Overlay */}

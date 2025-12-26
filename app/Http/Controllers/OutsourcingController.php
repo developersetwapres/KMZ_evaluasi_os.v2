@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Outsourcing;
 use App\Http\Requests\StoreOutsourcingRequest;
 use App\Http\Requests\UpdateOutsourcingRequest;
+use App\Models\Aspek;
+use App\Models\PenugasanPenilai;
 use App\Services\Penilaian\AspectEvaluationService;
+use App\Services\Penilaian\NilaiPeraspek;
 use App\Services\Penilaian\RankingScoreByJabatan;
 use App\Services\Penilaian\RekapHasilService;
 use Inertia\Inertia;
@@ -69,39 +72,13 @@ class OutsourcingController extends Controller
         //
     }
 
-    public function rekaphasil(): Response
-    {
-        $Outsourcings = Outsourcing::with([
-            'penugasan.bobotSkor',
-            'penugasan.penilian.kriteria.aspek.bobotSkor',
-        ])->where('status', 'aktif')->get();
 
-        $evaluationResults = $Outsourcings->map(function ($os) {
-            return [
-                'id' => $os->id,
-                'name' => $os->name,
-                'uuid' => $os->uuid,
-                'image' => $os->image,
-                'jabatan' => $os->jabatan->nama_jabatan,
-                ...app(RekapHasilService::class)->hitung($os->penugasan),
-            ];
-        });
-
-        $data = [
-            'evaluationResults' => $evaluationResults,
-        ];
-
-        return Inertia::render('admin/rekaphasil/page', $data);
-    }
-
-
-    public function detailByAspekEvaluator(Outsourcing $outsourcing): Response
+    public function nilaiAkhir(Outsourcing $outsourcing): Response
     {
         $outsourcing->load([
             'penugasan.bobotSkor',
             'penugasan.penilian.kriteria.aspek.bobotSkor',
         ]);
-
 
         $data = [
             'rekapAspekEvaluator' => [
@@ -115,18 +92,59 @@ class OutsourcingController extends Controller
             ]
         ];
 
-        return Inertia::render('admin/detail/detailaspekevaluator', $data);
+        return Inertia::render('admin/detail/nilai-akhir', $data);
     }
 
-    public function detailByAspek(Outsourcing $outsourcing, AspectEvaluationService $service): Response
+    public function rekapNilai(Outsourcing $outsourcing, AspectEvaluationService $service): Response
     {
 
         $data = [
             'peraspek' =>  $service->getDetailByAspek($outsourcing)
         ];
 
-        return Inertia::render('admin/detail/detailperaspek', $data);
+        return Inertia::render('admin/detail/rekap-nilai', $data);
     }
+
+    public function catatanEvaluator(Outsourcing $outsourcing): Response
+    {
+        $data = [
+            'penugasans' => $outsourcing->penugasan->load('evaluators.userable'),
+            'uuidOs' => $outsourcing->uuid,
+        ];
+
+        return Inertia::render('admin/detail/catatanevaluator', $data);
+    }
+
+    public function nilaiPerkriteria(Outsourcing $outsourcing, NilaiPeraspek $service, $tipePenilai = 'atasan'): Response
+    {
+
+        $penugasan = $outsourcing->penugasan->firstWhere('tipe_penilai', $tipePenilai);
+
+        $data = [
+            'rekapPerAspek' => $service->getDetailByAspek($penugasan->penilian),
+
+            'evaluationData' => Aspek::select(['id', 'title'])
+                ->with([
+                    'kriteria' => fn($q) =>
+                    $q->with([
+                        'penilaian'
+                        => fn($qPenilaian) =>
+                        $qPenilaian->where('penugasan_id', $penugasan->id),
+
+                        'indikators' => fn($q2) =>
+                        $q2->where('jabatan_id', $outsourcing->jabatan_id)
+                            ->orWhere('jabatan_id', 16),
+                    ]),
+                ])
+                ->latest()
+                ->get(),
+
+            'uuidOs' => $outsourcing->uuid,
+        ];
+
+        return Inertia::render('admin/detail/nilaiperkriteria', $data);
+    }
+
 
     public function ranking(RankingScoreByJabatan $service): Response
     {

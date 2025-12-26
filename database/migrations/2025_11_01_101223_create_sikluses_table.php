@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
 
             $table->string('title', 191)->unique('uq_siklus_title');
+            $table->uuid('uuid')->unique();
             $table->date('tanggal_mulai');
             $table->date('tanggal_selesai');
             $table->boolean('is_active')->default(false);

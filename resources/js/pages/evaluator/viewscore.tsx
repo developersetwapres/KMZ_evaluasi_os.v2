@@ -1,25 +1,13 @@
 'use client';
 
+import { ViewScoreComponent } from '@/components/penilaian/view-score-component';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { home } from '@/routes';
 import { Outsourcing } from '@/types';
 import { Head, Link } from '@inertiajs/react';
-import {
-    ArrowLeft,
-    CheckCircle,
-    ClipboardCheck,
-    FileText,
-    Info,
-    UserCheck,
-} from 'lucide-react';
+import { ArrowLeft, ClipboardCheck, FileText, UserCheck } from 'lucide-react';
 
 // Classification function (untouched)
 const getScoreClassification = (score: number) => {
@@ -54,6 +42,7 @@ interface ViewScoreProps {
     evaluationData: any;
     overallNotes: string;
     rekapPerAspek: any;
+    tipePenilai: string;
 }
 
 export default function ViewScore({
@@ -62,6 +51,7 @@ export default function ViewScore({
     evaluationData,
     overallNotes,
     rekapPerAspek,
+    tipePenilai,
 }: ViewScoreProps) {
     const aspects = Object.keys(evaluationData);
 
@@ -161,14 +151,16 @@ export default function ViewScore({
                                         {evaluator.name}
                                     </h3>
                                     <p className="text-lg font-medium text-green-100">
-                                        {evaluator.jabatan}
+                                        {evaluator?.jabatan_id
+                                            ? evaluator?.jabatan?.nama_jabatan
+                                            : evaluator?.jabatan}
                                     </p>
 
                                     <div className="mt-3">
                                         <Badge className="border-white/30 bg-white/20 px-4 py-2 text-sm font-semibold text-white">
-                                            {evaluator.role === 'atasan'
+                                            {tipePenilai == 'atasan'
                                                 ? 'Atasan'
-                                                : evaluator.role ===
+                                                : tipePenilai ==
                                                     'penerima_layanan'
                                                   ? 'Penerima Layanan'
                                                   : 'Teman Setingkat'}
@@ -226,231 +218,10 @@ export default function ViewScore({
 
                         <div className="space-y-5">
                             {/* Overall Summary Card - UPDATED to match evaluation-form.tsx concept */}
-                            <Card className="gap-0 bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
-                                <CardHeader>
-                                    <CardTitle className="flex items-center space-x-3 text-2xl">
-                                        <div className="rounded-full bg-white/20 p-3">
-                                            <CheckCircle className="h-8 w-8" />
-                                        </div>
-                                        <span>
-                                            Review Penilaian Keseluruhan
-                                        </span>
-                                    </CardTitle>
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="grid gap-6 md:grid-cols-3">
-                                        {rekapPerAspek?.aspects?.map(
-                                            (aspek, index) => {
-                                                const nilaiAkhir =
-                                                    aspek.nilai * aspek.bobot;
-
-                                                return (
-                                                    <div
-                                                        key={index}
-                                                        className="text-center"
-                                                    >
-                                                        <div className="text-sm text-blue-100">
-                                                            {aspek.title}
-                                                        </div>
-
-                                                        <div className="text-xs text-blue-100">
-                                                            {aspek.nilai.toFixed(
-                                                                2,
-                                                            )}{' '}
-                                                            ×{' '}
-                                                            {aspek.bobot * 100}%
-                                                        </div>
-
-                                                        <div className="mt-1 text-3xl font-extrabold tracking-tight">
-                                                            {nilaiAkhir.toFixed(
-                                                                2,
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                );
-                                            },
-                                        )}
-
-                                        {/* SKOR AKHIR */}
-                                        <div className="text-center">
-                                            <div className="text-sm text-blue-100">
-                                                Skor Akhir
-                                            </div>
-
-                                            <div className="text-xs text-blue-100">
-                                                {rekapPerAspek?.aspects
-                                                    ?.map((a) =>
-                                                        (
-                                                            a.nilai * a.bobot
-                                                        ).toFixed(2),
-                                                    )
-                                                    .join(' + ')}
-                                            </div>
-
-                                            <div className="mt-1 text-3xl font-extrabold tracking-tight">
-                                                {rekapPerAspek.finalTotalScore.toFixed(
-                                                    2,
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
-
-                            {/* Detailed Review by Aspect - UPDATED to show Total, Count, and emphasize Avg */}
-                            {aspects.map((aspectKey, aspectIndex) => {
-                                const aspect =
-                                    evaluationData[
-                                        aspectKey as keyof typeof evaluationData
-                                    ];
-
-                                return (
-                                    <Card
-                                        key={aspectKey}
-                                        className="gap-4 border-l-4 border-l-blue-500"
-                                    >
-                                        <CardHeader className="bg-gradient-to-r from-gray-50 to-blue-50">
-                                            <div className="flex items-center justify-between">
-                                                <div className="flex items-center space-x-4">
-                                                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-xl font-bold text-white">
-                                                        {aspectIndex + 1}
-                                                    </div>
-                                                    <div>
-                                                        <CardTitle className="text-2xl text-blue-800">
-                                                            {aspect.title}
-                                                        </CardTitle>
-                                                        <CardDescription className="text-blue-600">
-                                                            {
-                                                                aspect.kriteria
-                                                                    .length
-                                                            }{' '}
-                                                            Kriteria
-                                                        </CardDescription>
-                                                    </div>
-                                                </div>
-
-                                                {(() => {
-                                                    const { total, avg } =
-                                                        getAspectStats(
-                                                            aspectKey,
-                                                        );
-                                                    return (
-                                                        <div
-                                                            className={`rounded-xl px-6 py-3 ${getScoreColor(avg)}`}
-                                                        >
-                                                            <div className="text-sm">
-                                                                Total Skor:{' '}
-                                                                {total}
-                                                            </div>
-                                                            <div className="text-sm font-semibold">
-                                                                Rata-Rata :{' '}
-                                                                {avg}
-                                                            </div>
-                                                        </div>
-                                                    );
-                                                })()}
-                                            </div>
-                                        </CardHeader>
-
-                                        <CardContent className="p-6 pt-3">
-                                            <div className="space-y-6">
-                                                {aspect.kriteria.map(
-                                                    (
-                                                        criterion: any,
-                                                        criterionIndex: number,
-                                                    ) => {
-                                                        const score =
-                                                            criterion.penilaian
-                                                                ?.nilai || 0;
-
-                                                        const classification =
-                                                            getScoreClassification(
-                                                                score,
-                                                            );
-
-                                                        return (
-                                                            <div
-                                                                key={
-                                                                    criterion.id
-                                                                }
-                                                                className="rounded-lg border-l-4 border-l-gray-300 bg-gray-50 p-5"
-                                                            >
-                                                                <div className="mb-4 flex items-start justify-between">
-                                                                    <div className="flex flex-1 items-start space-x-3">
-                                                                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-600 text-sm font-bold text-white">
-                                                                            {aspectIndex +
-                                                                                1}
-                                                                            .
-                                                                            {criterionIndex +
-                                                                                1}
-                                                                        </div>
-                                                                        <div className="flex-1">
-                                                                            <h4 className="text-xl font-semibold text-gray-800">
-                                                                                {
-                                                                                    criterion.title
-                                                                                }
-                                                                            </h4>
-                                                                            <div className="mt-2 text-lg font-bold text-gray-900">
-                                                                                Nilai:{' '}
-                                                                                {
-                                                                                    score
-                                                                                }
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="ml-4">
-                                                                        <Badge
-                                                                            className={`${classification.color} border px-3 py-1 text-sm font-semibold`}
-                                                                        >
-                                                                            {
-                                                                                classification.label
-                                                                            }
-                                                                        </Badge>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div className="mt-4 rounded-lg border border-gray-200 bg-white p-4">
-                                                                    <h5 className="mb-2 flex items-center space-x-2 font-medium text-gray-700">
-                                                                        <Info className="h-4 w-4" />
-                                                                        <span>
-                                                                            Indikator
-                                                                            Penilaian:
-                                                                        </span>
-                                                                    </h5>
-                                                                    <ul className="space-y-1 text-sm text-gray-600">
-                                                                        {criterion?.indikators?.map(
-                                                                            (
-                                                                                indicator: any,
-                                                                                idx: number,
-                                                                            ) => (
-                                                                                <li
-                                                                                    key={
-                                                                                        idx
-                                                                                    }
-                                                                                    className="flex items-start space-x-2"
-                                                                                >
-                                                                                    <span className="mt-1 text-blue-500">
-                                                                                        •
-                                                                                    </span>
-                                                                                    <span>
-                                                                                        {
-                                                                                            indicator?.deskripsi
-                                                                                        }
-                                                                                    </span>
-                                                                                </li>
-                                                                            ),
-                                                                        )}
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        );
-                                                    },
-                                                )}
-                                            </div>
-                                        </CardContent>
-                                    </Card>
-                                );
-                            })}
+                            <ViewScoreComponent
+                                rekapPerAspek={rekapPerAspek}
+                                evaluationData={evaluationData}
+                            />
 
                             {/* Overall Notes */}
                             {overallNotes && (

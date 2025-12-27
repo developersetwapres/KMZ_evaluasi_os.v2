@@ -5,21 +5,14 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
-import { Link } from '@inertiajs/react';
+import { SharedData } from '@/types';
+import { Link, usePage } from '@inertiajs/react';
 import { Building2, User } from 'lucide-react';
 
-interface UserData {
-    name: string;
-    email: string;
-    jabatan: string;
-    unit_kerja: string;
-}
+export function AdminProfileCard() {
+    const { auth } = usePage<SharedData>().props;
+    const user = auth.user;
 
-interface AdminProfileCardProps {
-    user: UserData;
-}
-
-export function AdminProfileCard({ user }: AdminProfileCardProps) {
     return (
         <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
             <CardHeader>
@@ -29,10 +22,10 @@ export function AdminProfileCard({ user }: AdminProfileCardProps) {
                     </div>
                     <div>
                         <CardTitle className="text-2xl text-white">
-                            {user.name}
+                            {user.userable?.name}
                         </CardTitle>
                         <CardDescription className="text-blue-100">
-                            {user.jabatan} • {user.unit_kerja}
+                            {user.userable?.jabatan}
                         </CardDescription>
                     </div>
                 </div>
@@ -42,17 +35,19 @@ export function AdminProfileCard({ user }: AdminProfileCardProps) {
                     <div className="space-y-2">
                         <div className="flex items-center space-x-2">
                             <span className="font-medium">Email:</span>
-                            <span>{user.email}</span>
+                            <span>{user?.email}</span>
                         </div>
                         <div className="flex items-center space-x-2">
                             <span className="font-medium">Role:</span>
-                            <span>System Administrator</span>
+                            {user.role.map((r, o) => (
+                                <span>{r},</span>
+                            ))}
                         </div>
                     </div>
                     <div className="space-y-2">
                         <div className="flex items-center space-x-2">
                             <Building2 className="h-4 w-4" />
-                            <span>{user.unit_kerja}</span>
+                            <span>{user.userable?.biro?.nama_biro}</span>
                         </div>
                         <div className="flex items-center space-x-2">
                             <span className="font-medium">Akses:</span>

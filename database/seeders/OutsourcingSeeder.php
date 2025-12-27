@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Outsourcing;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -15,7 +14,6 @@ class OutsourcingSeeder extends Seeder
      */
     public function run(): void
     {
-
         $data = [
             ['name' => 'Entus Haeromi', 'nrp_os' => 'NA200705197801'],
             ['name' => 'Nana Mulyana', 'nrp_os' => 'NA201011197401'],
@@ -212,7 +210,7 @@ class OutsourcingSeeder extends Seeder
                 'nip_sso'        => null,
                 'userable_id'    => $value['nrp_os'],
                 'userable_type'  => Outsourcing::class,
-                'role'           => 'outsourcing',
+                'role'           => ['evaluator'],
                 'is_ldap'        => 0,
                 'email'          => $emailName . '@wapresri.go.id',
                 'password'       => Hash::make($value['nrp_os']),

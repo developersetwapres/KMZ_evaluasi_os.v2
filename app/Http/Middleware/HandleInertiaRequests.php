@@ -50,8 +50,8 @@ class HandleInertiaRequests extends Middleware
                         'userable' => function ($query) {
                             $query->morphWith(
                                 [
-                                    MasterPegawai::class => [],
-                                    Outsourcing::class => ['jabatan']
+                                    MasterPegawai::class => ['biro'],
+                                    Outsourcing::class => ['biro', 'jabatan'],
                                 ]
                             );
                         }

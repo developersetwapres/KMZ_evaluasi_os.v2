@@ -19,6 +19,8 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
+import { toast } from '@/hooks/use-toast';
+import { reset } from '@/routes/penugasan';
 import { router } from '@inertiajs/react';
 import { BarChart3, Calculator, Users } from 'lucide-react';
 import { useState } from 'react';
@@ -57,17 +59,16 @@ export default function nilaiAkhir({ rekapAspekEvaluator }) {
         setIsResetNilaiOpen(false);
         setSelectedPenilaian(null);
 
-        console.log(selectedPenilaian);
-
-        return;
-        router.post(route('evaluasi.resetscore'), idPenugasan, {
-            onSuccess: () => {
-                toast({
-                    title: 'Berhasil',
-                    description: 'Nilai sudah direset',
-                });
-            },
-        });
+        (router.post(reset.url(selectedPenilaian.uuidPenugasan)),
+            {
+                onSuccess: () => {
+                    return;
+                    toast({
+                        title: 'Berhasil',
+                        description: 'Nilai sudah direset',
+                    });
+                },
+            });
     };
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">

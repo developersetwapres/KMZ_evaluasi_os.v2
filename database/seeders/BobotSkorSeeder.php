@@ -41,7 +41,7 @@ class BobotSkorSeeder extends Seeder
             [
                 'siklus_id'  => 1,
                 'title' => 'Penilai Teman',
-                'kode_bobot' => 'teman',
+                'kode_bobot' => 'teman_setingkat',
                 'bobot' => 20.00,
             ]
         ];

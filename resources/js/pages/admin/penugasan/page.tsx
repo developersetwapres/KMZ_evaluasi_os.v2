@@ -148,7 +148,7 @@ export default function PeerAssignment({
     const [selectedEvaluators, setSelectedEvaluators] = useState({
         atasan: '',
         penerima_layanan: '',
-        teman: '',
+        teman_setingkat: '',
     });
 
     const { toast } = useToast();
@@ -165,7 +165,7 @@ export default function PeerAssignment({
             selectedEmployee &&
             (selectedEvaluators.atasan ||
                 selectedEvaluators.penerima_layanan ||
-                selectedEvaluators.teman)
+                selectedEvaluators.teman_setingkat)
         ) {
             router.post(store.url(selectedEmployee.uuid), selectedEvaluators, {
                 onSuccess: () => {
@@ -174,7 +174,7 @@ export default function PeerAssignment({
                     setSelectedEvaluators({
                         atasan: '',
                         penerima_layanan: '',
-                        teman: '',
+                        teman_setingkat: '',
                     });
 
                     // Show success message
@@ -199,7 +199,7 @@ export default function PeerAssignment({
             if (
                 ev.atasan?.name &&
                 ev.penerima_layanan?.name &&
-                ev.teman?.name
+                ev.teman_setingkat?.name
             ) {
                 sudah++;
             } else {
@@ -397,10 +397,10 @@ export default function PeerAssignment({
                                                                                             ?.penerima_layanan
                                                                                             ?.uuid ||
                                                                                         '',
-                                                                                    teman:
+                                                                                    teman_setingkat:
                                                                                         penugasan
                                                                                             ?.evaluators
-                                                                                            ?.teman
+                                                                                            ?.teman_setingkat
                                                                                             ?.uuid ||
                                                                                         '',
                                                                                 },
@@ -509,17 +509,17 @@ export default function PeerAssignment({
                                                                     </div>
                                                                 </div>
 
-                                                                {/* Teman */}
+                                                                {/* Teman_setingkat */}
                                                                 <div className="mb-2.5 flex items-center space-x-2 rounded border p-2">
                                                                     <Users2 className="h-4 w-4 text-green-600" />
                                                                     <div className="flex-1">
                                                                         <div className="text-xs font-medium text-gray-700">
-                                                                            Teman
+                                                                            Teman_setingkat
                                                                             Setingkat
                                                                         </div>
                                                                         {penugasan
                                                                             ?.evaluators
-                                                                            ?.teman
+                                                                            ?.teman_setingkat
                                                                             ?.name ? (
                                                                             <div className="flex items-center space-x-1">
                                                                                 <CheckCircle className="h-3 w-3 text-green-600" />
@@ -527,14 +527,14 @@ export default function PeerAssignment({
                                                                                     {
                                                                                         penugasan
                                                                                             .evaluators
-                                                                                            .teman
+                                                                                            .teman_setingkat
                                                                                             .name
                                                                                     }{' '}
                                                                                     -{' '}
                                                                                     {
                                                                                         penugasan
                                                                                             .evaluators
-                                                                                            .teman
+                                                                                            .teman_setingkat
                                                                                             ?.jabatan
                                                                                     }
                                                                                 </span>
@@ -690,13 +690,14 @@ export default function PeerAssignment({
                                                 <SearchableSelect
                                                     items={outsourcing || []}
                                                     value={
-                                                        selectedEvaluators.teman
+                                                        selectedEvaluators.teman_setingkat
                                                     }
                                                     onValueChange={(value) => {
                                                         setSelectedEvaluators(
                                                             (prev) => ({
                                                                 ...prev,
-                                                                teman: value,
+                                                                teman_setingkat:
+                                                                    value,
                                                             }),
                                                         );
                                                     }}
@@ -711,7 +712,8 @@ export default function PeerAssignment({
                                             {outsourcing.length === 0 && (
                                                 <div className="mt-2 ml-7 rounded-md border border-yellow-200 bg-yellow-50 p-3">
                                                     <p className="text-sm text-yellow-800">
-                                                        Tidak ada teman
+                                                        Tidak ada
+                                                        teman_setingkat
                                                         setingkat lain di unit
                                                         yang sama untuk
                                                         ditugaskan sebagai

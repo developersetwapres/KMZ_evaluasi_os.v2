@@ -12,9 +12,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Siklus::factory(5)->create();
-
         $this->call([
+            SiklusSeeder::class,
             UnitSeeder::class,
             BiroSeeder::class,
             JabatanSeeder::class,
@@ -22,7 +21,6 @@ class DatabaseSeeder extends Seeder
             AspekSeeder::class,
             KriteriaSeeder::class,
             IndikatorSeeder::class,
-            PenugasanPenilaiSeeder::class,
             MasterPegawaiSeeder::class,
             OutsourcingSeeder::class,
             UserSeeder::class,

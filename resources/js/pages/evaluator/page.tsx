@@ -86,6 +86,8 @@ export default function EvaluatorPage({ penugasanPeer }: any) {
                                                 ? user?.userable?.jabatan
                                                       ?.nama_jabatan
                                                 : user?.userable?.jabatan}
+                                            {' • '}
+                                            {user?.userable?.biro?.nama_biro}
                                         </CardDescription>
                                     </div>
                                 </div>

@@ -18,6 +18,7 @@ return new class extends Migration
 
             $table->string('nip')->unique();
             $table->string('name');
+            $table->string('image', 255);
 
             // relasi berbasis kode string
             $table->string('kode_instansi', 50)->nullable();

@@ -5,13 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorepenilaianRequest;
 use App\Http\Requests\UpdatepenilaianRequest;
 use App\Models\Aspek;
-use App\Models\MasterPegawai;
 use App\Models\Outsourcing;
 use App\Models\Penilaian;
 use App\Models\PenugasanPenilai;
 use App\Services\Penilaian\NilaiPeraspek;
+use App\Services\Penilaian\RekapHasilService;
 use Illuminate\Http\RedirectResponse;
-use App\Services\Penilaian\ViewScore;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -124,5 +123,33 @@ class PenilaianController extends Controller
     public function destroy(Penilaian $penilaian)
     {
         //
+    }
+
+    public function rekaphasil(): Response
+    {
+        $Outsourcings = Outsourcing::with([
+            'penugasan.bobotSkor',
+            'penugasan.penilian.kriteria.aspek.bobotSkor',
+        ])
+            ->orderBy('name', 'asc')
+            ->where('status', 'aktif')
+            ->get();
+
+        $evaluationResults = $Outsourcings->map(function ($os) {
+            return [
+                'id' => $os->id,
+                'name' => $os->name,
+                'uuid' => $os->uuid,
+                'image' => $os->image,
+                'jabatan' => $os->jabatan->nama_jabatan,
+                ...app(RekapHasilService::class)->hitung($os->penugasan),
+            ];
+        });
+
+        $data = [
+            'evaluationResults' => $evaluationResults,
+        ];
+
+        return Inertia::render('admin/rekaphasil/page', $data);
     }
 }

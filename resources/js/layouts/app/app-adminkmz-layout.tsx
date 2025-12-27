@@ -4,12 +4,6 @@ import { AdminProfileCard } from '@/components/penilaian/admin/admin-profile-car
 import type React from 'react';
 
 // Mock user data - replace with actual data fetching
-const user = {
-    name: 'John Doe',
-    email: 'john.doe@company.com',
-    jabatan: 'IT Manager',
-    unit_kerja: 'Departemen Teknologi Informasi',
-};
 
 export default function AdminLayout({
     children,
@@ -21,7 +15,7 @@ export default function AdminLayout({
             <AdminHeader />
             <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
                 <div className="space-y-8">
-                    <AdminProfileCard user={user} />
+                    <AdminProfileCard />
                     <div className="space-y-6">
                         <AdminNav />
                         {children}

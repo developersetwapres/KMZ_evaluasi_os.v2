@@ -26,7 +26,7 @@ class StorePenugasanPenilaiRequest extends FormRequest
         return [
             'atasan' => ['required', 'uuid', 'exists:master_pegawais,uuid'],
             'penerima_layanan' => ['required', 'uuid', 'exists:master_pegawais,uuid'],
-            'teman' => ['required', 'uuid', 'exists:outsourcings,uuid'],
+            'teman_setingkat' => ['required', 'uuid', 'exists:outsourcings,uuid'],
         ];
     }
 
@@ -41,9 +41,9 @@ class StorePenugasanPenilaiRequest extends FormRequest
             'penerima_layanan.uuid' => 'Format penilai penerima layanan tidak valid.',
             'penerima_layanan.exists' => 'Penilai penerima layanan tidak ditemukan.',
 
-            'teman.required' => 'Penilai teman wajib dipilih.',
-            'teman.uuid' => 'Format penilai teman tidak valid.',
-            'teman.exists' => 'Penilai teman tidak ditemukan.',
+            'teman_setingkat.required' => 'Penilai teman wajib dipilih.',
+            'teman_setingkat.uuid' => 'Format penilai teman tidak valid.',
+            'teman_setingkat.exists' => 'Penilai teman tidak ditemukan.',
         ];
     }
 }

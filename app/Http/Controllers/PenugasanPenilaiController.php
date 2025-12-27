@@ -36,12 +36,13 @@ class PenugasanPenilaiController extends Controller
                 'biro',
                 'jabatan'
             ])
+            ->orderBy('name', 'asc')
             ->get()
             ->map(function ($os) {
 
                 $evaluators = [
                     'atasan' => ['name' => null, 'jabatan' => null],
-                    'teman' => ['name' => null, 'jabatan' => null],
+                    'teman_setingkat' => ['name' => null, 'jabatan' => null],
                     'penerima_layanan' => ['name' => null, 'jabatan' => null],
                 ];
 
@@ -115,7 +116,7 @@ class PenugasanPenilaiController extends Controller
 
                 // 2. Tentukan penilai berdasarkan tipe
                 $penilaiUserId = match ($tipePenilai) {
-                    'teman' => Outsourcing::where('uuid', $penilaiUuid)
+                    'teman_setingkat' => Outsourcing::where('uuid', $penilaiUuid)
                         ->with('user')
                         ->firstOrFail()
                         ->user
@@ -197,5 +198,17 @@ class PenugasanPenilaiController extends Controller
         ];
 
         return Inertia::render('evaluator/page', $data);
+    }
+
+    public function reset(PenugasanPenilai $PenugasanPenilai)
+    {
+        foreach ($PenugasanPenilai->penilian as $key => $penugasan) {
+            $penugasan->delete();
+        };
+
+        $PenugasanPenilai->update([
+            'catatan' => null,
+            'status' => 'incomplete',
+        ]);
     }
 }

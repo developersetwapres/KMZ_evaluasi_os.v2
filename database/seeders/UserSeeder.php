@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\MasterPegawai;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -15,7 +14,6 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-
         $users = [
             [
                 'id' => '6',
@@ -7650,32 +7648,54 @@ class UserSeeder extends Seeder
             ['id' => '4115', 'nip' => '199011292025211051', 'nip_sso' => '199011292025211051', 'is_ldap' => '1', 'email' => NULL, 'password' => NULL,]
         ];
 
-        User::create(
-            [
-                'nip'      => '7777777333',
-                'nip_sso'  => null,
-                'userable_id'    => '7777777333',
-                'userable_type'  => MasterPegawai::class,
-                'role'  => 'administrator',
-                'is_ldap'  => false,
-                'email'  => 'it@set.wapresri.go.id',
-                'password'  => Hash::make('7777777333'),
-            ]
-        );
+        // User::create(
+        //     [
+        //         'nip'      => '7777777333',
+        //         'nip_sso'  => null,
+        //         'userable_id'    => '7777777333',
+        //         'userable_type'  => MasterPegawai::class,
+        //         'role'  => ['administrator', 'operator'],
+        //         'is_ldap'  => false,
+        //         'email'  => 'it@set.wapresri.go.id',
+        //         'password'  => Hash::make('7777777333'),
+        //     ]
+        // );
 
-        foreach ($users  as $key => $value) {
-            User::create(
-                [
-                    'nip'      => $value['nip'],
-                    'nip_sso'  => $value['nip_sso'],
-                    'userable_id'    => $value['nip'],
-                    'userable_type'  => MasterPegawai::class,
-                    'role'  => $value['role'] ?? 'evaluator',
-                    'is_ldap'  => $value['is_ldap'],
-                    'email'  => $value['email'],
-                    'password'  => $value['password'],
-                ]
-            );
+        // foreach ($users  as $key => $value) {
+        //     User::create(
+        //         [
+        //             'nip'      => $value['nip'],
+        //             'nip_sso'  => $value['nip_sso'],
+        //             'userable_id'    => $value['nip'],
+        //             'userable_type'  => MasterPegawai::class,
+        //             'role'  => $value['role'] ?? ['evaluator'],
+        //             'is_ldap'  => $value['is_ldap'],
+        //             'email'  => $value['email'],
+        //             'password'  => $value['password'],
+        //         ]
+        //     );
+        // }
+
+        $asignAdministrator = [
+            '197404071999031001',
+            '198005012008012015',
+        ];
+
+        $asignAdministratorOperator = [
+            '198605282009122001',
+            '198503022009021001',
+        ];
+
+        foreach ($asignAdministrator as $key => $adm) {
+            User::where('nip', $adm)->update([
+                'role' => ['operator', 'evaluator']
+            ]);
+        }
+
+        foreach ($asignAdministratorOperator as $key => $admo) {
+            User::where('nip', $adm)->update([
+                'role' => ['administrator', 'operator', 'evaluator']
+            ]);
         }
     }
 }

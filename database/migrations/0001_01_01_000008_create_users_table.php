@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('nip_sso')->nullable();
             $table->boolean('is_ldap');
             $table->string('email')->unique()->nullable();
-            $table->json('role')->default('evaluator');
+            $table->json('role')->default(['evaluator']);
             $table->string('password')->nullable();
             $table->enum('status', ['aktif', 'nonaktif'])->default('aktif');
 

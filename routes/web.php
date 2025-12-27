@@ -1,12 +1,9 @@
 <?php
 
-use App\Http\Controllers\MorePages;
-use App\Http\Controllers\NilaiKriteriaController;
 use App\Http\Controllers\OutsourcingController;
 use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\PenugasanPenilaiController;
 use App\Http\Controllers\UserController;
-use App\Models\NilaiKriteria;
 use Illuminate\Support\Facades\Route;
 
 
@@ -16,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 //     ]);
 // }])->name('home');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'role:evaluator'])->group(function () {
     Route::get('/', [PenugasanPenilaiController::class, 'card'])->name('home');
 
     Route::get('/penilaian/view-score/{penugasan:uuid}', [PenilaianController::class, 'show'])->name('penilaian.show');
@@ -27,8 +24,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', [NilaiKriteriaController::class, 'rekaphasil'])->name('dashboard');
+Route::middleware(['auth', 'verified', 'role:operator'])->group(function () {
+    Route::get('/dashboard', [PenilaianController::class, 'rekaphasil'])->name('dashboard');
 
     Route::get('/dashboard/nilai-akhir/{outsourcing:uuid}', [OutsourcingController::class, 'nilaiAkhir'])->name('os.rekapaspekevaluator');
     Route::get('/dashboard/rekap-nilai/{outsourcing:uuid}', [OutsourcingController::class, 'rekapNilai'])->name('os.detailperaspek');
@@ -41,6 +38,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/dashboard/penugasan-peer', [PenugasanPenilaiController::class, 'index'])->name('penugasan.index');
     Route::post('/dashboard/penugasan-peer/store/{outsourcing:uuid}', [PenugasanPenilaiController::class, 'store'])->name('penugasan.store');
+});
+
+Route::middleware(['auth', 'verified', 'role:administrator'])->group(function () {
+    Route::post('/dashboard/penugasan-peer/reset/{PenugasanPenilai:uuid}', [PenugasanPenilaiController::class, 'reset'])->name('penugasan.reset');
 });
 
 require __DIR__ . '/settings.php';

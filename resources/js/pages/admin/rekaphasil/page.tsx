@@ -32,9 +32,8 @@ export default function ResultsRecapPage({ evaluationResults }) {
     const filteredResults = evaluationResults?.filter((result: any) => {
         const matchesSearch =
             result.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            result.unit_kerja.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesUnit =
-            filterUnit === 'all' || result.unit_kerja === filterUnit;
+            result.biro.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesUnit = filterUnit === 'all' || result.biro === filterUnit;
         return matchesSearch && matchesUnit;
     });
 
@@ -54,7 +53,7 @@ export default function ResultsRecapPage({ evaluationResults }) {
         return 'Sangat Kurang';
     };
 
-    const units = [...new Set(evaluationResults.map((r: any) => r.unit_kerja))];
+    const units = [...new Set(evaluationResults.map((r: any) => r.biro))];
 
     return (
         <AdminLayout>
@@ -146,7 +145,7 @@ export default function ResultsRecapPage({ evaluationResults }) {
                                                         {result.name}
                                                     </CardTitle>
                                                     <CardDescription>
-                                                        {result.unit_kerja} •{' '}
+                                                        {result.biro} •{' '}
                                                         {result.jabatan}
                                                     </CardDescription>
                                                 </div>

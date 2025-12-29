@@ -40,7 +40,7 @@ export function AdminProfileCard() {
                         <div className="flex items-center space-x-2">
                             <span className="font-medium">Role:</span>
                             {user.role.map((r, o) => (
-                                <span>{r},</span>
+                                <span key={o}>{r},</span>
                             ))}
                         </div>
                     </div>

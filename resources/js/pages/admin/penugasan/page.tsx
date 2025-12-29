@@ -156,8 +156,7 @@ export default function PeerAssignment({
     const filteredSearchEmployees = outsourcing?.filter(
         (emp: any) =>
             emp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            emp.unit_kerja.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            emp.perusahaan.toLowerCase().includes(searchTerm.toLowerCase()),
+            emp.biro.toLowerCase().includes(searchTerm.toLowerCase()),
     );
 
     const handleAssignEvaluators = () => {
@@ -326,7 +325,7 @@ export default function PeerAssignment({
                                                                     </h3>
                                                                     <p className="mb-1.5 text-sm text-gray-600">
                                                                         {
-                                                                            penugasan.unit_kerja
+                                                                            penugasan.biro
                                                                         }
                                                                     </p>
                                                                     <Badge className="bg-blue-100 text-xs text-blue-800">

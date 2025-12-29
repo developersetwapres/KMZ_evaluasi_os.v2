@@ -148,7 +148,7 @@ export default function UserManagement({ initialUsers }: any) {
         const matchesSearch =
             user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.unit_kerja.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.biro.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.jabatan.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesRole = filterRole === 'all' || user.role === filterRole;
         return matchesSearch && matchesRole;

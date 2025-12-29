@@ -141,6 +141,7 @@ class PenilaianController extends Controller
                 'name' => $os->name,
                 'uuid' => $os->uuid,
                 'image' => $os->image,
+                'biro' => $os->biro?->nama_biro,
                 'jabatan' => $os->jabatan->nama_jabatan,
                 ...app(RekapHasilService::class)->hitung($os->penugasan),
             ];

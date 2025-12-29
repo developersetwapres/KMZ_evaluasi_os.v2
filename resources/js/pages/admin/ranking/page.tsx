@@ -130,8 +130,6 @@ export default function RankingPage({ outsourcingData }: any) {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 20;
 
-    console.log(outsourcingData);
-
     const currentData = dataMap[selectedPosition] || [];
 
     const totalPages = Math.ceil(currentData.length / itemsPerPage) || 0;

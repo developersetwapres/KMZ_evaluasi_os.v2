@@ -1,5 +1,11 @@
 'use client';
 
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
 import {
     Card,
@@ -8,15 +14,94 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
 import { useToast } from '@/hooks/use-toast';
 import { logout } from '@/routes';
 import { create } from '@/routes/penilaian';
 import { SharedData } from '@/types';
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import { CheckCircle, ClipboardList, Clock, LogOut, User } from 'lucide-react';
+import {
+    Award,
+    Calendar,
+    CheckCircle,
+    ClipboardList,
+    Clock,
+    History,
+    LogOut,
+    User,
+} from 'lucide-react';
 
-export default function EvaluatorPage({ penugasanPeer }: any) {
+const semesterHistory = [
+    {
+        id: 'sem-2024-2',
+        name: 'Semester Genap 2024/2025',
+        period: 'Februari - Juli 2025',
+        status: 'completed',
+        employees: [
+            {
+                id: 1,
+                uuid: 'uuid-1',
+                outsourcings: {
+                    name: 'Ahmad Fauzi',
+                    jabatan: 'IT Support',
+                    image: 'placeholder-user.jpg',
+                },
+                status: 'completed',
+                tipe_penilai: 'atasan_langsung',
+                score: 88,
+            },
+            {
+                id: 2,
+                uuid: 'uuid-2',
+                outsourcings: {
+                    name: 'Siti Nurhaliza',
+                    jabatan: 'Admin',
+                    image: 'placeholder-user.jpg',
+                },
+                status: 'completed',
+                tipe_penilai: 'peer',
+                score: 92,
+            },
+        ],
+    },
+    {
+        id: 'sem-2024-1',
+        name: 'Semester Ganjil 2024/2025',
+        period: 'Agustus 2024 - Januari 2025',
+        status: 'completed',
+        employees: [
+            {
+                id: 3,
+                uuid: 'uuid-3',
+                outsourcings: {
+                    name: 'Budi Santoso',
+                    jabatan: 'Security',
+                    image: 'placeholder-user.jpg',
+                },
+                status: 'completed',
+                tipe_penilai: 'atasan_langsung',
+                score: 85,
+            },
+            {
+                id: 4,
+                uuid: 'uuid-4',
+                outsourcings: {
+                    name: 'Lisa Permata',
+                    jabatan: 'Receptionist',
+                    image: 'placeholder-user.jpg',
+                },
+                status: 'completed',
+                tipe_penilai: 'peer',
+                score: 90,
+            },
+        ],
+    },
+];
+
+export default function EvaluatorPage({ penugasanPeer, semesterHistory }: any) {
+    console.log(semesterHistory);
+
     const { auth } = usePage<SharedData>().props;
     const user = auth.user;
 
@@ -52,7 +137,7 @@ export default function EvaluatorPage({ penugasanPeer }: any) {
                             </div>
 
                             <Link
-                                className="flex inline-flex items-center justify-center gap-2 space-x-2 rounded-md border bg-transparent px-3 py-2 text-sm font-medium whitespace-nowrap hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+                                className="inline-flex items-center justify-center gap-2 space-x-2 rounded-md border bg-transparent px-3 py-2 text-sm font-medium whitespace-nowrap hover:border-red-200 hover:bg-red-50 hover:text-red-600"
                                 href={logout()}
                                 onClick={handleLogout}
                                 data-test="logout-button"
@@ -94,168 +179,425 @@ export default function EvaluatorPage({ penugasanPeer }: any) {
                             </CardHeader>
                         </Card>
 
-                        {/* Search and Stats */}
-                        <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-                            <div>
-                                <h2 className="text-2xl font-bold text-gray-900">
-                                    Daftar Pegawai yang Dinilai
-                                </h2>
-                                <p className="text-gray-600">
-                                    {user.type === 'outsourcing'
-                                        ? 'Pegawai teman setingkat yang harus Anda nilai'
-                                        : `Pegawai outsourcing yang harus dinilai`}
-                                </p>
+                        {/* Tabs for Current Semester and History */}
+                        <Tabs className="space-y-6" defaultValue={'current'}>
+                            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                                <TabsList className="grid w-full grid-cols-2 sm:w-auto">
+                                    <TabsTrigger
+                                        value="current"
+                                        className="gap-2"
+                                    >
+                                        <Calendar className="h-4 w-4" />
+                                        Semester Aktif
+                                    </TabsTrigger>
+                                    <TabsTrigger
+                                        value="history"
+                                        className="gap-2"
+                                    >
+                                        <History className="h-4 w-4" />
+                                        Riwayat Semester
+                                    </TabsTrigger>
+                                </TabsList>
                             </div>
 
-                            <div className="flex items-center space-x-4">
-                                <div className="text-center">
-                                    <div className="text-2xl font-bold text-blue-600">
-                                        {penugasanPeer?.length}
-                                    </div>
-                                    <div className="text-sm text-gray-500">
-                                        Total Pegawai
-                                    </div>
-                                </div>
-                                <div className="text-center">
-                                    <div className="text-2xl font-bold text-green-600">
-                                        {
-                                            penugasanPeer?.filter(
-                                                (emp: any) =>
-                                                    emp.status === 'completed',
-                                            ).length
-                                        }
-                                    </div>
-                                    <div className="text-sm text-gray-500">
-                                        Selesai
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Creative Employee Cards */}
-                        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                            {penugasanPeer?.map((employee: any) => (
-                                <Card
-                                    key={employee.id}
-                                    className="group relative overflow-hidden border-0 bg-gradient-to-br from-white to-blue-50 pb-2 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl"
-                                >
-                                    {/* Status Badge - Floating */}
-                                    <div className="absolute top-4 right-4 z-10">
-                                        <Badge
-                                            variant={
-                                                employee.status === 'completed'
-                                                    ? 'default'
-                                                    : 'secondary'
-                                            }
-                                            className={`flex items-center space-x-1 px-3 py-1 shadow-lg ${
-                                                employee.status === 'completed'
-                                                    ? 'bg-green-500 text-white hover:bg-green-600'
-                                                    : 'bg-orange-500 text-white hover:bg-orange-600'
-                                            }`}
-                                        >
-                                            {employee.status === 'completed' ? (
-                                                <CheckCircle className="h-3 w-3" />
-                                            ) : (
-                                                <Clock className="h-3 w-3" />
-                                            )}
-                                            <span className="text-xs font-medium">
-                                                {employee.status == 'completed'
-                                                    ? 'Selesai'
-                                                    : 'Belum'}
-                                            </span>
-                                        </Badge>
+                            {/* Current Semester Tab */}
+                            <TabsContent value="current" className="space-y-6">
+                                {/* Search and Stats */}
+                                <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+                                    <div>
+                                        <h2 className="text-2xl font-bold text-gray-900">
+                                            Daftar Pegawai yang Dinilai
+                                        </h2>
+                                        <p className="text-gray-600">
+                                            {user.type === 'outsourcing'
+                                                ? 'Pegawai teman setingkat yang harus Anda nilai'
+                                                : `Pegawai outsourcing yang harus dinilai`}
+                                        </p>
                                     </div>
 
-                                    {/* Decorative Background Pattern */}
-                                    <div className="absolute inset-0 opacity-5">
-                                        <div className="absolute top-0 right-0 h-32 w-32 translate-x-16 -translate-y-16 rounded-full bg-blue-500"></div>
-                                        <div className="absolute bottom-0 left-0 h-24 w-24 -translate-x-12 translate-y-12 rounded-full bg-indigo-500"></div>
-                                    </div>
-
-                                    <CardContent className="relative z-10 p-8 text-center">
-                                        {/* Photo with Decorative Ring */}
-                                        <div className="relative mb-4">
-                                            <img
-                                                src={
-                                                    `/storage/${employee.outsourcings.image}` ||
-                                                    '/placeholder.svg'
-                                                }
-                                                alt={employee.outsourcings.name}
-                                                className="mx-auto h-27 w-27 rounded-full border-4 border-white shadow-md transition-transform duration-300 group-hover:scale-110"
-                                            />
-                                        </div>
-
-                                        <h3 className="mb-1 overflow-hidden bg-gradient-to-r from-gray-800 to-blue-600 bg-clip-text text-xl font-bold text-ellipsis whitespace-nowrap text-transparent transition-all duration-300 group-hover:from-blue-600 group-hover:to-indigo-600">
-                                            {employee.outsourcings.name}
-                                        </h3>
-
-                                        {/* Position with Icon */}
-                                        <div className="mb-6 flex items-center justify-center space-x-2">
-                                            <p className="text-sm font-medium text-gray-600">
-                                                {employee.outsourcings.jabatan}
-                                            </p>
-                                        </div>
-
-                                        <Link
-                                            href={create.url(employee.uuid)}
-                                            className={`mb-3 block w-full transform rounded-md py-2 text-sm font-semibold text-white shadow-lg transition-all duration-300 group-hover:scale-105 ${
-                                                employee.status === 'completed'
-                                                    ? 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700'
-                                                    : 'bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700'
-                                            }`}
-                                        >
-                                            <div className="flex items-center justify-center space-x-2">
-                                                <ClipboardList className="h-4 w-4" />
-                                                <span>
-                                                    {employee.status ===
-                                                    'completed'
-                                                        ? 'Lihat Penilaian'
-                                                        : 'Mulai Penilaian'}
-                                                </span>
+                                    <div className="flex items-center gap-4">
+                                        <div className="rounded-lg bg-white px-4 py-2 shadow-md">
+                                            <div className="text-center">
+                                                <div className="text-2xl font-bold text-blue-600">
+                                                    {penugasanPeer?.length}
+                                                </div>
+                                                <div className="text-xs text-gray-500">
+                                                    Total
+                                                </div>
                                             </div>
-                                        </Link>
-
-                                        <span className="text-xs text-gray-600">
-                                            Nilai sebagai{' '}
-                                            {employee.tipe_penilai?.replace(
-                                                /_/g,
-                                                ' ',
-                                            )}
-                                        </span>
-                                    </CardContent>
-
-                                    {/* Hover Effect Overlay */}
-                                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-blue-600/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-                                </Card>
-                            ))}
-                        </div>
-
-                        {penugasanPeer?.length === 0 && (
-                            <Card className="border-0 bg-gradient-to-br from-gray-50 to-blue-50 py-16 text-center shadow-lg">
-                                <CardContent>
-                                    <div className="relative">
-                                        <div className="absolute inset-0 flex items-center justify-center opacity-10">
-                                            <User className="h-32 w-32 text-gray-400" />
                                         </div>
-                                        <div className="relative z-10">
-                                            <div className="mx-auto mb-4 w-fit rounded-full bg-white p-4 shadow-lg">
-                                                <User className="h-12 w-12 text-gray-400" />
+                                        <div className="rounded-lg bg-white px-4 py-2 shadow-md">
+                                            <div className="text-center">
+                                                <div className="text-2xl font-bold text-green-600">
+                                                    {
+                                                        penugasanPeer?.filter(
+                                                            (emp: any) =>
+                                                                emp.status ===
+                                                                'completed',
+                                                        ).length
+                                                    }
+                                                </div>
+                                                <div className="text-xs text-gray-500">
+                                                    Selesai
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {/* NANTI KETIKA SUDAH DIBUAT SAVE PENDING */}
+                                        {/* <div className="rounded-lg bg-white px-4 py-2 shadow-md">
+                                        <div className="text-center">
+                                            <div className="text-2xl font-bold text-orange-600">
+                                                {penugasanPeer.pending}
+                                            </div>
+                                            <div className="text-xs text-gray-500">
+                                                Pending
+                                            </div>
+                                        </div>
+                                    </div> */}
+                                    </div>
+                                </div>
+                                {/* Creative Employee Cards */}
+                                <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                                    {penugasanPeer?.map((employee: any) => (
+                                        <Card
+                                            key={employee.id}
+                                            className="group relative overflow-hidden border-0 bg-gradient-to-br from-white to-blue-50 pb-2 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+                                        >
+                                            {/* Status Badge - Floating */}
+                                            <div className="absolute top-4 right-4 z-10">
+                                                <Badge
+                                                    variant={
+                                                        employee.status ===
+                                                        'completed'
+                                                            ? 'default'
+                                                            : 'secondary'
+                                                    }
+                                                    className={`flex items-center space-x-1 px-3 py-1 shadow-lg ${
+                                                        employee.status ===
+                                                        'completed'
+                                                            ? 'bg-green-500 text-white hover:bg-green-600'
+                                                            : 'bg-orange-500 text-white hover:bg-orange-600'
+                                                    }`}
+                                                >
+                                                    {employee.status ===
+                                                    'completed' ? (
+                                                        <CheckCircle className="h-3 w-3" />
+                                                    ) : (
+                                                        <Clock className="h-3 w-3" />
+                                                    )}
+                                                    <span className="text-xs font-medium">
+                                                        {employee.status ==
+                                                        'completed'
+                                                            ? 'Selesai'
+                                                            : 'Belum'}
+                                                    </span>
+                                                </Badge>
+                                            </div>
+
+                                            {/* Decorative Background Pattern */}
+                                            <div className="absolute inset-0 opacity-5">
+                                                <div className="absolute top-0 right-0 h-32 w-32 translate-x-16 -translate-y-16 rounded-full bg-blue-500"></div>
+                                                <div className="absolute bottom-0 left-0 h-24 w-24 -translate-x-12 translate-y-12 rounded-full bg-indigo-500"></div>
+                                            </div>
+
+                                            <CardContent className="relative z-10 p-8 text-center">
+                                                {/* Photo with Decorative Ring */}
+                                                <div className="relative mb-4">
+                                                    <img
+                                                        src={
+                                                            `/storage/${employee.outsourcings.image}` ||
+                                                            '/placeholder.svg'
+                                                        }
+                                                        alt={
+                                                            employee
+                                                                .outsourcings
+                                                                .name
+                                                        }
+                                                        className="mx-auto h-27 w-27 rounded-full border-4 border-white shadow-md transition-transform duration-300 group-hover:scale-110"
+                                                    />
+                                                </div>
+
+                                                <h3 className="mb-1 overflow-hidden bg-gradient-to-r from-gray-800 to-blue-600 bg-clip-text text-xl font-bold text-ellipsis whitespace-nowrap text-transparent transition-all duration-300 group-hover:from-blue-600 group-hover:to-indigo-600">
+                                                    {employee.outsourcings.name}
+                                                </h3>
+
+                                                {/* Position with Icon */}
+                                                <div className="mb-6 flex items-center justify-center space-x-2">
+                                                    <p className="text-sm font-medium text-gray-600">
+                                                        {
+                                                            employee
+                                                                .outsourcings
+                                                                .jabatan
+                                                        }
+                                                    </p>
+                                                </div>
+
+                                                <Link
+                                                    href={create.url(
+                                                        employee.uuid,
+                                                    )}
+                                                    className={`mb-3 block w-full transform rounded-md py-2 text-sm font-semibold text-white shadow-lg transition-all duration-300 group-hover:scale-105 ${
+                                                        employee.status ===
+                                                        'completed'
+                                                            ? 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700'
+                                                            : 'bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700'
+                                                    }`}
+                                                >
+                                                    <div className="flex items-center justify-center space-x-2">
+                                                        <ClipboardList className="h-4 w-4" />
+                                                        <span>
+                                                            {employee.status ===
+                                                            'completed'
+                                                                ? 'Lihat Penilaian'
+                                                                : 'Mulai Penilaian'}
+                                                        </span>
+                                                    </div>
+                                                </Link>
+
+                                                <span className="text-xs text-gray-600">
+                                                    Nilai sebagai{' '}
+                                                    {employee.tipe_penilai?.replace(
+                                                        /_/g,
+                                                        ' ',
+                                                    )}
+                                                </span>
+                                            </CardContent>
+
+                                            {/* Hover Effect Overlay */}
+                                            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-blue-600/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+                                        </Card>
+                                    ))}
+                                </div>
+
+                                {penugasanPeer?.length === 0 && (
+                                    <Card className="border-0 bg-gradient-to-br from-gray-50 to-blue-50 py-16 text-center shadow-lg">
+                                        <CardContent>
+                                            <div className="relative">
+                                                <div className="absolute inset-0 flex items-center justify-center opacity-10">
+                                                    <User className="h-32 w-32 text-gray-400" />
+                                                </div>
+                                                <div className="relative z-10">
+                                                    <div className="mx-auto mb-4 w-fit rounded-full bg-white p-4 shadow-lg">
+                                                        <User className="h-12 w-12 text-gray-400" />
+                                                    </div>
+                                                    <h3 className="mb-2 text-xl font-bold text-gray-900">
+                                                        {penugasanPeer?.length ===
+                                                        0
+                                                            ? 'Tidak ada pegawai yang ditugaskan'
+                                                            : 'Tidak ada pegawai ditemukan'}
+                                                    </h3>
+                                                    <p className="mx-auto max-w-md text-gray-500">
+                                                        {penugasanPeer?.length ===
+                                                        0
+                                                            ? 'Hubungi administrator untuk penugasan penilaian pegawai outsourcing'
+                                                            : 'Coba ubah kata kunci pencarian Anda atau periksa filter yang digunakan'}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                )}
+                            </TabsContent>
+
+                            {/* History Tab */}
+                            <TabsContent value="history" className="space-y-6">
+                                <div className="flex items-center gap-3">
+                                    {/* <div className="rounded-lg bg-gradient-to-br from-purple-600 to-indigo-600 p-3 shadow-lg">
+                                        <BookOpen className="h-6 w-6 text-white" />
+                                    </div> */}
+                                    <div>
+                                        <h2 className="text-2xl font-bold text-gray-900">
+                                            Riwayat Penilaian Semester
+                                        </h2>
+                                        <p className="text-gray-600">
+                                            Lihat hasil penilaian dari semester
+                                            sebelumnya
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Semester History Accordion */}
+                                <Accordion
+                                    type="single"
+                                    collapsible
+                                    className="space-y-4"
+                                >
+                                    {semesterHistory.map((semester) => {
+                                        const semesterStats = {
+                                            total: semester.employees.length,
+                                            completed:
+                                                semester.employees.filter(
+                                                    (emp) =>
+                                                        emp.status ===
+                                                        'completed',
+                                                ).length,
+                                            avgScore: Math.round(
+                                                semester.employees.reduce(
+                                                    (acc, emp) =>
+                                                        acc + (emp.score || 0),
+                                                    0,
+                                                ) / semester.employees.length,
+                                            ),
+                                        };
+
+                                        return (
+                                            <AccordionItem
+                                                key={semester.id}
+                                                value={semester.id}
+                                                className="overflow-hidden rounded-xl border-0 bg-white shadow-md"
+                                            >
+                                                <AccordionTrigger className="px-6 py-4 hover:bg-gradient-to-r hover:from-purple-50 hover:to-indigo-50 hover:no-underline">
+                                                    <div className="flex w-full items-center justify-between pr-4">
+                                                        <div className="flex items-center gap-4 text-left">
+                                                            <div className="rounded-lg bg-gradient-to-br from-purple-100 to-indigo-100 p-3">
+                                                                <Calendar className="h-6 w-6 text-purple-600" />
+                                                            </div>
+                                                            <div>
+                                                                <h3 className="text-lg font-bold text-gray-900">
+                                                                    {
+                                                                        semester.name
+                                                                    }
+                                                                </h3>
+                                                                <p className="text-sm text-gray-500">
+                                                                    {
+                                                                        semester.period
+                                                                    }
+                                                                </p>
+                                                            </div>
+                                                        </div>
+
+                                                        {/* Mini Stats */}
+                                                        <div className="hidden items-center gap-6 sm:flex">
+                                                            <div className="text-center">
+                                                                <div className="text-lg font-bold text-blue-600">
+                                                                    {
+                                                                        semesterStats.total
+                                                                    }
+                                                                </div>
+                                                                <div className="text-xs text-gray-500">
+                                                                    Pegawai
+                                                                </div>
+                                                            </div>
+                                                            <div className="text-center">
+                                                                <div className="text-lg font-bold text-green-600">
+                                                                    {
+                                                                        semesterStats.completed
+                                                                    }
+                                                                </div>
+                                                                <div className="text-xs text-gray-500">
+                                                                    Selesai
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </AccordionTrigger>
+
+                                                <AccordionContent className="bg-gradient-to-br from-gray-100 to-purple-50/30 p-6 px-6">
+                                                    {/* Employee List */}
+                                                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                                                        {semester.employees.map(
+                                                            (employee) => (
+                                                                <Card
+                                                                    key={
+                                                                        employee.id
+                                                                    }
+                                                                    className="group overflow-hidden border-0 bg-white shadow-md transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                                                                >
+                                                                    <CardContent className="p-4">
+                                                                        <div className="flex items-start gap-3">
+                                                                            <img
+                                                                                src={`/${employee.outsourcings.image}`}
+                                                                                alt={
+                                                                                    employee
+                                                                                        .outsourcings
+                                                                                        .name
+                                                                                }
+                                                                                className="h-14 w-14 rounded-full border-2 border-purple-200 object-cover shadow-sm"
+                                                                            />
+                                                                            <div className="min-w-0 flex-1">
+                                                                                <h4 className="truncate font-semibold text-gray-900">
+                                                                                    {
+                                                                                        employee
+                                                                                            .outsourcings
+                                                                                            .name
+                                                                                    }
+                                                                                </h4>
+                                                                                <p className="text-xs text-gray-500">
+                                                                                    {
+                                                                                        employee
+                                                                                            .outsourcings
+                                                                                            .jabatan
+                                                                                    }
+                                                                                </p>
+                                                                                <div className="mt-2 flex items-center justify-between">
+                                                                                    <Badge
+                                                                                        className={`text-xs ${
+                                                                                            employee.status ===
+                                                                                            'completed'
+                                                                                                ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                                                                                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                                                                        }`}
+                                                                                    >
+                                                                                        {employee.status ===
+                                                                                        'completed' ? (
+                                                                                            <CheckCircle className="mr-1 h-3 w-3" />
+                                                                                        ) : (
+                                                                                            <Clock className="mr-1 h-3 w-3" />
+                                                                                        )}
+                                                                                        {employee.status ===
+                                                                                        'completed'
+                                                                                            ? 'Selesai'
+                                                                                            : 'Pending'}
+                                                                                    </Badge>
+                                                                                    {employee.score && (
+                                                                                        <div className="flex items-center gap-1 text-sm font-bold text-purple-600">
+                                                                                            <Award className="h-4 w-4" />
+                                                                                            {
+                                                                                                employee.score
+                                                                                            }
+                                                                                        </div>
+                                                                                    )}
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <Link
+                                                                            href={`/penilaian/${employee.uuid}`}
+                                                                            className="mt-3 flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-600 py-2 text-sm font-medium text-white transition-all hover:from-purple-600 hover:to-indigo-700"
+                                                                        >
+                                                                            <ClipboardList className="h-4 w-4" />
+                                                                            Lihat
+                                                                            Detail
+                                                                        </Link>
+                                                                    </CardContent>
+                                                                </Card>
+                                                            ),
+                                                        )}
+                                                    </div>
+                                                </AccordionContent>
+                                            </AccordionItem>
+                                        );
+                                    })}
+                                </Accordion>
+
+                                {/* Empty State for History */}
+                                {semesterHistory.length === 0 && (
+                                    <Card className="border-0 bg-gradient-to-br from-purple-50 to-indigo-50 py-16 text-center shadow-lg">
+                                        <CardContent>
+                                            <div className="mx-auto mb-4 w-fit rounded-full bg-white p-6 shadow-lg">
+                                                <History className="h-16 w-16 text-gray-400" />
                                             </div>
                                             <h3 className="mb-2 text-xl font-bold text-gray-900">
-                                                {penugasanPeer?.length === 0
-                                                    ? 'Tidak ada pegawai yang ditugaskan'
-                                                    : 'Tidak ada pegawai ditemukan'}
+                                                Belum Ada Riwayat Semester
                                             </h3>
                                             <p className="mx-auto max-w-md text-gray-500">
-                                                {penugasanPeer?.length === 0
-                                                    ? 'Hubungi administrator untuk penugasan penilaian pegawai outsourcing'
-                                                    : 'Coba ubah kata kunci pencarian Anda atau periksa filter yang digunakan'}
+                                                Riwayat penilaian dari semester
+                                                sebelumnya akan muncul di sini
                                             </p>
-                                        </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        )}
+                                        </CardContent>
+                                    </Card>
+                                )}
+                            </TabsContent>
+                        </Tabs>
                     </div>
                 </main>
             </div>

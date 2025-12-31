@@ -9,6 +9,7 @@ use App\Models\BobotSkor;
 use App\Models\MasterPegawai;
 use App\Models\Outsourcing;
 use App\Models\Siklus;
+use App\Services\Penilaian\RekapHasilService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -186,13 +187,74 @@ class PenugasanPenilaiController extends Controller
 
     public function card(): Response
     {
-        // dd(Hash::make('password'));
+        // 1. Ambil semua penugasan milik user login (lengkap untuk hitung nilai)
+        $penugasans = Auth::user()
+            ->penugasan()
+            ->with([
+                'siklus',
+                'outsourcings.jabatan',
+                'penilian.kriteria.aspek.bobotSkor',
+                'bobotSkor',
+                'evaluators.userable',
+            ])
+            ->whereHas('siklus', fn($q) => $q->where('is_active', false))
+            ->get();
+
+
+        // 2. Group berdasarkan siklus
+        $semesterHistory = $penugasans
+            ->groupBy('siklus_id')
+            ->map(function ($penugasanBySiklus) {
+                $siklus = $penugasanBySiklus->first()->siklus;
+
+
+                // 3. Di dalam siklus, group lagi berdasarkan outsourcing
+                $employees = $penugasanBySiklus
+                    ->groupBy('outsourcing_id')
+                    ->map(function ($penugasanByOutsourcing) {
+                        $first = $penugasanByOutsourcing->first();
+
+
+                        // hitung score menggunakan service yang SUDAH ADA
+                        $rekap = app(RekapHasilService::class)
+                            ->hitung($penugasanByOutsourcing);
+
+
+                        return [
+                            'id' => $first->outsourcings->id,
+                            'uuid' => $first->uuid,
+                            'outsourcings' => [
+                                'name' => $first->outsourcings->name,
+                                'jabatan' => optional($first->outsourcings->jabatan)->nama_jabatan,
+                                'image' => $first->outsourcings->image,
+                            ],
+                            'status' => $first->status,
+                            'tipe_penilai' => $first->tipe_penilai,
+                            'score' => $rekap['finalTotalScore'],
+                        ];
+                    })
+                    ->values();
+
+
+                return [
+                    'id' => $siklus->uuid,
+                    'name' => $siklus->title,
+                    'period' => sprintf(
+                        '%s - %s',
+                        optional($siklus->tanggal_mulai)->translatedFormat('F Y'),
+                        optional($siklus->tanggal_selesai)->translatedFormat('F Y'),
+                    ),
+                    'status' => $siklus->is_active ? 'active' : 'completed',
+                    'employees' => $employees,
+                ];
+            })
+            ->values();
+
         $data = [
+            'semesterHistory' => $semesterHistory,
             'penugasanPeer' => Auth::user()->penugasan()
                 ->select(['outsourcing_id', 'siklus_id', 'status', 'uuid', 'tipe_penilai'])
-                ->whereHas('siklus', function ($q) {
-                    $q->where('is_active', true);
-                })
+                ->whereHas('siklus', fn($q) => $q->where('is_active', true))
                 ->with(['siklus', 'outsourcings'])
                 ->get(),
         ];

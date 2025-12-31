@@ -23,7 +23,9 @@ class UserController extends Controller
                 ->map(fn($o) => [
                     'id'      => $o->uuid,
                     'name'    => $o->name,
-                    'nip'     => $o->user?->email,
+                    'nip'     => $o->user?->nip,
+                    'email'     => $o->user?->email,
+                    'role'     => $o->user?->role,
                     'type'    => 'outsourcing',
                     'biro'    => $o->biro?->nama_biro,
                     'jabatan' => $o->jabatan?->nama_jabatan,
@@ -38,7 +40,8 @@ class UserController extends Controller
                     'name'      => $p->name,
                     'type'      => 'pegawai',
                     'nip'       => $p->user?->nip_sso,
-                    'biro'      => $p->biro?->name,
+                    'biro'      => $p->biro?->nama_biro,
+                    'role'     => $p->user?->role,
                     'jabatan'   => $p->jabatan,
                 ]);
         } else {

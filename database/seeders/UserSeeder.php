@@ -7648,18 +7648,18 @@ class UserSeeder extends Seeder
             ['id' => '4115', 'nip' => '199011292025211051', 'nip_sso' => '199011292025211051', 'is_ldap' => '1', 'email' => NULL, 'password' => NULL,]
         ];
 
-        // User::create(
-        //     [
-        //         'nip'      => '7777777333',
-        //         'nip_sso'  => null,
-        //         'userable_id'    => '7777777333',
-        //         'userable_type'  => MasterPegawai::class,
-        //         'role'  => ['administrator', 'operator'],
-        //         'is_ldap'  => false,
-        //         'email'  => 'it@set.wapresri.go.id',
-        //         'password'  => Hash::make('7777777333'),
-        //     ]
-        // );
+        User::create(
+            [
+                'nip'      => '7777777333',
+                'nip_sso'  => null,
+                'userable_id'    => '7777777333',
+                'userable_type'  => MasterPegawai::class,
+                'role'  => ['administrator', 'operator'],
+                'is_ldap'  => false,
+                'email'  => 'it@set.wapresri.go.id',
+                'password'  => Hash::make('7777777333'),
+            ]
+        );
 
         // foreach ($users  as $key => $value) {
         //     User::create(
@@ -7675,6 +7675,28 @@ class UserSeeder extends Seeder
         //         ]
         //     );
         // }
+
+        $masterNips = MasterPegawai::pluck('nip')->toArray();
+
+        foreach ($users as $value) {
+            if (!in_array($value['nip'], $masterNips)) {
+                continue; // skip user yg NIP-nya tidak ada
+            }
+
+            User::updateOrCreate(
+                ['nip' => $value['nip']],
+                [
+                    'nip_sso' => $value['nip_sso'],
+                    'userable_id' => $value['nip'],
+                    'userable_type' => MasterPegawai::class,
+                    'role' => $value['role'] ?? ['evaluator'],
+                    'is_ldap' => $value['is_ldap'],
+                    'email' => $value['email'],
+                    'password' => $value['password'],
+                ]
+            );
+        }
+
 
         $asignAdministrator = [
             '197404071999031001',

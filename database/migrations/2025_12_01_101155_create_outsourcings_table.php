@@ -21,8 +21,6 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->string('nip', 191)->nullable();
             $table->string('kode_biro', 191)->nullable();
-            $table->enum('status', ['aktif', 'nonaktif'])->default('aktif');
-
             $table->timestamps();
         });
     }

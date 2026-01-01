@@ -132,7 +132,7 @@ class PenilaianController extends Controller
             'penugasan.penilian.kriteria.aspek.bobotSkor',
         ])
             ->orderBy('name', 'asc')
-            ->where('status', 'aktif')
+            ->where('is_active', 1)
             ->get();
 
         $evaluationResults = $Outsourcings->map(function ($os) {

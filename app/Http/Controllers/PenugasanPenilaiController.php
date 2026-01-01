@@ -29,7 +29,7 @@ class PenugasanPenilaiController extends Controller
             ['message' => 'Tidak ada siklus aktif'];
         }
 
-        $outsourcings = Outsourcing::where('status', 'aktif')
+        $outsourcings = Outsourcing::where('is_active', 1)
             ->with([
                 'penugasan' => fn($q) =>
                 $q->where('siklus_id', $siklus->id)->with('evaluators.userable'),

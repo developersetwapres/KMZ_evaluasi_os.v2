@@ -99,7 +99,7 @@ class AspectEvaluationService
             'biro' => optional($outsourcing->biro)->nama_biro,
             'jabatan' => optional($outsourcing->jabatan)->nama_jabatan,
             'image' => $outsourcing->image,
-            'status' => $outsourcing->status,
+            'status' => $outsourcing->is_active,
             'finalTotalScore' => round($finalTotalScore, 4),
             'aspects' => $aspectsResult,
         ];

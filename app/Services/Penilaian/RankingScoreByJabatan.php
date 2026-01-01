@@ -22,7 +22,7 @@ class RankingScoreByJabatan
         foreach ($jabatans as $jabatan) {
             $ranking = [];
 
-            foreach ($jabatan->outsourcings->where('status', 'aktif') as $os) {
+            foreach ($jabatan->outsourcings->where('is_active', 1) as $os) {
                 $rekap = app(RekapHasilService::class)
                     ->hitung($os->penugasan);
 

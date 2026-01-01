@@ -23,7 +23,7 @@ class Penilaian extends Model
 
     public function penugasan(): BelongsTo
     {
-        return $this->belongsTo(Outsourcing::class, 'penugasan_id');
+        return $this->belongsTo(PenugasanPenilai::class, 'penugasan_id');
     }
 
     public function kriteria(): BelongsTo

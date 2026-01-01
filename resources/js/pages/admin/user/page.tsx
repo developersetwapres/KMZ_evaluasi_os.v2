@@ -1,7 +1,5 @@
 'use client';
 
-import type React from 'react';
-
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -34,7 +32,9 @@ import { cn } from '@/lib/utils';
 import { index } from '@/routes/user';
 import { Link, router, usePage } from '@inertiajs/react';
 import {
-    Building2,
+    Briefcase,
+    Building,
+    CheckCircle,
     Crown,
     Edit,
     Eye,
@@ -43,6 +43,7 @@ import {
     Plus,
     Search,
     Shield,
+    Star,
     Trash2,
     Upload,
     User,
@@ -274,38 +275,10 @@ export default function UserManagement({ initialUsers }: any) {
                     </CardHeader>
                 </Card>
 
-                {/* Stats Cards */}
-                {/* <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-                    {roleOptions.map((role) => {
-                        const count = users?.filter(
-                            (u: any) => u.role === role.value,
-                        ).length;
-                        const Icon = role.icon;
-                        return (
-                            <Card key={role.value} className="py-2">
-                                <CardContent className="p-4 text-center">
-                                    <div className="mb-2 flex items-center justify-center">
-                                        <div
-                                            className={`rounded-full p-2 ${role.color}`}
-                                        >
-                                            <Icon className="h-5 w-5" />
-                                        </div>
-                                    </div>
-                                    <div className="text-2xl font-bold">
-                                        {count}
-                                    </div>
-                                    <div className="text-sm text-gray-600">
-                                        {role.label}
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        );
-                    })}
-                </div> */}
-
                 <nav className="grid h-10 w-full grid-cols-2 rounded-lg bg-muted p-1">
                     <Link
                         href={index.url('outsourcings')}
+                        preserveScroll
                         className={cn(
                             'flex items-center justify-center space-x-2 rounded-md px-3 py-2 text-sm font-medium transition-all',
                             isOutsourcing
@@ -321,6 +294,7 @@ export default function UserManagement({ initialUsers }: any) {
 
                     <Link
                         href={index.url('evaluators')}
+                        preserveScroll
                         className={cn(
                             'flex items-center justify-center space-x-2 rounded-md px-3 py-2 text-sm font-medium transition-all',
                             isEvaluator
@@ -329,7 +303,7 @@ export default function UserManagement({ initialUsers }: any) {
                         )}
                     >
                         <User2 className="h-4 w-4" />
-                        <span className="hidden sm:inline">User Evaluator</span>
+                        <span className="hidden sm:inline">User Pegawai</span>
                     </Link>
                 </nav>
 
@@ -397,15 +371,12 @@ export default function UserManagement({ initialUsers }: any) {
                                 const roleInfo = getRoleInfo(user.role);
                                 const Icon = roleInfo.icon;
 
-                                return (
-                                    <Card
-                                        key={user.id}
-                                        className="transition-shadow hover:shadow-lg"
-                                    >
-                                        <CardHeader className="pb-3">
-                                            <div className="flex items-start justify-between">
-                                                <div className="flex items-center space-x-3">
-                                                    <Avatar className="h-12 w-12">
+                                if (user.type == 'pegawai') {
+                                    return (
+                                        <Card className="gap-0 overflow-hidden rounded-xl bg-white shadow-lg transition-shadow duration-300 hover:shadow-xl">
+                                            <CardHeader className="">
+                                                <div className="flex items-center gap-4">
+                                                    <Avatar className="h-15 w-15">
                                                         <AvatarImage
                                                             src={
                                                                 `/storage/${user.image}` ||
@@ -425,88 +396,189 @@ export default function UserManagement({ initialUsers }: any) {
                                                                 .toUpperCase()}
                                                         </AvatarFallback>
                                                     </Avatar>
+
                                                     <div>
-                                                        <CardTitle className="text-lg">
+                                                        <h2 className="font-semibold text-gray-800">
                                                             {user.name}
-                                                        </CardTitle>
-                                                        {/* <CardDescription className="flex items-center space-x-1">
-                                                            <div
-                                                                className={`rounded-full p-1 ${roleInfo.color}`}
-                                                            >
-                                                                <Icon className="h-3 w-3" />
-                                                            </div>
-                                                            <span>
-                                                                {user.jabatan}
-                                                            </span>
-                                                        </CardDescription> */}
+                                                        </h2>
+                                                        <p className="text-sm text-gray-600">
+                                                            NIP: {user.nip}
+                                                        </p>
                                                     </div>
                                                 </div>
-                                                <Badge
-                                                    variant={
-                                                        user.status === 'active'
-                                                            ? 'default'
-                                                            : 'secondary'
-                                                    }
-                                                    className="cursor-pointer"
-                                                    onClick={() =>
-                                                        toggleUserStatus(
-                                                            user.id,
-                                                        )
-                                                    }
-                                                >
-                                                    {user.status === 'active'
-                                                        ? 'Aktif'
-                                                        : 'Nonaktif'}
-                                                </Badge>
-                                            </div>
-                                        </CardHeader>
+                                            </CardHeader>
+                                            <CardContent className="p-6">
+                                                <div className="space-y-3">
+                                                    <div className="flex items-center gap-2">
+                                                        <Briefcase className="h-4 w-4 text-purple-500" />
+                                                        <span className="text-sm">
+                                                            {user.jabatan}
+                                                        </span>
+                                                    </div>
 
-                                        <CardContent className="space-y-3">
-                                            <div className="space-y-2 text-sm text-gray-600">
-                                                <div className="flex items-center space-x-2">
-                                                    <Mail className="h-3 w-3" />
-                                                    <span className="truncate">
-                                                        {user.nip}
-                                                    </span>
+                                                    <div className="flex items-center gap-2">
+                                                        <Building className="h-4 w-4 text-purple-500" />
+                                                        <span className="text-sm">
+                                                            {user.biro}
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex items-center gap-2">
+                                                        <Star className="h-4 w-4 text-yellow-500" />
+                                                        <span className="text-sm font-medium">
+                                                            Role:
+                                                        </span>
+                                                        {user.role.map(
+                                                            (role, index) => (
+                                                                <Badge
+                                                                    key={index}
+                                                                    variant="outline"
+                                                                    className="text-xs"
+                                                                >
+                                                                    {role}
+                                                                </Badge>
+                                                            ),
+                                                        )}
+                                                    </div>
+                                                    <div className="flex items-center gap-2">
+                                                        <CheckCircle className="h-4 w-4 text-green-500" />
+                                                        <span className="text-sm font-medium">
+                                                            Jumlah yang dinilai:
+                                                        </span>{' '}
+                                                        {5} OS
+                                                    </div>
                                                 </div>
-                                                <div className="flex items-center space-x-2">
-                                                    <Building2 className="h-3 w-3" />
-                                                    <span className="text-xs">
-                                                        {user.biro}
-                                                    </span>
+                                            </CardContent>
+                                        </Card>
+                                    );
+                                } else {
+                                    return (
+                                        <Card className="gap-0 overflow-hidden rounded-xl bg-white shadow-lg transition-shadow duration-300 hover:shadow-xl">
+                                            <CardHeader className="pb-3">
+                                                <div className="flex items-start justify-between">
+                                                    <div className="flex items-center space-x-3">
+                                                        <Avatar className="h-12 w-12">
+                                                            <AvatarImage
+                                                                src={
+                                                                    `/storage/${user.image}` ||
+                                                                    '/placeholder.svg'
+                                                                }
+                                                                alt={user.name}
+                                                            />
+                                                            <AvatarFallback>
+                                                                {user.name
+                                                                    .split(' ')
+                                                                    .map(
+                                                                        (
+                                                                            n: any,
+                                                                        ) =>
+                                                                            n[0],
+                                                                    )
+                                                                    .join('')
+                                                                    .substring(
+                                                                        0,
+                                                                        2,
+                                                                    )
+                                                                    .toUpperCase()}
+                                                            </AvatarFallback>
+                                                        </Avatar>
+                                                        <div>
+                                                            <CardTitle className="font-semibold text-gray-800">
+                                                                {user.name}
+                                                            </CardTitle>
+                                                            <p className="text-sm text-gray-600">
+                                                                NIP: {user.nip}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <Badge
+                                                        variant={
+                                                            user.status ===
+                                                            'active'
+                                                                ? 'default'
+                                                                : 'secondary'
+                                                        }
+                                                        className="cursor-pointer"
+                                                        onClick={() =>
+                                                            toggleUserStatus(
+                                                                user.id,
+                                                            )
+                                                        }
+                                                    >
+                                                        {user.status ===
+                                                        'active'
+                                                            ? 'Aktif'
+                                                            : 'Nonaktif'}
+                                                    </Badge>
                                                 </div>
-                                                <div className="flex items-center space-x-2">
-                                                    <Icon className="h-3 w-3" />
-                                                    <span className="text-xs">
-                                                        {user.jabatan}
-                                                    </span>
-                                                </div>
-                                            </div>
+                                            </CardHeader>
+                                            <CardContent className="px-6 pt-6 pb-0.5">
+                                                <div className="space-y-3">
+                                                    <div className="flex items-center gap-2">
+                                                        <Mail className="h-4 w-4 text-purple-500" />
+                                                        <span className="text-sm">
+                                                            {user.email}
+                                                        </span>
+                                                    </div>
 
-                                            <div className="flex space-x-2 pt-2">
-                                                <Button
-                                                    size="sm"
-                                                    variant="outline"
-                                                    onClick={() =>
-                                                        handleEdit(user)
-                                                    }
-                                                >
-                                                    <Edit className="h-3 w-3" />
-                                                </Button>
-                                                <Button
-                                                    size="sm"
-                                                    variant="outline"
-                                                    onClick={() =>
-                                                        handleDelete(user.id)
-                                                    }
-                                                    className="hover:border-red-200 hover:bg-red-50 hover:text-red-600"
-                                                >
-                                                    <Trash2 className="h-3 w-3" />
-                                                </Button>
-                                            </div>
-                                        </CardContent>
-                                    </Card>
-                                );
+                                                    <div className="flex items-center gap-2">
+                                                        <Briefcase className="h-4 w-4 text-purple-500" />
+                                                        <span className="text-sm">
+                                                            {user.jabatan}
+                                                        </span>
+                                                    </div>
+
+                                                    <div className="flex items-center gap-2">
+                                                        <Building className="h-4 w-4 text-purple-500" />
+                                                        <span className="text-sm">
+                                                            {user.biro}
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex items-center gap-2">
+                                                        <Star className="h-4 w-4 text-yellow-500" />
+                                                        <span className="text-sm font-medium">
+                                                            Role:
+                                                        </span>
+                                                        {user.role.map(
+                                                            (role, index) => (
+                                                                <Badge
+                                                                    key={index}
+                                                                    variant="outline"
+                                                                    className="text-xs"
+                                                                >
+                                                                    {role}
+                                                                </Badge>
+                                                            ),
+                                                        )}
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex space-x-2 pt-6">
+                                                    <Button
+                                                        size="sm"
+                                                        variant="outline"
+                                                        onClick={() =>
+                                                            handleEdit(user)
+                                                        }
+                                                    >
+                                                        <Edit className="h-3 w-3" />
+                                                    </Button>
+                                                    <Button
+                                                        size="sm"
+                                                        variant="outline"
+                                                        onClick={() =>
+                                                            handleDelete(
+                                                                user.id,
+                                                            )
+                                                        }
+                                                        className="hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+                                                    >
+                                                        <Trash2 className="h-3 w-3" />
+                                                    </Button>
+                                                </div>
+                                            </CardContent>
+                                        </Card>
+                                    );
+                                }
                             })}
                         </div>
 

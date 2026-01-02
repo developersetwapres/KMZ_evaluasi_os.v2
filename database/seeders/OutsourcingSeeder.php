@@ -253,7 +253,7 @@ class OutsourcingSeeder extends Seeder
                 'userable_type'  => Outsourcing::class,
                 'role'           => ['evaluator'],
                 'is_ldap'        => 0,
-                'email'          => $$value['email'],
+                'email'          => $value['email'],
                 'password'       => $value['password'],
             ]);
         }

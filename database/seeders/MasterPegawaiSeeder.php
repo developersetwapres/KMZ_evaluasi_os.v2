@@ -3920,7 +3920,7 @@ class MasterPegawaiSeeder extends Seeder
                     'id' => $value['nip'],
                     'nip' => $value['nip'],
                     'name' => $value['name'],
-                    'image' => 'images/evaluator/' . $value['nip'] . '.jpg',
+                    'image' => 'images/asn/' . $value['nip'] . '.jpg',
                     'kode_instansi' => $value['kode_instansi'],
                     'kode_unit' => $value['kode_unit'],
                     'kode_deputi' => $value['kode_deputi'],

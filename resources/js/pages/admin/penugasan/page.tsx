@@ -69,6 +69,13 @@ function SearchableSelect({
 
     const selectedItem = items.find((item) => item.uuid === value);
 
+    const displayValue =
+        searchTerm !== ''
+            ? searchTerm
+            : selectedItem
+              ? getLabel(selectedItem)
+              : '';
+
     const handleSelect = (uuid: string) => {
         onValueChange(uuid);
         setSearchTerm('');
@@ -81,6 +88,7 @@ function SearchableSelect({
                 placeholder={
                     selectedItem ? getLabel(selectedItem) : placeholder
                 }
+                // value={displayValue}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onClick={() => setIsOpen(true)}
@@ -116,6 +124,7 @@ function SearchableSelect({
                     )}
                 </div>
             )}
+
             {selectedItem && (
                 <div className="mt-2 rounded border border-blue-200 bg-blue-50 p-2">
                     <p className="text-sm font-medium text-blue-900">
@@ -143,6 +152,7 @@ export default function PeerAssignment({
         name: string;
         biro: string;
         jabatan: string;
+        evaluators: any;
     } | null>(null);
 
     const [selectedEvaluators, setSelectedEvaluators] = useState({
@@ -378,6 +388,8 @@ export default function PeerAssignment({
                                                                                     uuid: penugasan.uuid,
                                                                                     name: penugasan.name,
                                                                                     biro: penugasan.biro,
+                                                                                    evaluators:
+                                                                                        penugasan.evaluators,
                                                                                     jabatan:
                                                                                         penugasan.nama_jabatan,
                                                                                 },

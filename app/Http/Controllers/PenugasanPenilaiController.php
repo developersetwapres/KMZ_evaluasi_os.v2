@@ -42,9 +42,9 @@ class PenugasanPenilaiController extends Controller
             ->map(function ($os) {
 
                 $evaluators = [
-                    'atasan' => ['name' => null, 'jabatan' => null],
-                    'teman_setingkat' => ['name' => null, 'jabatan' => null],
-                    'penerima_layanan' => ['name' => null, 'jabatan' => null],
+                    'atasan' => ['name' => null, 'jabatan' => null, 'uuid' => null],
+                    'teman_setingkat' => ['name' => null, 'jabatan' => null, 'uuid' => null],
+                    'penerima_layanan' => ['name' => null, 'jabatan' => null, 'uuid' => null],
                 ];
 
                 foreach ($os->penugasan as $p) {
@@ -64,6 +64,7 @@ class PenugasanPenilaiController extends Controller
 
                     $evaluators[$p->tipe_penilai] = [
                         'name' => $userable->name,
+                        'uuid' => $userable->uuid,
                         'jabatan' => method_exists($userable, 'displayJabatan')
                             ? $userable->displayJabatan()
                             : null,
@@ -72,6 +73,7 @@ class PenugasanPenilaiController extends Controller
 
                 return [
                     'uuid' => $os->uuid,
+                    'image' => $os->image,
                     'name' => $os->name,
                     'jabatan' => $os->jabatan?->nama_jabatan,
                     'biro' => $os->biro?->nama_biro,

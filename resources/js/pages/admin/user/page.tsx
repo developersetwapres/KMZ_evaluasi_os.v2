@@ -148,12 +148,13 @@ export default function UserManagement({ initialUsers }: any) {
     const filteredUsers = users?.filter((user: any) => {
         const matchesSearch =
             user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.biro.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.jabatan.toLowerCase().includes(searchTerm.toLowerCase());
+            user.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.jabatan?.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesRole = filterRole === 'all' || user.role === filterRole;
         return matchesSearch && matchesRole;
     });
+
+    console.log(filteredUsers);
 
     const handleAdd = () => {
         setEditingUser(null);
@@ -217,10 +218,6 @@ export default function UserManagement({ initialUsers }: any) {
         }
 
         setIsDialogOpen(false);
-    };
-
-    const getRoleInfo = (role: string) => {
-        return roleOptions.find((r) => r.value === role) || roleOptions[0];
     };
 
     const toggleUserStatus = (id: number) => {
@@ -342,35 +339,11 @@ export default function UserManagement({ initialUsers }: any) {
                                     className="pl-10"
                                 />
                             </div>
-                            <Select
-                                value={filterRole}
-                                onValueChange={setFilterRole}
-                            >
-                                <SelectTrigger className="w-full sm:w-48">
-                                    <SelectValue placeholder="Filter Role" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="all">
-                                        Semua Role
-                                    </SelectItem>
-                                    {roleOptions.map((role) => (
-                                        <SelectItem
-                                            key={role.value}
-                                            value={role.value}
-                                        >
-                                            {role.label}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
                         </div>
 
                         {/* Users Grid */}
                         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                             {filteredUsers?.map((user: any) => {
-                                const roleInfo = getRoleInfo(user.role);
-                                const Icon = roleInfo.icon;
-
                                 if (user.type == 'pegawai') {
                                     return (
                                         <Card className="gap-0 overflow-hidden rounded-xl bg-white shadow-lg transition-shadow duration-300 hover:shadow-xl">
@@ -504,8 +477,7 @@ export default function UserManagement({ initialUsers }: any) {
                                                             )
                                                         }
                                                     >
-                                                        {user.status ===
-                                                        'active'
+                                                        {user.is_active == 1
                                                             ? 'Aktif'
                                                             : 'Nonaktif'}
                                                     </Badge>

@@ -10,10 +10,19 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
+                sh 'docker build -t laravel-evaluasiosv2:latest .'
+            }
+        }
+
+        stage('Deploy Container') {
+            steps {
                 sh '''
-                docker build -t laravel-evaluasiosv2:latest .
+                docker compose down
+                docker compose up -d
                 '''
             }
         }
     }
 }
+o
+

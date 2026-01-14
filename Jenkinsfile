@@ -2,8 +2,7 @@ pipeline {
     agent any
 
     stages {
-
-        stage('Checkout Source Code') {
+        stage('Checkout') {
             steps {
                 checkout scm
             }
@@ -16,25 +15,14 @@ pipeline {
                 '''
             }
         }
-
-        stage('Deploy Container') {
-            steps {
-                sh '''
-                docker compose down
-                docker compose up -d --build
-                '''
-            }
-        }
-
     }
 
     post {
         success {
-            echo '✅ Deploy berhasil'
+            echo '✅ Image berhasil dibuild'
         }
         failure {
-            echo '❌ Deploy gagal, cek console output'
+            echo '❌ Build gagal'
         }
     }
 }
-

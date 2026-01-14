@@ -10,19 +10,18 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh '''
-                docker build -t laravel-evaluasiosv2:latest .
-                '''
+                sh 'docker build -t laravel-evaluasiosv2:latest .'
             }
         }
-    }
 
-    post {
-        success {
-            echo '✅ Image berhasil dibuild'
-        }
-        failure {
-            echo '❌ Build gagal'
+        stage('Deploy (Restart Container)') {
+            steps {
+                sh '''
+                cd /data/projects/laravel-evaluasiosv2
+                docker compose down
+                docker compose up -d
+                '''
+            }
         }
     }
 }

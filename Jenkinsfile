@@ -17,7 +17,7 @@ pipeline {
         stage('Deploy (Restart Container)') {
             steps {
                 sh '''
-                cd /data/projects/laravel-evaluasiosv2
+                cd $WORKSPACE
                 docker compose down
                 docker compose up -d
                 '''

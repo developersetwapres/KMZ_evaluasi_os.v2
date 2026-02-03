@@ -54,6 +54,9 @@ class UserController extends Controller
 
         $data = [
             'initialUsers' => $initialUsers,
+            'totalOutsourcing' => Outsourcing::count(),
+            'outsourcingAktif' => Outsourcing::where('is_active', 1)->count(),
+            'outsourcingNonAktif' => Outsourcing::where('is_active', 0)->count(),
         ];
 
         return Inertia::render('admin/user/page', $data);

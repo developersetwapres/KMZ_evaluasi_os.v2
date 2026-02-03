@@ -34,11 +34,14 @@ import { Link, router, usePage } from '@inertiajs/react';
 import {
     Briefcase,
     Building,
+    Calendar,
     CheckCircle,
+    Clock,
     Crown,
     Edit,
     Eye,
     EyeOff,
+    HashIcon,
     Mail,
     Plus,
     Search,
@@ -108,11 +111,17 @@ const unitOptions = [
     'Biro Pers, Media, dan Informasi',
 ];
 
-export default function UserManagement({ initialUsers }: any) {
+export default function UserManagement({
+    initialUsers,
+    totalOutsourcing,
+    outsourcingAktif,
+    outsourcingNonAktif,
+}: any) {
     const { flash } = usePage().props;
     const imageUrl = 'flash.pathTemp';
 
     const [users, setUsers] = useState(initialUsers);
+    const [selectedUser, setSelectedUser] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [editingUser, setEditingUser] = useState<any>(null);
@@ -307,22 +316,48 @@ export default function UserManagement({ initialUsers }: any) {
                 {/* Main Content */}
                 <Card>
                     <CardHeader>
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <CardTitle className="text-lg">
-                                    Daftar User
-                                </CardTitle>
-                                <CardDescription>
-                                    Kelola semua user dalam sistem
-                                </CardDescription>
-                            </div>
-                            <Button
-                                onClick={handleAdd}
-                                className="flex items-center space-x-2"
-                            >
-                                <Plus className="h-4 w-4" />
-                                <span>Tambah User</span>
-                            </Button>
+                        <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-3">
+                            <Card className="border-l-4 border-l-cyan-500 bg-gradient-to-br from-cyan-50 to-white">
+                                <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
+                                    <CardTitle className="text-sm font-medium text-slate-600">
+                                        Outsourcing Aktif
+                                    </CardTitle>
+                                    <Calendar className="size-5 text-cyan-500" />
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="text-3xl font-bold text-cyan-600">
+                                        {outsourcingAktif}
+                                    </div>
+                                </CardContent>
+                            </Card>
+
+                            <Card className="border-l-4 border-l-purple-500 bg-gradient-to-br from-purple-50 to-white">
+                                <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
+                                    <CardTitle className="text-sm font-medium text-slate-600">
+                                        Outsourcing Non Aktif
+                                    </CardTitle>
+                                    <Users className="size-5 text-purple-500" />
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="text-3xl font-bold text-purple-600">
+                                        {outsourcingNonAktif}
+                                    </div>
+                                </CardContent>
+                            </Card>
+
+                            <Card className="border-l-4 border-l-rose-500 bg-gradient-to-br from-rose-50 to-white">
+                                <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
+                                    <CardTitle className="text-sm font-medium text-slate-600">
+                                        Total Outsourcing
+                                    </CardTitle>
+                                    <Clock className="size-5 text-rose-500" />
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="text-3xl font-bold text-rose-600">
+                                        {totalOutsourcing}
+                                    </div>
+                                </CardContent>
+                            </Card>
                         </div>
                     </CardHeader>
                     <CardContent>
@@ -339,14 +374,47 @@ export default function UserManagement({ initialUsers }: any) {
                                     className="pl-10"
                                 />
                             </div>
+
+                            <Select
+                                value={selectedUser || 'Semua Status'}
+                                onValueChange={(value) =>
+                                    setSelectedUser(
+                                        value === 'Semua Status' ? null : value,
+                                    )
+                                }
+                            >
+                                <SelectTrigger className="md:w-48">
+                                    <SelectValue placeholder="Filter Status" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="Semua Status">
+                                        Semua Status
+                                    </SelectItem>
+                                    <SelectItem value={'1'}>Aktif</SelectItem>
+                                    <SelectItem value={'0'}>
+                                        Non-Aktif
+                                    </SelectItem>
+                                </SelectContent>
+                            </Select>
+
+                            <Button
+                                onClick={handleAdd}
+                                className="flex items-center space-x-2"
+                            >
+                                <Plus className="h-4 w-4" />
+                                <span>Tambah User</span>
+                            </Button>
                         </div>
 
                         {/* Users Grid */}
                         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                            {filteredUsers?.map((user: any) => {
+                            {filteredUsers?.map((user: any, index: number) => {
                                 if (user.type == 'pegawai') {
                                     return (
-                                        <Card className="gap-0 overflow-hidden rounded-xl bg-white shadow-lg transition-shadow duration-300 hover:shadow-xl">
+                                        <Card
+                                            key={index}
+                                            className="gap-0 overflow-hidden rounded-xl bg-white shadow-lg transition-shadow duration-300 hover:shadow-xl"
+                                        >
                                             <CardHeader className="">
                                                 <div className="flex items-center gap-4">
                                                     <Avatar className="h-15 w-15">
@@ -401,7 +469,10 @@ export default function UserManagement({ initialUsers }: any) {
                                                             Role:
                                                         </span>
                                                         {user.role.map(
-                                                            (role, index) => (
+                                                            (
+                                                                role: string,
+                                                                index: number,
+                                                            ) => (
                                                                 <Badge
                                                                     key={index}
                                                                     variant="outline"
@@ -425,7 +496,10 @@ export default function UserManagement({ initialUsers }: any) {
                                     );
                                 } else {
                                     return (
-                                        <Card className="gap-0 overflow-hidden rounded-xl bg-white shadow-lg transition-shadow duration-300 hover:shadow-xl">
+                                        <Card
+                                            key={index}
+                                            className="gap-0 overflow-hidden rounded-xl bg-white shadow-lg transition-shadow duration-300 hover:shadow-xl"
+                                        >
                                             <CardHeader className="pb-3">
                                                 <div className="flex items-start justify-between">
                                                     <div className="flex items-center space-x-3">
@@ -511,7 +585,10 @@ export default function UserManagement({ initialUsers }: any) {
                                                             Role:
                                                         </span>
                                                         {user.role.map(
-                                                            (role, index) => (
+                                                            (
+                                                                role: string,
+                                                                index: number,
+                                                            ) => (
                                                                 <Badge
                                                                     key={index}
                                                                     variant="outline"
@@ -546,6 +623,12 @@ export default function UserManagement({ initialUsers }: any) {
                                                     >
                                                         <Trash2 className="h-3 w-3" />
                                                     </Button>
+                                                    <div className="ml-2 flex items-center gap-1 rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-600">
+                                                        <HashIcon className="h-3 w-3" />
+                                                        <span className="">
+                                                            {index + 1}
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </CardContent>
                                         </Card>

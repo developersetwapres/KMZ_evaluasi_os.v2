@@ -125,7 +125,6 @@ export default function UserManagement({
     const [searchTerm, setSearchTerm] = useState('');
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [editingUser, setEditingUser] = useState<any>(null);
-    const [filterRole, setFilterRole] = useState('all');
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
@@ -159,11 +158,11 @@ export default function UserManagement({
             user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.jabatan?.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesRole = filterRole === 'all' || user.role === filterRole;
+
+        const matchesRole =
+            selectedUser == null || user.is_active == selectedUser;
         return matchesSearch && matchesRole;
     });
-
-    console.log(filteredUsers);
 
     const handleAdd = () => {
         setEditingUser(null);
@@ -392,7 +391,7 @@ export default function UserManagement({
                                     </SelectItem>
                                     <SelectItem value={'1'}>Aktif</SelectItem>
                                     <SelectItem value={'0'}>
-                                        Non-Aktif
+                                        Non Aktif
                                     </SelectItem>
                                 </SelectContent>
                             </Select>

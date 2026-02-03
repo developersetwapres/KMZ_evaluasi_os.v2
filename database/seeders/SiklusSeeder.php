@@ -14,10 +14,16 @@ class SiklusSeeder extends Seeder
     {
         $data = [
             [
-                'title' => 'Semester II tahun 2025',
-                'tanggal_mulai' => '2025-12-29',
-                'tanggal_selesai' => '2026-01-10',
+                'title' => 'Semester I tahun 2026',
+                'tanggal_mulai' => '2026-01-01',
+                'tanggal_selesai' => '2026-06-30',
                 'is_active' => 1,
+            ],
+            [
+                'title' => 'Semester II tahun 2025',
+                'tanggal_mulai' => '2025-07-01',
+                'tanggal_selesai' => '2025-12-31',
+                'is_active' => 0,
             ]
         ];
 

@@ -24,14 +24,17 @@ class PenugasanPenilaiController extends Controller
 
     public function index(): Response
     {
-        $siklus = Siklus::where('is_active', 1)->first();
+        // $siklus = Siklus::where('is_active', 1)->first();
+        $siklus = Siklus::where('title', 'Semester I tahun 2025')->firstOrFail();
+
 
         if (!$siklus) {
             ['message' => 'Tidak ada siklus aktif'];
         }
 
-        $outsourcings = Outsourcing::where('is_active', 1)
-            ->with([
+        $outsourcings = Outsourcing::
+            // where('is_active', 1)
+            with([
                 'penugasan' => fn($q) =>
                 $q->where('siklus_id', $siklus->id)->with('evaluators.userable'),
                 'biro',

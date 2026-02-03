@@ -166,7 +166,7 @@ export default function PeerAssignment({
     const filteredSearchEmployees = outsourcing?.filter(
         (emp: any) =>
             emp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            emp.biro.toLowerCase().includes(searchTerm.toLowerCase()),
+            emp?.biro?.toLowerCase().includes(searchTerm.toLowerCase()),
     );
 
     const handleAssignEvaluators = () => {

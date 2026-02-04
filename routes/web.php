@@ -7,12 +7,6 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 
-// Route::get('/', [function () {
-//     return Inertia::render('welcome', [
-//         'canRegister' => Features::enabled(Features::registration()),
-//     ]);
-// }])->name('home');
-
 Route::middleware(['auth', 'verified', 'role:evaluator'])->group(function () {
     Route::get('/', [PenugasanPenilaiController::class, 'card'])->name('home');
 

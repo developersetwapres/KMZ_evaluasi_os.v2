@@ -100,8 +100,6 @@ const semesterHistory = [
 ];
 
 export default function EvaluatorPage({ penugasanPeer, semesterHistory }: any) {
-    console.log(semesterHistory);
-
     const { auth } = usePage<SharedData>().props;
     const user = auth.user;
 
@@ -157,7 +155,7 @@ export default function EvaluatorPage({ penugasanPeer, semesterHistory }: any) {
                                 <div className="flex items-center space-x-4">
                                     <div className="rounded-full bg-white/20 p-3">
                                         <img
-                                            src={`/storage/${user.image}`}
+                                            src={`/storage/${user?.userable?.image}`}
                                             alt={user?.userable?.name}
                                             className="h-17 w-17 rounded-full"
                                         />

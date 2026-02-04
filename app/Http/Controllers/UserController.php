@@ -4,49 +4,61 @@ namespace App\Http\Controllers;
 
 use App\Models\MasterPegawai;
 use App\Models\Outsourcing;
-use App\Models\User;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
-
-use function Termwind\render;
 
 class UserController extends Controller
 {
     public function index($user): Response
     {
         if ($user == 'outsourcings') {
-            $initialUsers = Outsourcing::with(['biro', 'jabatan'])
+            $initialUsers = Outsourcing::with([
+                'biro',
+                'jabatan',
+                'user' => fn($q) =>
+                $q->withCount([
+                    'penugasan as penugasan_count' => fn($q) =>
+                    $q->where('siklus_id', 1)
+                ])
+            ])
                 ->orderBy('name', 'asc')
-                ->with('user')
                 ->get()
                 ->map(fn($o) => [
                     'id'      => $o->uuid,
                     'name'    => $o->name,
-                    'image'    => $o->image,
+                    'image'   => $o->image,
                     'nip'     => $o->user?->nip,
-                    'email'     => $o->user?->email,
-                    'role'     => $o->user?->role,
-                    'is_active'     => $o->is_active,
+                    'email'   => $o->user?->email,
+                    'role'    => $o->user?->role,
+                    'is_active' => $o->is_active,
                     'type'    => 'outsourcing',
                     'biro'    => $o->biro?->nama_biro,
                     'jabatan' => $o->jabatan?->nama_jabatan,
+                    'jumlahDinilai' => $o->user?->penugasan_count ?? 0,
                 ]);
         } elseif ($user == 'evaluators') {
             $initialUsers = MasterPegawai::where('kode_unit', '02')
+                ->with([
+                    'biro',
+                    'user' => fn($q) =>
+                    $q->withCount([
+                        'penugasan as penugasan_count' => fn($q) =>
+                        $q->where('siklus_id', 1)
+                    ])
+                ])
                 ->orderBy('name', 'asc')
-                ->with(['biro', 'user'])
                 ->get()
                 ->map(fn($p) => [
-                    'id'        => $p->uuid,
-                    'name'      => $p->name,
-                    'image'    => $p->image,
-                    'email'     => null,
-                    'type'      => 'pegawai',
-                    'nip'       => $p->user?->nip_sso,
-                    'biro'      => $p->biro?->nama_biro,
-                    'role'     => $p->user?->role,
-                    'jabatan'   => $p->jabatan,
+                    'id'      => $p->uuid,
+                    'name'    => $p->name,
+                    'image'   => $p->image,
+                    'email'   => null,
+                    'type'    => 'pegawai',
+                    'nip'     => $p->user?->nip_sso,
+                    'biro'    => $p->biro?->nama_biro,
+                    'role'    => $p->user?->role,
+                    'jabatan' => $p->jabatan,
+                    'jumlahDinilai' => $p->user?->penugasan_count ?? 0,
                 ]);
         } else {
             $initialUsers = [];
@@ -57,6 +69,22 @@ class UserController extends Controller
             'totalOutsourcing' => Outsourcing::count(),
             'outsourcingAktif' => Outsourcing::where('is_active', 1)->count(),
             'outsourcingNonAktif' => Outsourcing::where('is_active', 0)->count(),
+            'totalPegawai' => MasterPegawai::where('kode_unit', '02')->count(),
+            'pegawaiMenilai' => MasterPegawai::where('kode_unit', '02')
+                ->whereHas(
+                    'user.penugasan',
+                    fn($q) =>
+                    $q->where('siklus_id', 1)
+                )
+                ->count(),
+
+            'pegawaiTidakMenilai' => MasterPegawai::where('kode_unit', '02')
+                ->whereDoesntHave(
+                    'user.penugasan',
+                    fn($q) =>
+                    $q->where('siklus_id', 1)
+                )
+                ->count(),
         ];
 
         return Inertia::render('admin/user/page', $data);

@@ -116,6 +116,9 @@ export default function UserManagement({
     totalOutsourcing,
     outsourcingAktif,
     outsourcingNonAktif,
+    totalPegawai,
+    pegawaiMenilai,
+    pegawaiTidakMenilai,
 }: any) {
     const { flash } = usePage().props;
     const imageUrl = 'flash.pathTemp';
@@ -315,49 +318,95 @@ export default function UserManagement({
                 {/* Main Content */}
                 <Card>
                     <CardHeader>
-                        <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-3">
-                            <Card className="border-l-4 border-l-cyan-500 bg-gradient-to-br from-cyan-50 to-white">
-                                <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
-                                    <CardTitle className="text-sm font-medium text-slate-600">
-                                        Outsourcing Aktif
-                                    </CardTitle>
-                                    <Calendar className="size-5 text-cyan-500" />
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="text-3xl font-bold text-cyan-600">
-                                        {outsourcingAktif}
-                                    </div>
-                                </CardContent>
-                            </Card>
+                        {filteredUsers[0]?.type == 'pegawai' ? (
+                            <div className="mb-2 grid grid-cols-1 gap-4 md:grid-cols-3">
+                                <Card className="border-l-4 border-l-cyan-500 bg-gradient-to-br from-cyan-50 to-white">
+                                    <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
+                                        <CardTitle className="text-sm font-medium text-slate-600">
+                                            Pegawai Yang Menilai
+                                        </CardTitle>
+                                        <Calendar className="size-5 text-cyan-500" />
+                                    </CardHeader>
+                                    <CardContent>
+                                        <div className="text-3xl font-bold text-cyan-600">
+                                            {pegawaiMenilai}
+                                        </div>
+                                    </CardContent>
+                                </Card>
 
-                            <Card className="border-l-4 border-l-purple-500 bg-gradient-to-br from-purple-50 to-white">
-                                <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
-                                    <CardTitle className="text-sm font-medium text-slate-600">
-                                        Outsourcing Non Aktif
-                                    </CardTitle>
-                                    <Users className="size-5 text-purple-500" />
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="text-3xl font-bold text-purple-600">
-                                        {outsourcingNonAktif}
-                                    </div>
-                                </CardContent>
-                            </Card>
+                                <Card className="border-l-4 border-l-purple-500 bg-gradient-to-br from-purple-50 to-white">
+                                    <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
+                                        <CardTitle className="text-sm font-medium text-slate-600">
+                                            Pegawai Tidak Menilai
+                                        </CardTitle>
+                                        <Users className="size-5 text-purple-500" />
+                                    </CardHeader>
+                                    <CardContent>
+                                        <div className="text-3xl font-bold text-purple-600">
+                                            {pegawaiTidakMenilai}
+                                        </div>
+                                    </CardContent>
+                                </Card>
 
-                            <Card className="border-l-4 border-l-rose-500 bg-gradient-to-br from-rose-50 to-white">
-                                <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
-                                    <CardTitle className="text-sm font-medium text-slate-600">
-                                        Total Outsourcing
-                                    </CardTitle>
-                                    <Clock className="size-5 text-rose-500" />
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="text-3xl font-bold text-rose-600">
-                                        {totalOutsourcing}
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </div>
+                                <Card className="border-l-4 border-l-rose-500 bg-gradient-to-br from-rose-50 to-white">
+                                    <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
+                                        <CardTitle className="text-sm font-medium text-slate-600">
+                                            Total Pegawai
+                                        </CardTitle>
+                                        <Clock className="size-5 text-rose-500" />
+                                    </CardHeader>
+                                    <CardContent>
+                                        <div className="text-3xl font-bold text-rose-600">
+                                            {totalPegawai}
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            </div>
+                        ) : (
+                            <div className="mb-2 grid grid-cols-1 gap-4 md:grid-cols-3">
+                                <Card className="border-l-4 border-l-cyan-500 bg-gradient-to-br from-cyan-50 to-white">
+                                    <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
+                                        <CardTitle className="text-sm font-medium text-slate-600">
+                                            Outsourcing Aktif
+                                        </CardTitle>
+                                        <Calendar className="size-5 text-cyan-500" />
+                                    </CardHeader>
+                                    <CardContent>
+                                        <div className="text-3xl font-bold text-cyan-600">
+                                            {outsourcingAktif}
+                                        </div>
+                                    </CardContent>
+                                </Card>
+
+                                <Card className="border-l-4 border-l-purple-500 bg-gradient-to-br from-purple-50 to-white">
+                                    <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
+                                        <CardTitle className="text-sm font-medium text-slate-600">
+                                            Outsourcing Non Aktif
+                                        </CardTitle>
+                                        <Users className="size-5 text-purple-500" />
+                                    </CardHeader>
+                                    <CardContent>
+                                        <div className="text-3xl font-bold text-purple-600">
+                                            {outsourcingNonAktif}
+                                        </div>
+                                    </CardContent>
+                                </Card>
+
+                                <Card className="border-l-4 border-l-rose-500 bg-gradient-to-br from-rose-50 to-white">
+                                    <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
+                                        <CardTitle className="text-sm font-medium text-slate-600">
+                                            Total Outsourcing
+                                        </CardTitle>
+                                        <Clock className="size-5 text-rose-500" />
+                                    </CardHeader>
+                                    <CardContent>
+                                        <div className="text-3xl font-bold text-rose-600">
+                                            {totalOutsourcing}
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            </div>
+                        )}
                     </CardHeader>
                     <CardContent>
                         {/* Filters */}
@@ -485,9 +534,10 @@ export default function UserManagement({
                                                     <div className="flex items-center gap-2">
                                                         <CheckCircle className="h-4 w-4 text-green-500" />
                                                         <span className="text-sm font-medium">
-                                                            Jumlah yang dinilai:
-                                                        </span>{' '}
-                                                        {5} OS
+                                                            Jumlah yang dinilai:{' '}
+                                                            {user.jumlahDinilai}{' '}
+                                                            OS
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </CardContent>
@@ -532,7 +582,7 @@ export default function UserManagement({
                                                                 {user.name}
                                                             </CardTitle>
                                                             <p className="text-sm text-gray-600">
-                                                                NIP: {user.nip}
+                                                                NRP: {user.nip}
                                                             </p>
                                                         </div>
                                                     </div>
@@ -597,6 +647,15 @@ export default function UserManagement({
                                                                 </Badge>
                                                             ),
                                                         )}
+                                                    </div>
+
+                                                    <div className="flex items-center gap-2">
+                                                        <CheckCircle className="h-4 w-4 text-green-500" />
+                                                        <span className="text-sm font-medium">
+                                                            Jumlah yang dinilai:{' '}
+                                                            {user.jumlahDinilai}{' '}
+                                                            OS
+                                                        </span>
                                                     </div>
                                                 </div>
 

@@ -14,9 +14,6 @@ use App\Services\Penilaian\RankingScoreByJabatan;
 use App\Services\Penilaian\RekapHasilService;
 use Inertia\Inertia;
 use Inertia\Response;
-use Maatwebsite\Excel\Facades\Excel;
-use Maatwebsite\Excel\Excel as ExcelExcel;
-use Maatwebsite\Excel\Concerns\FromArray;
 
 class OutsourcingController extends Controller
 {
@@ -136,7 +133,7 @@ class OutsourcingController extends Controller
             'uuidOs' => $outsourcing->uuid,
         ];
 
-        return Inertia::render('admin/detail/catatanevaluator', $data);
+        return Inertia::render('admin/detail/catatan-evaluator', $data);
     }
 
     public function nilaiPerkriteria(Outsourcing $outsourcing, NilaiPeraspek $service, $tipePenilai = 'atasan'): Response
@@ -166,7 +163,7 @@ class OutsourcingController extends Controller
             'uuidOs' => $outsourcing->uuid,
         ];
 
-        return Inertia::render('admin/detail/nilaiperkriteria', $data);
+        return Inertia::render('admin/detail/nilai-perkriteria', $data);
     }
 
 

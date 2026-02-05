@@ -27,6 +27,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { useToast } from '@/hooks/use-toast';
 import AdminLayout from '@/layouts/app/app-adminkmz-layout';
 import { cn } from '@/lib/utils';
 import { update as updateOutsourcing } from '@/routes/outsourcing';
@@ -69,6 +70,7 @@ export default function UserManagement({
 }: any) {
     const { flash } = usePage().props;
     const imageUrl = flash?.pathTemp ?? '';
+    const { toast } = useToast();
 
     const [users, setUsers] = useState(initialUsers);
     const [selectedUser, setSelectedUser] = useState<string | null>(null);
@@ -150,18 +152,33 @@ export default function UserManagement({
             router.put(updateOutsourcing.url(editingUser.id), formData, {
                 onSuccess: () => {
                     setIsDialogOpen(false);
+                    toast({
+                        title: 'Validasi Berhasil',
+                        description: 'Data user berhasil diperbarui.',
+                    });
                 },
                 onError: (err) => {
-                    console.log(err);
+                    toast({
+                        title: 'Validasi gagal',
+                        description: Object.values(err)[0],
+                        variant: 'destructive',
+                    });
                 },
             });
         } else {
             router.post(route('user.store'), formData, {
                 onSuccess: () => {
-                    //
+                    toast({
+                        title: 'Validasi Berhasil',
+                        description: 'Data user berhasil ditambahkan.',
+                    });
                 },
                 onError: (err) => {
-                    console.log(err);
+                    toast({
+                        title: 'Validasi gagal',
+                        description: Object.values(err)[0],
+                        variant: 'destructive',
+                    });
                 },
             });
         }

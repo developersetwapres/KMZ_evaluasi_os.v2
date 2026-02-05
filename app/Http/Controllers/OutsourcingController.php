@@ -14,6 +14,9 @@ use App\Services\Penilaian\RankingScoreByJabatan;
 use App\Services\Penilaian\RekapHasilService;
 use Inertia\Inertia;
 use Inertia\Response;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Excel as ExcelExcel;
+use Maatwebsite\Excel\Concerns\FromArray;
 
 class OutsourcingController extends Controller
 {
@@ -72,13 +75,13 @@ class OutsourcingController extends Controller
             'is_active' => $request->status,
             // 'nip' => $request->nip,
             'image' => $finalImagePath,
-            'password' => Hash::make($request->password),
         ]);
 
         $idUser = $Outsourcing->load('user')->user->id;
 
         User::findOrFail($idUser)->update([
             'email' => $request->email,
+            'password' => Hash::make($request->password),
             // 'role' => $request->role,
         ]);
 

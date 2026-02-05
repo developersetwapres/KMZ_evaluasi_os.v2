@@ -11,6 +11,18 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Outsourcing extends Model
 {
+
+    protected $fillable = [
+        'uuid',
+        'name',
+        'image',
+        'jabatan_id',
+        'is_active',
+        'nip',
+        'kode_biro',
+    ];
+
+
     /** @use HasFactory<\Database\Factories\OutsourcingFactory> */
     use HasFactory;
     use HasUuid;

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Biro;
+use App\Models\Jabatan;
 use App\Models\MasterPegawai;
 use App\Models\Outsourcing;
 use Inertia\Inertia;
@@ -33,7 +35,9 @@ class UserController extends Controller
                     'is_active' => $o->is_active,
                     'type'    => 'outsourcing',
                     'biro'    => $o->biro?->nama_biro,
+                    'kode_biro'    => $o->biro?->kode_biro,
                     'jabatan' => $o->jabatan?->nama_jabatan,
+                    'id_jabatan' => $o->jabatan?->id,
                     'jumlahDinilai' => $o->user?->penugasan_count ?? 0,
                 ]);
         } elseif ($user == 'evaluators') {
@@ -56,8 +60,10 @@ class UserController extends Controller
                     'type'    => 'pegawai',
                     'nip'     => $p->user?->nip_sso,
                     'biro'    => $p->biro?->nama_biro,
+                    'kode_biro'    => $p->biro?->kode_biro,
                     'role'    => $p->user?->role,
                     'jabatan' => $p->jabatan,
+                    'id_jabatan' => $p->jabatan,
                     'jumlahDinilai' => $p->user?->penugasan_count ?? 0,
                 ]);
         } else {
@@ -85,6 +91,10 @@ class UserController extends Controller
                     $q->where('siklus_id', 1)
                 )
                 ->count(),
+            'jabatans' => Jabatan::orderBy('nama_jabatan', 'asc')->get(),
+            'biros' => Biro::where('kode_biro', 'like', '02%')
+                ->orderBy('nama_biro', 'asc')
+                ->get()
         ];
 
         return Inertia::render('admin/user/page', $data);

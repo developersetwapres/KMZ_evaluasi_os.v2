@@ -3,7 +3,9 @@
 use App\Http\Controllers\OutsourcingController;
 use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\PenugasanPenilaiController;
+use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserController;
+use App\Models\Outsourcing;
 use Illuminate\Support\Facades\Route;
 
 
@@ -29,9 +31,12 @@ Route::middleware(['auth', 'verified', 'role:operator'])->group(function () {
     Route::get('/dashboard/ranking-skor', [OutsourcingController::class, 'ranking'])->name('os.ranking');
 
     Route::get('/dashboard/user-management/{user}', [UserController::class, 'index'])->name('user.index');
+    Route::put('/dashboard/outsourcing-update/{outsourcing:uuid}', [OutsourcingController::class, 'update'])->name('outsourcing.update');
 
     Route::get('/dashboard/penugasan-peer', [PenugasanPenilaiController::class, 'index'])->name('penugasan.index');
     Route::post('/dashboard/penugasan-peer/store/{outsourcing:uuid}', [PenugasanPenilaiController::class, 'store'])->name('penugasan.store');
+
+    Route::post('/upload-temp-image', [UploadController::class, 'uploadTempImage'])->name('upload.tempImage');
 });
 
 Route::middleware(['auth', 'verified', 'role:administrator'])->group(function () {

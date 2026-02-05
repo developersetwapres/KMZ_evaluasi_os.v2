@@ -29,6 +29,8 @@ import {
 } from '@/components/ui/select';
 import AdminLayout from '@/layouts/app/app-adminkmz-layout';
 import { cn } from '@/lib/utils';
+import { update as updateOutsourcing } from '@/routes/outsourcing';
+import { tempImage } from '@/routes/upload';
 import { index } from '@/routes/user';
 import { Link, router, usePage } from '@inertiajs/react';
 import {
@@ -37,7 +39,6 @@ import {
     Calendar,
     CheckCircle,
     Clock,
-    Crown,
     Edit,
     Eye,
     EyeOff,
@@ -45,7 +46,6 @@ import {
     Mail,
     Plus,
     Search,
-    Shield,
     Star,
     Trash2,
     Upload,
@@ -56,61 +56,6 @@ import {
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-const roleOptions = [
-    {
-        value: 'admin',
-        label: 'Administrator',
-        icon: Shield,
-        color: 'bg-red-100 text-red-800',
-    },
-    {
-        value: 'atasan',
-        label: 'Atasan',
-        icon: Crown,
-        color: 'bg-purple-100 text-purple-800',
-    },
-    {
-        value: 'penerima_layanan',
-        label: 'Penerima Layanan',
-        icon: UserCog,
-        color: 'bg-blue-100 text-blue-800',
-    },
-    {
-        value: 'outsourcing',
-        label: 'Outsourcing',
-        icon: Users,
-        color: 'bg-green-100 text-green-800',
-    },
-];
-
-const unitOptions = [
-    'Biro Umum',
-    'Biro Protokol dan Kerumahtanggaan',
-    'Biro TUSDM',
-    'Biro Perencanaan dan Keuangan',
-    'Deputi Bidang Dukungan KPPP',
-    'Deputi Bidang Dukungan KPKPSDM',
-    'BPMI',
-    'Asdep Tata Kelola Pemerintahan dan Perepatan Pembangunan Daerah',
-    'Asdep Pemberdayaan Masyarakat dan Penanggulangan Bencana',
-    'Badan Teknologi, Data dan Informasi',
-    'Asdep Infrastruktur, Sumber Daya Alam, dan Pembangunan Kewilayahan',
-    'Deputi Bidang Administrasi',
-    'Asdep Ekonomi, Keuangan dan Transformasi Digital',
-    'Asdep Politik, Keamanan, Hukum dan Hak Asasi Manusia',
-    'Asdep Hubungan Luar Negeri dan Pertahanan ',
-    'Asdep Industri, Perdagangan, Pariwisata dan Ekonomi Kreatif',
-    'Sekretaris Wakil Presiden',
-    'Asdep Pengentasan Kemiskinan dan Pembangunan Desa',
-    'Deputi Bidang Dukungan Kebijakan Perekonomian, Pariwisata dan Transformasi Digital',
-    'Deputi Bidang Dukungan Kebijakan Peningkatan Kesejahteraan dan Pembangunan Sumber Daya Manusia',
-    'Kepala BPMI',
-    'Asdep Pendidikan, Agama, Kebudayaan, Pemuda dan Olahraga',
-    'Asdep Kesehatan, Gizi dan Pembangunan Keluarga',
-    'Biro Umum Setneg',
-    'Biro Pers, Media, dan Informasi',
-];
-
 export default function UserManagement({
     initialUsers,
     totalOutsourcing,
@@ -118,10 +63,12 @@ export default function UserManagement({
     outsourcingNonAktif,
     totalPegawai,
     pegawaiMenilai,
+    biros,
     pegawaiTidakMenilai,
+    jabatans,
 }: any) {
     const { flash } = usePage().props;
-    const imageUrl = 'flash.pathTemp';
+    const imageUrl = flash?.pathTemp ?? '';
 
     const [users, setUsers] = useState(initialUsers);
     const [selectedUser, setSelectedUser] = useState<string | null>(null);
@@ -133,12 +80,9 @@ export default function UserManagement({
         name: '',
         email: '',
         jabatan: '',
-        lokasi_kerja: '',
         unit_kerja: '',
-        perusahaan: '',
         role: '',
-        phone: '',
-        status: 'active',
+        status: '',
         image: '',
         password: '',
     });
@@ -173,12 +117,9 @@ export default function UserManagement({
             name: '',
             email: '',
             jabatan: '',
-            lokasi_kerja: '',
             unit_kerja: '',
-            perusahaan: '',
             role: '',
-            phone: '',
-            status: 'active',
+            status: '',
             image: '',
             password: '',
         });
@@ -190,13 +131,10 @@ export default function UserManagement({
         setFormData({
             name: user.name,
             email: user.email,
-            jabatan: user.jabatan,
-            lokasi_kerja: user.lokasi_kerja,
-            unit_kerja: user.unit_kerja,
-            perusahaan: user.perusahaan,
+            jabatan: user.id_jabatan,
+            unit_kerja: user.kode_biro,
             role: user.role,
-            phone: user.phone,
-            status: user.status,
+            status: user.is_active.toString(),
             image: user.image,
             password: '',
         });
@@ -209,9 +147,9 @@ export default function UserManagement({
 
     const handleSave = () => {
         if (editingUser) {
-            router.put(route('user.update', editingUser.id), formData, {
+            router.put(updateOutsourcing.url(editingUser.id), formData, {
                 onSuccess: () => {
-                    //
+                    setIsDialogOpen(false);
                 },
                 onError: (err) => {
                     console.log(err);
@@ -248,7 +186,7 @@ export default function UserManagement({
 
         if (file) {
             router.post(
-                route('upload.temp'),
+                tempImage.url(),
                 { image: file },
                 {
                     onSuccess: () => {
@@ -774,7 +712,6 @@ export default function UserManagement({
                                     </div>
                                 </div>
                             </div>
-
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <Label htmlFor="name">Nama Lengkap</Label>
@@ -807,129 +744,88 @@ export default function UserManagement({
                                 </div>
                             </div>
 
+                            <div className="space-y-2">
+                                <Label htmlFor="unit_kerja">Unit Kerja</Label>
+                                <Select
+                                    value={formData.unit_kerja}
+                                    onValueChange={(value) =>
+                                        setFormData({
+                                            ...formData,
+                                            unit_kerja: value,
+                                        })
+                                    }
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Pilih unit kerja" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {biros.map((biro: any) => (
+                                            <SelectItem
+                                                key={biro.id}
+                                                value={biro.kode_biro}
+                                            >
+                                                {biro.kode_biro}
+                                                {'_'}
+                                                {biro.nama_biro}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="jabatan">Jabatan</Label>
-                                    <Input
-                                        id="jabatan"
+                                    <Label htmlFor="unit_kerja">Jabatan</Label>
+                                    <Select
                                         value={formData.jabatan}
-                                        onChange={(e) =>
-                                            setFormData({
-                                                ...formData,
-                                                jabatan: e.target.value,
-                                            })
-                                        }
-                                        placeholder="Masukkan jabatan"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="role">Role</Label>
-                                    <Select
-                                        value={formData.role}
                                         onValueChange={(value) =>
                                             setFormData({
                                                 ...formData,
-                                                role: value,
+                                                jabatan: value,
                                             })
                                         }
                                     >
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Pilih unit kerja" />
+                                            <SelectValue placeholder="Pilih jabatan" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            {roleOptions.map((role) => (
+                                            {jabatans.map((jabatan: any) => (
                                                 <SelectItem
-                                                    key={role.value}
-                                                    value={role.value}
+                                                    key={jabatan.id}
+                                                    value={jabatan.id}
                                                 >
-                                                    {role.label}
+                                                    {jabatan.nama_jabatan}
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>
                                     </Select>
                                 </div>
-                            </div>
 
-                            <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="lokasi_kerja">
-                                        Lokasi Kerja
-                                    </Label>
-                                    <Input
-                                        id="lokasi_kerja"
-                                        value={formData.lokasi_kerja}
-                                        onChange={(e) =>
-                                            setFormData({
-                                                ...formData,
-                                                lokasi_kerja: e.target.value,
-                                            })
-                                        }
-                                        placeholder="Masukkan Lokasi Kerja"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="unit_kerja">
-                                        Unit Kerja
-                                    </Label>
+                                    <Label htmlFor="status">Status</Label>
                                     <Select
-                                        value={formData.unit_kerja}
+                                        value={formData.status}
                                         onValueChange={(value) =>
                                             setFormData({
                                                 ...formData,
-                                                unit_kerja: value,
+                                                status: value,
                                             })
                                         }
                                     >
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Pilih unit kerja" />
+                                            <SelectValue placeholder="Pilih status os" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            {unitOptions.map((unit) => (
-                                                <SelectItem
-                                                    key={unit}
-                                                    value={unit}
-                                                >
-                                                    {unit}
-                                                </SelectItem>
-                                            ))}
+                                            <SelectItem value={String(1)}>
+                                                Aktif
+                                            </SelectItem>
+                                            <SelectItem value={String(0)}>
+                                                Tidak Aktif
+                                            </SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </div>
                             </div>
-
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="perusahaan">
-                                        Perusahaan
-                                    </Label>
-                                    <Input
-                                        id="perusahaan"
-                                        value={formData.perusahaan}
-                                        onChange={(e) =>
-                                            setFormData({
-                                                ...formData,
-                                                perusahaan: e.target.value,
-                                            })
-                                        }
-                                        placeholder="Masukkan perusahaan"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="phone">No. Telepon</Label>
-                                    <Input
-                                        id="phone"
-                                        value={formData.phone}
-                                        onChange={(e) =>
-                                            setFormData({
-                                                ...formData,
-                                                phone: e.target.value,
-                                            })
-                                        }
-                                        placeholder="Masukkan no. telepon"
-                                    />
-                                </div>
-                            </div>
-
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <Label htmlFor="password">Password</Label>

@@ -10,6 +10,21 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class MasterPegawai extends Model
 {
+    protected $fillable = [
+        'uuid',
+        'nip',
+        'name',
+        'image',
+        'jabatan',
+        'kode_instansi',
+        'kode_unit',
+        'kode_deputi',
+        'kode_biro',
+        'kode_bagian',
+        'kode_subbagian',
+    ];
+
+
     /** @use HasFactory<\Database\Factories\MasterPegawaiFactory> */
     use HasFactory;
     use HasUuid;

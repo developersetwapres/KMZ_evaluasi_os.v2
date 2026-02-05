@@ -6,7 +6,8 @@ use App\Models\Outsourcing;
 use App\Http\Requests\StoreOutsourcingRequest;
 use App\Http\Requests\UpdateOutsourcingRequest;
 use App\Models\Aspek;
-use App\Models\PenugasanPenilai;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use App\Services\Penilaian\AspectEvaluationService;
 use App\Services\Penilaian\NilaiPeraspek;
 use App\Services\Penilaian\RankingScoreByJabatan;
@@ -61,7 +62,27 @@ class OutsourcingController extends Controller
      */
     public function update(UpdateOutsourcingRequest $request, Outsourcing $Outsourcing)
     {
-        //
+        $moveImageFromTemp = app(UploadController::class)->moveImageFromTemp(...);
+        $finalImagePath = $moveImageFromTemp($request->image,  'os');
+
+        $Outsourcing->update([
+            'name' => $request->name,
+            'jabatan_id' => $request->jabatan,
+            'kode_biro' => $request->unit_kerja,
+            'is_active' => $request->status,
+            // 'nip' => $request->nip,
+            'image' => $finalImagePath,
+            'password' => Hash::make($request->password),
+        ]);
+
+        $idUser = $Outsourcing->load('user')->user->id;
+
+        User::findOrFail($idUser)->update([
+            'email' => $request->email,
+            // 'role' => $request->role,
+        ]);
+
+        return redirect()->back()->with('success', 'Data Outsourcing berhasil diperbarui.');
     }
 
     /**

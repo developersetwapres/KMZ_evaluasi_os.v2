@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorepenilaianRequest;
-use App\Http\Requests\UpdatepenilaianRequest;
+use App\Http\Requests\StorePenilaianRequest;
+use App\Http\Requests\UpdatePenilaianRequest;
 use App\Models\Aspek;
 use App\Models\Outsourcing;
 use App\Models\Penilaian;
@@ -11,6 +11,7 @@ use App\Models\PenugasanPenilai;
 use App\Services\Penilaian\NilaiPeraspek;
 use App\Services\Penilaian\RekapHasilService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -78,6 +79,7 @@ class PenilaianController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(StorePenilaianRequest $request, PenugasanPenilai $penugasan)
+    // public function store(Request $request, PenugasanPenilai $penugasan)
     {
         foreach ($request->nilai as $key => $value) {
             Penilaian::create([

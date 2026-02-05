@@ -30,10 +30,11 @@ export default function ResultsRecapPage({ evaluationResults }) {
     const [filterUnit, setFilterUnit] = useState('all');
 
     const filteredResults = evaluationResults?.filter((result: any) => {
-        const matchesSearch =
-            result.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            result.biro.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesUnit = filterUnit === 'all' || result.biro === filterUnit;
+        const matchesSearch = result.name
+            ?.toLowerCase()
+            .includes(searchTerm?.toLowerCase());
+
+        const matchesUnit = filterUnit === 'all';
         return matchesSearch && matchesUnit;
     });
 

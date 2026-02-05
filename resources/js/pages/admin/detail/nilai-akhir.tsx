@@ -25,7 +25,7 @@ import { router } from '@inertiajs/react';
 import { BarChart3, Calculator, Users } from 'lucide-react';
 import { useState } from 'react';
 
-export default function nilaiAkhir({ rekapAspekEvaluator }) {
+export default function nilaiAkhir({ rekapAspekEvaluator }: any) {
     const [isResetNilaiOpen, setIsResetNilaiOpen] = useState(false);
     const [selectedPenilaian, setSelectedPenilaian] = useState<any>(null);
 
@@ -62,7 +62,6 @@ export default function nilaiAkhir({ rekapAspekEvaluator }) {
         (router.post(reset.url(selectedPenilaian.uuidPenugasan)),
             {
                 onSuccess: () => {
-                    return;
                     toast({
                         title: 'Berhasil',
                         description: 'Nilai sudah direset',
@@ -86,7 +85,7 @@ export default function nilaiAkhir({ rekapAspekEvaluator }) {
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center space-x-6">
                                     <img
-                                        src={`/ceholder-svg-height-96.jpg?height=96&width=96`}
+                                        src={`/storage/${rekapAspekEvaluator?.image}`}
                                         alt={rekapAspekEvaluator?.name}
                                         className="h-24 w-24 rounded-full border-4 border-white shadow-lg"
                                     />
@@ -151,8 +150,11 @@ export default function nilaiAkhir({ rekapAspekEvaluator }) {
                         <CardContent className="p-8">
                             <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
                                 {rekapAspekEvaluator.aspekScores.map(
-                                    (aspek, index) => (
-                                        <div className="transform rounded-xl border-2 border-blue-300 bg-gradient-to-br from-blue-400 to-blue-700 p-6 px-8 text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+                                    (aspek: any, index: any) => (
+                                        <div
+                                            key={index}
+                                            className="transform rounded-xl border-2 border-blue-300 bg-gradient-to-br from-blue-400 to-blue-700 p-6 px-8 text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+                                        >
                                             <div className="text-center">
                                                 <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
                                                     <Calculator className="h-8 w-8" />

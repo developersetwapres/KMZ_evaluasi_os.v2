@@ -28,7 +28,6 @@ class UpdateOutsourcingRequest extends FormRequest
             'email' => [
                 'required',
                 'email',
-                Rule::unique('users', 'email')->ignore($this->route('outsourcing')?->user_id),
             ],
 
             'password' => ['nullable', 'string', 'min:8'],

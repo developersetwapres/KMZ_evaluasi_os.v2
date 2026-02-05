@@ -1,6 +1,7 @@
 import { AdminHeader } from '@/components/penilaian/admin/admin-header';
 import { AdminNav } from '@/components/penilaian/admin/admin-nav';
 import { AdminProfileCard } from '@/components/penilaian/admin/admin-profile-card';
+import { Toaster } from '@/components/ui/toaster';
 import type React from 'react';
 
 // Mock user data - replace with actual data fetching
@@ -21,6 +22,7 @@ export default function AdminLayout({
                         {children}
                     </div>
                 </div>
+                <Toaster />
             </main>
         </div>
     );

@@ -158,6 +158,8 @@ export default function UserManagement({
                     });
                 },
                 onError: (err) => {
+                    console.log(err);
+
                     toast({
                         title: 'Validasi gagal',
                         description: Object.values(err)[0],

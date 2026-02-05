@@ -77,7 +77,7 @@ class PenilaianController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorepenilaianRequest $request, PenugasanPenilai $penugasan)
+    public function store(StorePenilaianRequest $request, PenugasanPenilai $penugasan)
     {
         foreach ($request->nilai as $key => $value) {
             Penilaian::create([

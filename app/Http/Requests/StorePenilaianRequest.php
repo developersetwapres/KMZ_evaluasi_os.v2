@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Models\Penilaian;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StorepenilaianRequest extends FormRequest
+class StorePenilaianRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

@@ -324,8 +324,8 @@ export default function EvaluatorPage({
                                                 </div>
                                                 <div>
                                                     <h3 className="text-lg font-bold text-gray-900">
-                                                        Daftar Pegawai
-                                                        Outsourcing yang Dinilai
+                                                        Daftar Pegawai yang
+                                                        Dinilai
                                                     </h3>
                                                     <p className="text-xs text-gray-500 sm:text-sm">
                                                         Pegawai outsourcing yang

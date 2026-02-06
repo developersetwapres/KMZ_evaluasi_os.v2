@@ -225,10 +225,10 @@ export default function EvaluatorPage({ penugasanPeer, semesterHistory }: any) {
                                             </div>
                                         </div>
 
-                                        <div className="mt-4 grid gap-4 md:grid-cols-3">
+                                        <div className="mt-4 grid gap-2 md:grid-cols-3">
                                             <Card className="p-4">
                                                 <div className="flex items-start justify-between">
-                                                    <div className="flex items-center gap-3">
+                                                    <div className="flex items-center gap-2">
                                                         <div className="rounded-md bg-indigo-50 p-2">
                                                             <Briefcase className="h-5 w-5 text-indigo-600" />
                                                         </div>
@@ -247,20 +247,14 @@ export default function EvaluatorPage({ penugasanPeer, semesterHistory }: any) {
                                                     </Badge>
                                                 </div>
 
-                                                <div className="mt-4 flex items-center justify-between">
-                                                    <div>
-                                                        <div className="text-3xl font-bold text-gray-900">
-                                                            88
-                                                        </div>
-                                                        <div className="text-xs text-gray-500">
-                                                            Rata-rata
-                                                        </div>
-                                                    </div>
-                                                    <div className="text-right text-sm text-gray-600">
-                                                        "Kerja sangat baik,
-                                                        terus pertahankan
-                                                        kualitas layanan."
-                                                    </div>
+                                                <div className="text-center text-4xl font-bold text-gray-900">
+                                                    88
+                                                </div>
+
+                                                <div className="text-center text-sm text-gray-600">
+                                                    "Kerja sangat baik, terus
+                                                    pertahankan kualitas
+                                                    layanan."
                                                 </div>
                                             </Card>
 

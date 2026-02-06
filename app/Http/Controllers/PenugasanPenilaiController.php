@@ -280,6 +280,8 @@ class PenugasanPenilaiController extends Controller
 
         $hasil = app(RekapHasilService::class)->hitung($penugasan);
 
+        $typeUser = Auth::user()->userable_type === Outsourcing::class ? 'outsourcing' : 'pegawai';
+
         $data = [
             'semesterHistory' => $semesterHistory,
             'penugasanPeer' => Auth::user()->penugasan()
@@ -287,8 +289,8 @@ class PenugasanPenilaiController extends Controller
                 ->whereHas('siklus', fn($q) => $q->where('is_active', true))
                 ->with(['siklus', 'outsourcings'])
                 ->get(),
-            'ressultScore' => $hasil,
-            'typeUser' => Auth::user()->userable_type === Outsourcing::class ? 'outsourcing' : 'pegawai',
+            'ressultScore' => $typeUser == 'outsourcing' ? $hasil : null,
+            'typeUser' => $typeUser,
         ];
 
         return Inertia::render('evaluator/page', $data);

@@ -21,6 +21,11 @@ import {
 } from '@/components/ui/dialog';
 import { toast } from '@/hooks/use-toast';
 import { reset } from '@/routes/penugasan';
+import {
+    getScoreBadgeColor,
+    getScoreColor,
+    getScoreLabel,
+} from '@/utils/score';
 import { router } from '@inertiajs/react';
 import { BarChart3, Calculator, Users } from 'lucide-react';
 import { useState } from 'react';
@@ -28,32 +33,6 @@ import { useState } from 'react';
 export default function nilaiAkhir({ rekapAspekEvaluator }: any) {
     const [isResetNilaiOpen, setIsResetNilaiOpen] = useState(false);
     const [selectedPenilaian, setSelectedPenilaian] = useState<any>(null);
-
-    const getScoreLabel = (score: number) => {
-        if (score >= 91) return 'Sangat Baik';
-        if (score >= 81) return 'Baik';
-        if (score >= 71) return 'Butuh Perbaikan';
-        if (score >= 61) return 'Kurang';
-        return 'Sangat Kurang';
-    };
-
-    const getScoreBadgeColor = (score: number) => {
-        if (score >= 91) return 'bg-green-100 text-green-800 border-green-200';
-        if (score >= 81) return 'bg-blue-100 text-blue-800 border-blue-200';
-        if (score >= 71)
-            return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-        if (score >= 61)
-            return 'bg-orange-100 text-orange-800 border-orange-200';
-        return 'bg-red-100 text-red-800 border-red-200';
-    };
-
-    const getScoreColor = (score: number) => {
-        if (score >= 91) return 'text-green-600';
-        if (score >= 81) return 'text-blue-600';
-        if (score >= 71) return 'text-yellow-600';
-        if (score >= 61) return 'text-orange-600';
-        return 'text-red-600';
-    };
 
     const handleResetNilai = () => {
         setIsResetNilaiOpen(false);

@@ -108,6 +108,7 @@ class OutsourcingController extends Controller
                 'uuid' => $outsourcing->uuid,
                 'image' => $outsourcing->image,
                 'jabatan' => $outsourcing->jabatan->nama_jabatan,
+                'unit_kerja' => $outsourcing->biro?->nama_biro,
                 ...app(RekapHasilService::class)
                     ->hitung($outsourcing->penugasan->load('evaluators'))
             ]

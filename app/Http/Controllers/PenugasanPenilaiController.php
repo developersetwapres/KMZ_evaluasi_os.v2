@@ -9,6 +9,7 @@ use App\Models\BobotSkor;
 use App\Models\MasterPegawai;
 use App\Models\Outsourcing;
 use App\Models\Siklus;
+use App\Models\User;
 use App\Services\Penilaian\RekapHasilService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -256,6 +257,29 @@ class PenugasanPenilaiController extends Controller
             })
             ->values();
 
+        //----------------------------------------------------------
+
+        $user = Auth::user();
+
+        /** @var Outsourcing $outsourcing */
+        $outsourcing = $user->userable;
+
+        $siklusAktif = Siklus::query()
+            ->where('is_active', true)
+            ->first();
+
+        $penugasan = PenugasanPenilai::query()
+            ->where('outsourcing_id', $outsourcing->id)
+            ->where('siklus_id', $siklusAktif->id)
+            ->with([
+                'bobotSkor',
+                'evaluators.userable',
+                'penilian.kriteria.aspek.bobotSkor',
+            ])
+            ->get();
+
+        $hasil = app(RekapHasilService::class)->hitung($penugasan);
+
         $data = [
             'semesterHistory' => $semesterHistory,
             'penugasanPeer' => Auth::user()->penugasan()
@@ -263,6 +287,8 @@ class PenugasanPenilaiController extends Controller
                 ->whereHas('siklus', fn($q) => $q->where('is_active', true))
                 ->with(['siklus', 'outsourcings'])
                 ->get(),
+            'ressultScore' => $hasil,
+            'typeUser' => Auth::user()->userable_type === Outsourcing::class ? 'outsourcing' : 'pegawai',
         ];
 
         return Inertia::render('evaluator/page', $data);

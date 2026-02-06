@@ -48,6 +48,8 @@ class RekapHasilService
                 'averageScore' => round($averageScore, 2),
                 'bobot' => round($bobot, 2),
                 'weightedScore' => round($weightedScore, 2),
+                'status' => $penugasan?->status,
+                'notes' => $penugasan?->catatan,
             ];
         }
 

@@ -16,10 +16,14 @@ import {
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
-import { useToast } from '@/hooks/use-toast';
 import { logout } from '@/routes';
 import { create } from '@/routes/penilaian';
 import { SharedData } from '@/types';
+import {
+    getScoreBadgeColor,
+    getScoreColor,
+    getScoreLabel,
+} from '@/utils/score';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import {
     Award,
@@ -35,78 +39,14 @@ import {
     Users,
 } from 'lucide-react';
 
-const semesterHistory = [
-    {
-        id: 'sem-2024-2',
-        name: 'Semester Genap 2024/2025',
-        period: 'Februari - Juli 2025',
-        status: 'completed',
-        employees: [
-            {
-                id: 1,
-                uuid: 'uuid-1',
-                outsourcings: {
-                    name: 'Ahmad Fauzi',
-                    jabatan: 'IT Support',
-                    image: 'placeholder-user.jpg',
-                },
-                status: 'completed',
-                tipe_penilai: 'atasan_langsung',
-                score: 88,
-            },
-            {
-                id: 2,
-                uuid: 'uuid-2',
-                outsourcings: {
-                    name: 'Siti Nurhaliza',
-                    jabatan: 'Admin',
-                    image: 'placeholder-user.jpg',
-                },
-                status: 'completed',
-                tipe_penilai: 'peer',
-                score: 92,
-            },
-        ],
-    },
-    {
-        id: 'sem-2024-1',
-        name: 'Semester Ganjil 2024/2025',
-        period: 'Agustus 2024 - Januari 2025',
-        status: 'completed',
-        employees: [
-            {
-                id: 3,
-                uuid: 'uuid-3',
-                outsourcings: {
-                    name: 'Budi Santoso',
-                    jabatan: 'Security',
-                    image: 'placeholder-user.jpg',
-                },
-                status: 'completed',
-                tipe_penilai: 'atasan_langsung',
-                score: 85,
-            },
-            {
-                id: 4,
-                uuid: 'uuid-4',
-                outsourcings: {
-                    name: 'Lisa Permata',
-                    jabatan: 'Receptionist',
-                    image: 'placeholder-user.jpg',
-                },
-                status: 'completed',
-                tipe_penilai: 'peer',
-                score: 90,
-            },
-        ],
-    },
-];
-
-export default function EvaluatorPage({ penugasanPeer, semesterHistory }: any) {
+export default function EvaluatorPage({
+    penugasanPeer,
+    semesterHistory,
+    typeUser,
+    ressultScore,
+}: any) {
     const { auth } = usePage<SharedData>().props;
     const user = auth.user;
-
-    const { toast } = useToast();
 
     const cleanup = useMobileNavigation();
 
@@ -115,7 +55,7 @@ export default function EvaluatorPage({ penugasanPeer, semesterHistory }: any) {
         router.flushAll();
     };
 
-    console.log(user);
+    console.log(ressultScore);
 
     return (
         <>
@@ -157,20 +97,22 @@ export default function EvaluatorPage({ penugasanPeer, semesterHistory }: any) {
                     <div className="space-y-8">
                         {/* User Profile Card - Simplified */}
                         <Card className="bg-gradient-to-r from-green-500 to-green-600 py-5 text-white">
-                            <CardHeader>
+                            <CardHeader className="flex flex-row items-center justify-between">
+                                {/* KIRI – biodata */}
                                 <div className="flex items-center space-x-4">
                                     <div className="rounded-full bg-white/20 p-3">
                                         <img
                                             src={`/storage/${user?.userable?.image}`}
                                             alt={user?.userable?.name}
-                                            className="h-17 w-17 rounded-full"
+                                            className="h-19 w-19 rounded-full"
                                         />
                                     </div>
+
                                     <div>
-                                        <CardTitle className="text-2xl text-white">
+                                        <CardTitle className="text-lg text-white md:text-4xl">
                                             {user?.userable?.name}
                                         </CardTitle>
-                                        <CardDescription className="text-green-100">
+                                        <CardDescription className="text-xs text-green-100 md:text-sm">
                                             {user?.is_ldap == '0'
                                                 ? user?.userable?.jabatan
                                                       ?.nama_jabatan
@@ -179,6 +121,29 @@ export default function EvaluatorPage({ penugasanPeer, semesterHistory }: any) {
                                             {user?.userable?.biro?.nama_biro}
                                         </CardDescription>
                                     </div>
+                                </div>
+
+                                {/* KANAN – score */}
+                                <div className="text-right">
+                                    <div className="mb-2 text-4xl font-bold md:text-5xl">
+                                        {ressultScore?.finalTotalScore?.toFixed(
+                                            2,
+                                        )}
+                                    </div>
+
+                                    <Badge
+                                        className={`${getScoreBadgeColor(
+                                            ressultScore?.finalTotalScore,
+                                        )} border-2 text-sm md:px-4 md:py-1.5`}
+                                    >
+                                        {getScoreLabel(
+                                            ressultScore?.finalTotalScore,
+                                        )}
+                                    </Badge>
+
+                                    <p className="mt-2 text-xs text-indigo-100 md:text-lg">
+                                        Nilai Akhir Penilaian
+                                    </p>
                                 </div>
                             </CardHeader>
                         </Card>
@@ -204,135 +169,149 @@ export default function EvaluatorPage({ penugasanPeer, semesterHistory }: any) {
 
                             {/* Current Semester Tab */}
                             <TabsContent value="current" className="space-y-6">
-                                <Card className="border-0 bg-linear-to-br from-blue-50 shadow-md">
-                                    <CardContent>
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center gap-3">
-                                                <div className="rounded-lg bg-gray-100 p-2">
-                                                    <Users className="h-5 w-5 text-gray-600" />
-                                                </div>
-                                                <div>
-                                                    <h3 className="text-lg font-bold text-gray-900">
-                                                        Nilai Saya — Semester
-                                                        Aktif
-                                                    </h3>
-                                                    <p className="text-sm text-gray-500">
-                                                        Ringkasan penilaian
-                                                        pribadi pada semester
-                                                        berjalan
-                                                    </p>
+                                {typeUser === 'outsourcing' && (
+                                    <Card className="border-0 bg-linear-to-br from-blue-50 shadow-md">
+                                        <CardContent>
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="rounded-lg bg-gray-100 p-2">
+                                                        <Users className="h-5 w-5 text-gray-600" />
+                                                    </div>
+                                                    <div>
+                                                        <h3 className="text-lg font-bold text-gray-900">
+                                                            Nilai Saya —
+                                                            Semester Aktif
+                                                        </h3>
+                                                        <p className="text-sm text-gray-500">
+                                                            Ringkasan penilaian
+                                                            pribadi pada
+                                                            semester berjalan
+                                                        </p>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div className="mt-4 grid gap-2 md:grid-cols-3">
-                                            <Card className="p-4">
-                                                <div className="flex items-start justify-between">
-                                                    <div className="flex items-center gap-2">
-                                                        <div className="rounded-md bg-indigo-50 p-2">
-                                                            <Briefcase className="h-5 w-5 text-indigo-600" />
-                                                        </div>
-                                                        <div>
-                                                            <h4 className="text-sm font-semibold text-gray-900">
-                                                                Atasan
-                                                            </h4>
-                                                            <p className="text-xs text-gray-500">
-                                                                Penilaian oleh
-                                                                atasan langsung
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                    <Badge className="bg-green-100 text-green-800">
-                                                        Selesai
-                                                    </Badge>
-                                                </div>
+                                            <div className="mt-4 grid gap-2 md:grid-cols-3">
+                                                {ressultScore.evaluatorScores.map(
+                                                    (
+                                                        score: any,
+                                                        index: number,
+                                                    ) => (
+                                                        <Card
+                                                            className="gap-2.5 border-l-4 border-l-purple-500 bg-gradient-to-br from-purple-50 to-white px-4 py-7 shadow-md"
+                                                            key={index}
+                                                        >
+                                                            <div className="mb-3 flex items-start justify-between">
+                                                                <div className="flex items-center gap-2">
+                                                                    <div className="rounded-md bg-indigo-50 p-2">
+                                                                        {score.type ===
+                                                                        'atasan' ? (
+                                                                            <Briefcase className="h-5 w-5 text-indigo-600" />
+                                                                        ) : score.type ===
+                                                                          'teman_setingkat' ? (
+                                                                            <Users className="h-5 w-5 text-indigo-600" />
+                                                                        ) : score.type ===
+                                                                          'penerima_layanan' ? (
+                                                                            <Award className="h-5 w-5 text-indigo-600" />
+                                                                        ) : null}
+                                                                    </div>
+                                                                    <div>
+                                                                        <h4 className="text-sm font-semibold text-gray-900">
+                                                                            {score.type
+                                                                                .replace(
+                                                                                    '_',
+                                                                                    ' ',
+                                                                                )
+                                                                                .replace(
+                                                                                    /^./,
+                                                                                    (
+                                                                                        c: string,
+                                                                                    ) =>
+                                                                                        c.toUpperCase(),
+                                                                                )}
+                                                                        </h4>
 
-                                                <div className="text-center text-4xl font-bold text-gray-900">
-                                                    88
-                                                </div>
+                                                                        <p className="text-xs text-gray-500">
+                                                                            {score.type ===
+                                                                            'atasan'
+                                                                                ? 'Penilaian oleh atasan langsung'
+                                                                                : ''}
+                                                                            {score.type ===
+                                                                            'teman_setingkat'
+                                                                                ? 'Penilaian oleh teman setingkat'
+                                                                                : ''}
+                                                                            {score.type ===
+                                                                            'penerima_layanan'
+                                                                                ? 'Penilaian oleh penerima layanan'
+                                                                                : ''}
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                                <Badge
+                                                                    className={`${
+                                                                        score.status ===
+                                                                        'completed'
+                                                                            ? 'bg-green-100 text-green-800'
+                                                                            : 'bg-gray-100 text-gray-800'
+                                                                    } shadow-sm`}
+                                                                >
+                                                                    {score.status ===
+                                                                    'completed'
+                                                                        ? 'Selesai'
+                                                                        : 'Belum Menilai'}
+                                                                </Badge>
+                                                            </div>
 
-                                                <div className="text-center text-sm text-gray-600">
-                                                    "Kerja sangat baik, terus
-                                                    pertahankan kualitas
-                                                    layanan."
-                                                </div>
-                                            </Card>
+                                                            <div className="flex flex-col items-center">
+                                                                <div className="mb-6 w-2/3 rounded-lg bg-white p-3 text-center shadow-sm">
+                                                                    <div className="text-sm text-gray-600">
+                                                                        Score
+                                                                        Asli
+                                                                    </div>
+                                                                    <div
+                                                                        className={`text-2xl font-bold ${getScoreColor(score?.averageScore)}`}
+                                                                    >
+                                                                        {
+                                                                            score?.averageScore
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                                <div className="text-center font-mono text-sm opacity-90">
+                                                                    {
+                                                                        score?.averageScore
+                                                                    }{' '}
+                                                                    ×{' '}
+                                                                    {(
+                                                                        score?.bobot *
+                                                                        100
+                                                                    ).toFixed(
+                                                                        0,
+                                                                    )}
+                                                                    % =
+                                                                </div>
 
-                                            <Card className="p-4">
-                                                <div className="flex items-start justify-between">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="rounded-md bg-green-50 p-2">
-                                                            <Users className="h-5 w-5 text-green-600" />
-                                                        </div>
-                                                        <div>
-                                                            <h4 className="text-sm font-semibold text-gray-900">
-                                                                Penerima Layanan
-                                                            </h4>
-                                                            <p className="text-xs text-gray-500">
-                                                                Penilaian oleh
-                                                                penerima layanan
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                    <Badge className="bg-yellow-100 text-yellow-800">
-                                                        Sedang Dinilai
-                                                    </Badge>
-                                                </div>
+                                                                <div className="text-center text-4xl font-bold text-gray-900">
+                                                                    {
+                                                                        score.weightedScore
+                                                                    }
+                                                                </div>
+                                                            </div>
 
-                                                <div className="mt-4 flex items-center justify-between">
-                                                    <div>
-                                                        <div className="text-3xl font-bold text-gray-900">
-                                                            -
-                                                        </div>
-                                                        <div className="text-xs text-gray-500">
-                                                            Belum tersedia
-                                                        </div>
-                                                    </div>
-                                                    <div className="text-right text-sm text-gray-600">
-                                                        "Belum ada feedback"
-                                                    </div>
-                                                </div>
-                                            </Card>
-
-                                            <Card className="p-4">
-                                                <div className="flex items-start justify-between">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="rounded-md bg-blue-50 p-2">
-                                                            <MessageCircle className="h-5 w-5 text-blue-600" />
-                                                        </div>
-                                                        <div>
-                                                            <h4 className="text-sm font-semibold text-gray-900">
-                                                                Rekan / Teman
-                                                                Kerja
-                                                            </h4>
-                                                            <p className="text-xs text-gray-500">
-                                                                Penilaian oleh
-                                                                rekan kerja
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                    <Badge className="bg-gray-100 text-gray-800">
-                                                        Belum Dinilai
-                                                    </Badge>
-                                                </div>
-
-                                                <div className="mt-4 flex items-center justify-between">
-                                                    <div>
-                                                        <div className="text-3xl font-bold text-gray-900">
-                                                            -
-                                                        </div>
-                                                        <div className="text-xs text-gray-500">
-                                                            Belum tersedia
-                                                        </div>
-                                                    </div>
-                                                    <div className="text-right text-sm text-gray-600">
-                                                        "Belum ada feedback"
-                                                    </div>
-                                                </div>
-                                            </Card>
-                                        </div>
-                                    </CardContent>
-                                </Card>
+                                                            <div className="text-center text-sm text-gray-600">
+                                                                {score.notes
+                                                                    ? score.notes
+                                                                    : score.status ===
+                                                                        'completed'
+                                                                      ? '"Tidak ada saran dari penilai"'
+                                                                      : '"Belum ada catatan"'}
+                                                            </div>
+                                                        </Card>
+                                                    ),
+                                                )}
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                )}
 
                                 <Card className="border-0 bg-linear-to-br from-blue-50 shadow-md">
                                     <CardContent>
@@ -551,156 +530,159 @@ export default function EvaluatorPage({ penugasanPeer, semesterHistory }: any) {
 
                             {/* History Tab */}
                             <TabsContent value="history" className="space-y-6">
-                                {/* Nilai Saya - Semester Sebelumnya (personal history) */}
-                                <Card className="border-0 bg-linear-to-br from-blue-50 shadow-md">
-                                    <CardContent>
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center gap-3">
-                                                <div className="rounded-lg bg-gray-100 p-2">
-                                                    <Users className="h-5 w-5 text-gray-600" />
-                                                </div>
-                                                <div>
-                                                    <h3 className="text-lg font-bold text-gray-900">
-                                                        Nilai Saya — Semester
-                                                        Sebelumnya
-                                                    </h3>
-                                                    <p className="text-sm text-gray-500">
-                                                        Riwayat penilaian
-                                                        pribadi
-                                                    </p>
+                                {typeUser === 'outsourcing' && (
+                                    <Card className="border-0 bg-linear-to-br from-blue-50 shadow-md">
+                                        <CardContent>
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="rounded-lg bg-gray-100 p-2">
+                                                        <Users className="h-5 w-5 text-gray-600" />
+                                                    </div>
+                                                    <div>
+                                                        <h3 className="text-lg font-bold text-gray-900">
+                                                            Nilai Saya —
+                                                            Semester Sebelumnya
+                                                        </h3>
+                                                        <p className="text-sm text-gray-500">
+                                                            Riwayat penilaian
+                                                            pribadi
+                                                        </p>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div className="mt-4">
-                                            <Accordion
-                                                type="single"
-                                                collapsible
-                                                className="space-y-2"
-                                            >
-                                                {semesterHistory.map(
-                                                    (sem: any) => (
-                                                        <AccordionItem
-                                                            key={sem.id}
-                                                            value={sem.id}
-                                                            className="border"
-                                                        >
-                                                            <AccordionTrigger>
-                                                                <div className="flex w-full items-center justify-between">
-                                                                    <div>
-                                                                        <div className="font-semibold">
-                                                                            {
-                                                                                sem.name
-                                                                            }
+                                            <div className="mt-4">
+                                                <Accordion
+                                                    type="single"
+                                                    collapsible
+                                                    className="space-y-2"
+                                                >
+                                                    {semesterHistory.map(
+                                                        (sem: any) => (
+                                                            <AccordionItem
+                                                                key={sem.id}
+                                                                value={sem.id}
+                                                                className="border"
+                                                            >
+                                                                <AccordionTrigger>
+                                                                    <div className="flex w-full items-center justify-between">
+                                                                        <div>
+                                                                            <div className="font-semibold">
+                                                                                {
+                                                                                    sem.name
+                                                                                }
+                                                                            </div>
+                                                                            <div className="text-xs text-gray-500">
+                                                                                {
+                                                                                    sem.period
+                                                                                }
+                                                                            </div>
                                                                         </div>
-                                                                        <div className="text-xs text-gray-500">
+                                                                        <div className="text-sm text-gray-600">
                                                                             {
-                                                                                sem.period
-                                                                            }
+                                                                                sem
+                                                                                    .employees
+                                                                                    .length
+                                                                            }{' '}
+                                                                            pegawai
                                                                         </div>
                                                                     </div>
-                                                                    <div className="text-sm text-gray-600">
-                                                                        {
-                                                                            sem
-                                                                                .employees
-                                                                                .length
-                                                                        }{' '}
-                                                                        pegawai
-                                                                    </div>
-                                                                </div>
-                                                            </AccordionTrigger>
+                                                                </AccordionTrigger>
 
-                                                            <AccordionContent>
-                                                                <div className="grid gap-3">
-                                                                    {[
-                                                                        {
-                                                                            key: 'atasan_langsung',
-                                                                            title: 'Atasan',
-                                                                            icon: Briefcase,
-                                                                        },
-                                                                        {
-                                                                            key: 'penerima_layanan',
-                                                                            title: 'Penerima Layanan',
-                                                                            icon: Users,
-                                                                        },
-                                                                        {
-                                                                            key: 'peer',
-                                                                            title: 'Rekan',
-                                                                            icon: MessageCircle,
-                                                                        },
-                                                                    ].map(
-                                                                        (t) => {
-                                                                            const found =
-                                                                                sem.employees.find(
-                                                                                    (
-                                                                                        e: any,
-                                                                                    ) =>
-                                                                                        e.tipe_penilai?.includes(
-                                                                                            t.key.replace(
-                                                                                                '_',
-                                                                                                '',
+                                                                <AccordionContent>
+                                                                    <div className="grid gap-3">
+                                                                        {[
+                                                                            {
+                                                                                key: 'atasan_langsung',
+                                                                                title: 'Atasan',
+                                                                                icon: Briefcase,
+                                                                            },
+                                                                            {
+                                                                                key: 'penerima_layanan',
+                                                                                title: 'Penerima Layanan',
+                                                                                icon: Users,
+                                                                            },
+                                                                            {
+                                                                                key: 'peer',
+                                                                                title: 'Rekan',
+                                                                                icon: MessageCircle,
+                                                                            },
+                                                                        ].map(
+                                                                            (
+                                                                                t,
+                                                                            ) => {
+                                                                                const found =
+                                                                                    sem.employees.find(
+                                                                                        (
+                                                                                            e: any,
+                                                                                        ) =>
+                                                                                            e.tipe_penilai?.includes(
+                                                                                                t.key.replace(
+                                                                                                    '_',
+                                                                                                    '',
+                                                                                                ),
+                                                                                            ) ||
+                                                                                            e.tipe_penilai?.includes(
+                                                                                                t.key,
                                                                                             ),
-                                                                                        ) ||
-                                                                                        e.tipe_penilai?.includes(
-                                                                                            t.key,
-                                                                                        ),
-                                                                                );
-                                                                            const Icon =
-                                                                                (
-                                                                                    t as any
-                                                                                )
-                                                                                    .icon;
-                                                                            return (
-                                                                                <div
-                                                                                    key={
-                                                                                        t.key
-                                                                                    }
-                                                                                    className="flex items-center justify-between rounded-md border bg-white p-3"
-                                                                                >
-                                                                                    <div className="flex items-center gap-3">
-                                                                                        <div className="rounded-md bg-gray-50 p-2">
-                                                                                            <Icon className="h-4 w-4 text-gray-600" />
+                                                                                    );
+                                                                                const Icon =
+                                                                                    (
+                                                                                        t as any
+                                                                                    )
+                                                                                        .icon;
+                                                                                return (
+                                                                                    <div
+                                                                                        key={
+                                                                                            t.key
+                                                                                        }
+                                                                                        className="flex items-center justify-between rounded-md border bg-white p-3"
+                                                                                    >
+                                                                                        <div className="flex items-center gap-3">
+                                                                                            <div className="rounded-md bg-gray-50 p-2">
+                                                                                                <Icon className="h-4 w-4 text-gray-600" />
+                                                                                            </div>
+                                                                                            <div>
+                                                                                                <div className="text-sm font-medium">
+                                                                                                    {
+                                                                                                        t.title
+                                                                                                    }
+                                                                                                </div>
+                                                                                                <div className="text-xs text-gray-500">
+                                                                                                    {found
+                                                                                                        ? found
+                                                                                                              .outsourcings
+                                                                                                              .name
+                                                                                                        : 'Tidak ada data'}
+                                                                                                </div>
+                                                                                            </div>
                                                                                         </div>
-                                                                                        <div>
-                                                                                            <div className="text-sm font-medium">
-                                                                                                {
-                                                                                                    t.title
-                                                                                                }
+
+                                                                                        <div className="text-right">
+                                                                                            <div className="text-sm font-semibold text-purple-600">
+                                                                                                {found?.score ??
+                                                                                                    '-'}
                                                                                             </div>
                                                                                             <div className="text-xs text-gray-500">
                                                                                                 {found
-                                                                                                    ? found
-                                                                                                          .outsourcings
-                                                                                                          .name
-                                                                                                    : 'Tidak ada data'}
+                                                                                                    ? 'Catatan tersedia'
+                                                                                                    : '—'}
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
-
-                                                                                    <div className="text-right">
-                                                                                        <div className="text-sm font-semibold text-purple-600">
-                                                                                            {found?.score ??
-                                                                                                '-'}
-                                                                                        </div>
-                                                                                        <div className="text-xs text-gray-500">
-                                                                                            {found
-                                                                                                ? 'Catatan tersedia'
-                                                                                                : '—'}
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            );
-                                                                        },
-                                                                    )}
-                                                                </div>
-                                                            </AccordionContent>
-                                                        </AccordionItem>
-                                                    ),
-                                                )}
-                                            </Accordion>
-                                        </div>
-                                    </CardContent>
-                                </Card>
+                                                                                );
+                                                                            },
+                                                                        )}
+                                                                    </div>
+                                                                </AccordionContent>
+                                                            </AccordionItem>
+                                                        ),
+                                                    )}
+                                                </Accordion>
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                )}
 
                                 <Card className="border-0 bg-linear-to-br from-blue-50 shadow-md">
                                     <CardContent>

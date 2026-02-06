@@ -21,11 +21,16 @@ import {
 } from '@/components/ui/select';
 import AdminLayout from '@/layouts/app/app-adminkmz-layout';
 import { rekapaspekevaluator } from '@/routes/os';
+import { getScoreColor, getScoreLabel } from '@/utils/score';
 import { Link } from '@inertiajs/react';
 import { BarChart3, Download, Eye, Search } from 'lucide-react';
 import { useState } from 'react';
 
-export default function ResultsRecapPage({ evaluationResults }) {
+export default function ResultsRecapPage({
+    evaluationResults,
+}: {
+    evaluationResults: any;
+}) {
     const [searchTerm, setSearchTerm] = useState('');
     const [filterUnit, setFilterUnit] = useState('all');
 
@@ -37,22 +42,6 @@ export default function ResultsRecapPage({ evaluationResults }) {
         const matchesUnit = filterUnit === 'all';
         return matchesSearch && matchesUnit;
     });
-
-    const getScoreColor = (score: number) => {
-        if (score >= 91) return 'text-green-600';
-        if (score >= 81) return 'text-blue-600';
-        if (score >= 71) return 'text-yellow-600';
-        if (score >= 61) return 'text-orange-600';
-        return 'text-red-600';
-    };
-
-    const getScoreLabel = (score: number) => {
-        if (score >= 91) return 'Sangat Baik';
-        if (score >= 81) return 'Baik';
-        if (score >= 71) return 'Butuh Perbaikan';
-        if (score >= 61) return 'Kurang';
-        return 'Sangat Kurang';
-    };
 
     const units = [...new Set(evaluationResults.map((r: any) => r.biro))];
 
@@ -106,8 +95,8 @@ export default function ResultsRecapPage({ evaluationResults }) {
                                     <SelectItem value="all">
                                         Semua Unit
                                     </SelectItem>
-                                    {units.map((unit) => (
-                                        <SelectItem key={unit} value={unit}>
+                                    {units.map((unit, index) => (
+                                        <SelectItem key={index} value={unit}>
                                             {unit}
                                         </SelectItem>
                                     ))}

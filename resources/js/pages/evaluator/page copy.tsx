@@ -23,16 +23,13 @@ import { SharedData } from '@/types';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import {
     Award,
-    Briefcase,
     Calendar,
     CheckCircle,
     ClipboardList,
     Clock,
     History,
     LogOut,
-    MessageCircle,
     User,
-    Users,
 } from 'lucide-react';
 
 const semesterHistory = [
@@ -126,16 +123,15 @@ export default function EvaluatorPage({ penugasanPeer, semesterHistory }: any) {
                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="flex items-center justify-between py-4">
                             <div className="flex items-center space-x-3">
-                                <div className="rounded-lg bg-indigo-600 p-2">
+                                <div className="rounded-lg bg-green-600 p-2">
                                     <ClipboardList className="h-6 w-6 text-white" />
                                 </div>
                                 <div>
                                     <h1 className="text-xl font-bold text-gray-900">
-                                        Penilaian Outsourcing
+                                        Dashboard Penilai
                                     </h1>
-                                    <p className="flex items-center gap-2 text-sm text-gray-500">
-                                        <Calendar className="h-4 w-4 text-gray-400" />
-                                        Semester 2025/2026 Genap
+                                    <p className="text-sm text-gray-500">
+                                        Sistem Penilaian Kinerja Outsourcing
                                     </p>
                                 </div>
                             </div>
@@ -183,180 +179,45 @@ export default function EvaluatorPage({ penugasanPeer, semesterHistory }: any) {
                             </CardHeader>
                         </Card>
 
-                        <Tabs className="space-y-6" defaultValue={'current'}>
-                            <TabsList className="w-full gap-1.5 bg-white shadow-md">
-                                <TabsTrigger
-                                    value="current"
-                                    className="flex w-full items-center gap-2 rounded-md border bg-gray-100 text-slate-700 transition-all data-[state=active]:border-blue-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white data-[state=inactive]:hover:bg-gradient-to-r data-[state=inactive]:hover:from-gray-300 data-[state=inactive]:hover:to-gray-500 data-[state=inactive]:hover:text-white"
+                        <Card className="border-0 bg-linear-to-br from-blue-50 shadow-md">
+                            <CardContent>
+                                <Tabs
+                                    className="space-y-6"
+                                    defaultValue={'current'}
                                 >
-                                    <Calendar className="h-4 w-4" />
-                                    Semester Aktif
-                                </TabsTrigger>
+                                    <TabsList className="gap-1.5 bg-white shadow-md">
+                                        <TabsTrigger
+                                            value="current"
+                                            className="flex items-center gap-2 rounded-md border bg-gray-100 text-slate-700 data-[state=active]:border-blue-600 data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+                                        >
+                                            <Calendar className="h-4 w-4" />
+                                            Semester Aktif
+                                        </TabsTrigger>
 
-                                <TabsTrigger
-                                    value="history"
-                                    className="flex w-full items-center gap-2 rounded-md border bg-gray-100 text-slate-700 transition-all data-[state=active]:border-blue-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-600 data-[state=active]:text-white data-[state=inactive]:hover:bg-gradient-to-r data-[state=inactive]:hover:from-gray-300 data-[state=inactive]:hover:to-gray-500 data-[state=inactive]:hover:text-white"
-                                >
-                                    <History className="h-4 w-4" />
-                                    Riwayat Semester
-                                </TabsTrigger>
-                            </TabsList>
+                                        <TabsTrigger
+                                            value="history"
+                                            className="flex items-center gap-2 rounded-md border bg-gray-100 text-slate-700 data-[state=active]:border-blue-600 data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+                                        >
+                                            <History className="h-4 w-4" />
+                                            Riwayat Semester
+                                        </TabsTrigger>
+                                    </TabsList>
 
-                            {/* Current Semester Tab */}
-                            <TabsContent value="current" className="space-y-6">
-                                <Card className="border-0 bg-linear-to-br from-blue-50 shadow-md">
-                                    <CardContent>
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center gap-3">
-                                                <div className="rounded-lg bg-gray-100 p-2">
-                                                    <Users className="h-5 w-5 text-gray-600" />
-                                                </div>
-                                                <div>
-                                                    <h3 className="text-lg font-bold text-gray-900">
-                                                        Nilai Saya — Semester
-                                                        Aktif
-                                                    </h3>
-                                                    <p className="text-sm text-gray-500">
-                                                        Ringkasan penilaian
-                                                        pribadi pada semester
-                                                        berjalan
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="mt-4 grid gap-4 md:grid-cols-3">
-                                            <Card className="p-4">
-                                                <div className="flex items-start justify-between">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="rounded-md bg-indigo-50 p-2">
-                                                            <Briefcase className="h-5 w-5 text-indigo-600" />
-                                                        </div>
-                                                        <div>
-                                                            <h4 className="text-sm font-semibold text-gray-900">
-                                                                Atasan
-                                                            </h4>
-                                                            <p className="text-xs text-gray-500">
-                                                                Penilaian oleh
-                                                                atasan langsung
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                    <Badge className="bg-green-100 text-green-800">
-                                                        Selesai
-                                                    </Badge>
-                                                </div>
-
-                                                <div className="mt-4 flex items-center justify-between">
-                                                    <div>
-                                                        <div className="text-3xl font-bold text-gray-900">
-                                                            88
-                                                        </div>
-                                                        <div className="text-xs text-gray-500">
-                                                            Rata-rata
-                                                        </div>
-                                                    </div>
-                                                    <div className="text-right text-sm text-gray-600">
-                                                        "Kerja sangat baik,
-                                                        terus pertahankan
-                                                        kualitas layanan."
-                                                    </div>
-                                                </div>
-                                            </Card>
-
-                                            <Card className="p-4">
-                                                <div className="flex items-start justify-between">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="rounded-md bg-green-50 p-2">
-                                                            <Users className="h-5 w-5 text-green-600" />
-                                                        </div>
-                                                        <div>
-                                                            <h4 className="text-sm font-semibold text-gray-900">
-                                                                Penerima Layanan
-                                                            </h4>
-                                                            <p className="text-xs text-gray-500">
-                                                                Penilaian oleh
-                                                                penerima layanan
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                    <Badge className="bg-yellow-100 text-yellow-800">
-                                                        Sedang Dinilai
-                                                    </Badge>
-                                                </div>
-
-                                                <div className="mt-4 flex items-center justify-between">
-                                                    <div>
-                                                        <div className="text-3xl font-bold text-gray-900">
-                                                            -
-                                                        </div>
-                                                        <div className="text-xs text-gray-500">
-                                                            Belum tersedia
-                                                        </div>
-                                                    </div>
-                                                    <div className="text-right text-sm text-gray-600">
-                                                        "Belum ada feedback"
-                                                    </div>
-                                                </div>
-                                            </Card>
-
-                                            <Card className="p-4">
-                                                <div className="flex items-start justify-between">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="rounded-md bg-blue-50 p-2">
-                                                            <MessageCircle className="h-5 w-5 text-blue-600" />
-                                                        </div>
-                                                        <div>
-                                                            <h4 className="text-sm font-semibold text-gray-900">
-                                                                Rekan / Teman
-                                                                Kerja
-                                                            </h4>
-                                                            <p className="text-xs text-gray-500">
-                                                                Penilaian oleh
-                                                                rekan kerja
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                    <Badge className="bg-gray-100 text-gray-800">
-                                                        Belum Dinilai
-                                                    </Badge>
-                                                </div>
-
-                                                <div className="mt-4 flex items-center justify-between">
-                                                    <div>
-                                                        <div className="text-3xl font-bold text-gray-900">
-                                                            -
-                                                        </div>
-                                                        <div className="text-xs text-gray-500">
-                                                            Belum tersedia
-                                                        </div>
-                                                    </div>
-                                                    <div className="text-right text-sm text-gray-600">
-                                                        "Belum ada feedback"
-                                                    </div>
-                                                </div>
-                                            </Card>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-
-                                <Card className="border-0 bg-linear-to-br from-blue-50 shadow-md">
-                                    <CardContent>
-                                        <div className="mb-6 flex items-center justify-between">
-                                            <div className="flex items-center gap-3">
-                                                <div className="rounded-lg bg-gray-100 p-2">
-                                                    <Users className="h-5 w-5 text-gray-600" />
-                                                </div>
-                                                <div>
-                                                    <h3 className="text-lg font-bold text-gray-900">
-                                                        Daftar Pegawai yang
-                                                        Dinilai
-                                                    </h3>
-                                                    <p className="text-sm text-gray-500">
-                                                        Pegawai outsourcing yang
-                                                        harus dinilai
-                                                    </p>
-                                                </div>
+                                    {/* Current Semester Tab */}
+                                    <TabsContent
+                                        value="current"
+                                        className="space-y-6"
+                                    >
+                                        {/* Search and Stats */}
+                                        <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+                                            <div>
+                                                <h2 className="text-2xl font-bold text-gray-900">
+                                                    Daftar Pegawai yang Dinilai
+                                                </h2>
+                                                <p className="text-gray-600">
+                                                    Pegawai outsourcing yang
+                                                    harus dinilai
+                                                </p>
                                             </div>
 
                                             <div className="flex items-center gap-4">
@@ -403,7 +264,6 @@ export default function EvaluatorPage({ penugasanPeer, semesterHistory }: any) {
                                                     </div> */}
                                             </div>
                                         </div>
-
                                         {/* Creative Employee Cards */}
                                         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                                             {penugasanPeer?.map(
@@ -551,180 +411,25 @@ export default function EvaluatorPage({ penugasanPeer, semesterHistory }: any) {
                                                 </CardContent>
                                             </Card>
                                         )}
-                                    </CardContent>
-                                </Card>
-                            </TabsContent>
+                                    </TabsContent>
 
-                            {/* History Tab */}
-                            <TabsContent value="history" className="space-y-6">
-                                {/* Nilai Saya - Semester Sebelumnya (personal history) */}
-                                <Card className="border-0 bg-linear-to-br from-blue-50 shadow-md">
-                                    <CardContent>
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center gap-3">
-                                                <div className="rounded-lg bg-gray-100 p-2">
-                                                    <Users className="h-5 w-5 text-gray-600" />
-                                                </div>
-                                                <div>
-                                                    <h3 className="text-lg font-bold text-gray-900">
-                                                        Nilai Saya — Semester
-                                                        Sebelumnya
-                                                    </h3>
-                                                    <p className="text-sm text-gray-500">
-                                                        Riwayat penilaian
-                                                        pribadi
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="mt-4">
-                                            <Accordion
-                                                type="single"
-                                                collapsible
-                                                className="space-y-2"
-                                            >
-                                                {semesterHistory.map(
-                                                    (sem: any) => (
-                                                        <AccordionItem
-                                                            key={sem.id}
-                                                            value={sem.id}
-                                                            className="border"
-                                                        >
-                                                            <AccordionTrigger>
-                                                                <div className="flex w-full items-center justify-between">
-                                                                    <div>
-                                                                        <div className="font-semibold">
-                                                                            {
-                                                                                sem.name
-                                                                            }
-                                                                        </div>
-                                                                        <div className="text-xs text-gray-500">
-                                                                            {
-                                                                                sem.period
-                                                                            }
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="text-sm text-gray-600">
-                                                                        {
-                                                                            sem
-                                                                                .employees
-                                                                                .length
-                                                                        }{' '}
-                                                                        pegawai
-                                                                    </div>
-                                                                </div>
-                                                            </AccordionTrigger>
-
-                                                            <AccordionContent>
-                                                                <div className="grid gap-3">
-                                                                    {[
-                                                                        {
-                                                                            key: 'atasan_langsung',
-                                                                            title: 'Atasan',
-                                                                            icon: Briefcase,
-                                                                        },
-                                                                        {
-                                                                            key: 'penerima_layanan',
-                                                                            title: 'Penerima Layanan',
-                                                                            icon: Users,
-                                                                        },
-                                                                        {
-                                                                            key: 'peer',
-                                                                            title: 'Rekan',
-                                                                            icon: MessageCircle,
-                                                                        },
-                                                                    ].map(
-                                                                        (t) => {
-                                                                            const found =
-                                                                                sem.employees.find(
-                                                                                    (
-                                                                                        e: any,
-                                                                                    ) =>
-                                                                                        e.tipe_penilai?.includes(
-                                                                                            t.key.replace(
-                                                                                                '_',
-                                                                                                '',
-                                                                                            ),
-                                                                                        ) ||
-                                                                                        e.tipe_penilai?.includes(
-                                                                                            t.key,
-                                                                                        ),
-                                                                                );
-                                                                            const Icon =
-                                                                                (
-                                                                                    t as any
-                                                                                )
-                                                                                    .icon;
-                                                                            return (
-                                                                                <div
-                                                                                    key={
-                                                                                        t.key
-                                                                                    }
-                                                                                    className="flex items-center justify-between rounded-md border bg-white p-3"
-                                                                                >
-                                                                                    <div className="flex items-center gap-3">
-                                                                                        <div className="rounded-md bg-gray-50 p-2">
-                                                                                            <Icon className="h-4 w-4 text-gray-600" />
-                                                                                        </div>
-                                                                                        <div>
-                                                                                            <div className="text-sm font-medium">
-                                                                                                {
-                                                                                                    t.title
-                                                                                                }
-                                                                                            </div>
-                                                                                            <div className="text-xs text-gray-500">
-                                                                                                {found
-                                                                                                    ? found
-                                                                                                          .outsourcings
-                                                                                                          .name
-                                                                                                    : 'Tidak ada data'}
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-
-                                                                                    <div className="text-right">
-                                                                                        <div className="text-sm font-semibold text-purple-600">
-                                                                                            {found?.score ??
-                                                                                                '-'}
-                                                                                        </div>
-                                                                                        <div className="text-xs text-gray-500">
-                                                                                            {found
-                                                                                                ? 'Catatan tersedia'
-                                                                                                : '—'}
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            );
-                                                                        },
-                                                                    )}
-                                                                </div>
-                                                            </AccordionContent>
-                                                        </AccordionItem>
-                                                    ),
-                                                )}
-                                            </Accordion>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-
-                                <Card className="border-0 bg-linear-to-br from-blue-50 shadow-md">
-                                    <CardContent>
-                                        <div className="mb-7 flex items-center justify-between">
-                                            <div className="flex items-center gap-3">
-                                                <div className="rounded-lg bg-gray-100 p-2">
-                                                    <Users className="h-5 w-5 text-gray-600" />
-                                                </div>
-                                                <div>
-                                                    <h3 className="text-lg font-bold text-gray-900">
-                                                        Riwayat Penilaian
-                                                        Semester
-                                                    </h3>
-                                                    <p className="text-sm text-gray-500">
-                                                        Lihat hasil penilaian
-                                                        dari semester sebelumnya
-                                                    </p>
-                                                </div>
+                                    {/* History Tab */}
+                                    <TabsContent
+                                        value="history"
+                                        className="space-y-6"
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            {/* <div className="rounded-lg bg-gradient-to-br from-purple-600 to-indigo-600 p-3 shadow-lg">
+                                        <BookOpen className="h-6 w-6 text-white" />
+                                    </div> */}
+                                            <div>
+                                                <h2 className="text-2xl font-bold text-gray-900">
+                                                    Riwayat Penilaian Semester
+                                                </h2>
+                                                <p className="text-gray-600">
+                                                    Lihat hasil penilaian dari
+                                                    semester sebelumnya
+                                                </p>
                                             </div>
                                         </div>
 
@@ -918,10 +623,10 @@ export default function EvaluatorPage({ penugasanPeer, semesterHistory }: any) {
                                                 </CardContent>
                                             </Card>
                                         )}
-                                    </CardContent>
-                                </Card>
-                            </TabsContent>
-                        </Tabs>
+                                    </TabsContent>
+                                </Tabs>
+                            </CardContent>
+                        </Card>
                     </div>
                 </main>
             </div>

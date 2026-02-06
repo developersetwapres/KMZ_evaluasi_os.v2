@@ -3,10 +3,10 @@
 import { index as indexPenugasan } from '@/actions/App/Http/Controllers/PenugasanPenilaiController';
 import { cn } from '@/lib/utils';
 import { dashboard } from '@/routes';
-import { ranking } from '@/routes/os';
+import { ranking, saranEvaluator } from '@/routes/os';
 import { index as userIndex } from '@/routes/user';
 import { Link, usePage } from '@inertiajs/react';
-import { BarChart3, UserCog, Users } from 'lucide-react';
+import { BarChart3, MessageSquareText, UserCog } from 'lucide-react';
 
 const navItems = [
     {
@@ -20,9 +20,14 @@ const navItems = [
         icon: BarChart3,
     },
     {
+        href: saranEvaluator.url(),
+        label: 'Saran Evaluator',
+        icon: BarChart3,
+    },
+    {
         href: indexPenugasan.url(),
         label: 'Penugasan Peer',
-        icon: Users,
+        icon: MessageSquareText,
     },
     // {
     //     href: '/admin/evaluasi-360',

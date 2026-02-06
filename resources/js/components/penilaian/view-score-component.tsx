@@ -36,7 +36,7 @@ const getScoreClassification = (score: number) => {
     };
 };
 
-export function ViewScoreComponent({ rekapPerAspek, evaluationData }) {
+export function ViewScoreComponent({ rekapPerAspek, evaluationData }: any) {
     const aspects = Object.keys(evaluationData);
 
     function getAspectStats(aspectKey: string) {
@@ -74,26 +74,28 @@ export function ViewScoreComponent({ rekapPerAspek, evaluationData }) {
                 </CardHeader>
                 <CardContent>
                     <div className="grid gap-6 md:grid-cols-3">
-                        {rekapPerAspek?.aspects?.map((aspek, index) => {
-                            const nilaiAkhir = aspek.nilai * aspek.bobot;
+                        {rekapPerAspek?.aspects?.map(
+                            (aspek: any, index: number) => {
+                                const nilaiAkhir = aspek.nilai * aspek.bobot;
 
-                            return (
-                                <div key={index} className="text-center">
-                                    <div className="text-sm text-blue-100">
-                                        {aspek.title}
-                                    </div>
+                                return (
+                                    <div key={index} className="text-center">
+                                        <div className="text-sm text-blue-100">
+                                            {aspek.title}
+                                        </div>
 
-                                    <div className="text-xs text-blue-100">
-                                        {aspek.nilai.toFixed(2)} ×{' '}
-                                        {aspek.bobot * 100}%
-                                    </div>
+                                        <div className="text-xs text-blue-100">
+                                            {aspek.nilai.toFixed(2)} ×{' '}
+                                            {aspek.bobot * 100}%
+                                        </div>
 
-                                    <div className="mt-1 text-3xl font-extrabold tracking-tight">
-                                        {nilaiAkhir.toFixed(2)}
+                                        <div className="mt-1 text-3xl font-extrabold tracking-tight">
+                                            {nilaiAkhir.toFixed(2)}
+                                        </div>
                                     </div>
-                                </div>
-                            );
-                        })}
+                                );
+                            },
+                        )}
 
                         {/* SKOR AKHIR */}
                         <div className="text-center">
@@ -103,7 +105,9 @@ export function ViewScoreComponent({ rekapPerAspek, evaluationData }) {
 
                             <div className="text-xs text-blue-100">
                                 {rekapPerAspek?.aspects
-                                    ?.map((a) => (a.nilai * a.bobot).toFixed(2))
+                                    ?.map((a: any) =>
+                                        (a.nilai * a.bobot).toFixed(2),
+                                    )
                                     .join(' + ')}
                             </div>
 

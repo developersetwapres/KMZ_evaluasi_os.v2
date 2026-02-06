@@ -29,6 +29,7 @@ Route::middleware(['auth', 'verified', 'role:operator'])->group(function () {
     Route::get('/dashboard/nilai-perkriteria/{outsourcing:uuid}/{tipePenilai?}', [OutsourcingController::class, 'nilaiPerkriteria'])->name('os.nilaiPerkriteria');
 
     Route::get('/dashboard/ranking-skor', [OutsourcingController::class, 'ranking'])->name('os.ranking');
+    Route::get('/dashboard/saran-perbaikan-evaluator', [OutsourcingController::class, 'saranPerbaikanEvaluator'])->name('os.saranEvaluator');
 
     Route::get('/dashboard/user-management/{user}', [UserController::class, 'index'])->name('user.index');
     Route::put('/dashboard/outsourcing-update/{outsourcing:uuid}', [OutsourcingController::class, 'update'])->name('outsourcing.update');

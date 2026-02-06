@@ -167,6 +167,11 @@ class OutsourcingController extends Controller
         return Inertia::render('admin/detail/nilai-perkriteria', $data);
     }
 
+    public function saranPerbaikanEvaluator(): Response
+    {
+        return Inertia::render('admin/saranperbaikan/page');
+    }
+
 
     public function ranking(RankingScoreByJabatan $service): Response
     {

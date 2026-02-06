@@ -70,12 +70,12 @@ export default function EvaluatorPage({
                                     <ClipboardList className="h-6 w-6 text-white" />
                                 </div>
                                 <div>
-                                    <h1 className="text-xl font-bold text-gray-900">
+                                    <h1 className="font-bold text-gray-900 md:text-xl">
                                         Penilaian Outsourcing
                                     </h1>
-                                    <p className="flex items-center gap-2 text-sm text-gray-500">
+                                    <p className="flex items-center gap-2 text-xs text-gray-500 md:text-sm">
                                         <Calendar className="h-4 w-4 text-gray-400" />
-                                        Semester 2025/2026 Genap
+                                        Semester I 2025
                                     </p>
                                 </div>
                             </div>

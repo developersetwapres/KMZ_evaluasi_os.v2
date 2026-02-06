@@ -24,6 +24,13 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'userable_id',
+        'userable_type',
+        'nip',
+        'nip_sso',
+        'is_ldap',
+        'role',
+        'is_active',
     ];
 
     /**

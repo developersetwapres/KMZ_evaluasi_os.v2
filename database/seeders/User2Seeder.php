@@ -16,18 +16,9 @@ class User2Seeder extends Seeder
     {
         $users = [
             [
-                'id' => '1001',
-                'nip' => 'NA202412200201',
-                'nip_sso' => 'vendor.hilman',
-                'is_ldap' => '1',
-                'role'  => ['operator'],
-                'email' => NULL,
-                'password' => NULL,
-            ],
-            [
                 'id' => '1002',
                 'nip' => 'NA202506199903',
-                'nip_sso' => 'Kh06@2025',
+                'nip_sso' => 'vendor.khaeril',
                 'is_ldap' => '1',
                 'role'  => ['administrator', 'operator'],
                 'email' => NULL,

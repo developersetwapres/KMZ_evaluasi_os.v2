@@ -590,7 +590,7 @@ export default function UserManagement({
                                                         <span className="text-sm font-medium">
                                                             Role:
                                                         </span>
-                                                        {user.role.map(
+                                                        {user?.role?.map(
                                                             (
                                                                 role: string,
                                                                 index: number,

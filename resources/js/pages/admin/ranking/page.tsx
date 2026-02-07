@@ -85,9 +85,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
     return null;
 };
 
-// Props: expect `outsourcingData` to be the array from the BE example
 export default function RankingPage({ outsourcingData }: any) {
-    // build positions from outsourcingData
     const positions = useMemo(() => {
         if (!Array.isArray(outsourcingData)) return [];
         return outsourcingData.map((d: any) => ({
@@ -96,7 +94,6 @@ export default function RankingPage({ outsourcingData }: any) {
         }));
     }, [outsourcingData]);
 
-    // map outsourcingData into a lookup by slug
     const dataMap = useMemo(() => {
         const map: Record<string, any[]> = {};
         if (!Array.isArray(outsourcingData)) return map;
@@ -105,7 +102,6 @@ export default function RankingPage({ outsourcingData }: any) {
             const key = slugify(group.jabatan || 'unknown');
             const ranking = Array.isArray(group.ranking) ? group.ranking : [];
 
-            // transform each item to the shape used by the FE
             const transformed = ranking
                 .map((item: any) => ({
                     name: item.nama ?? item.name ?? 'N/A',

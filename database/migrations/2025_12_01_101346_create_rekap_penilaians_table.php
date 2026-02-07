@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('siklus_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('pekerja_id')->constrained('outsourcings')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('outsourcings_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->decimal('skor_perilaku', 6, 2)->nullable();
             $table->decimal('skor_teknis', 6, 2)->nullable();
             $table->decimal('skor_akhir', 6, 2)->nullable();
@@ -24,8 +24,8 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->unique(['siklus_id', 'pekerja_id'], 'uq_rekap');
-            $table->index('pekerja_id', 'fk_rekap_pekerja');
+            $table->unique(['siklus_id', 'outsourcings_id'], 'uq_rekap');
+            $table->index('outsourcings_id', 'fk_rekap_outsourcings');
         });
     }
 

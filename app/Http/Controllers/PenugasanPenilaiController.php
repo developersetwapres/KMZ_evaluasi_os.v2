@@ -9,11 +9,10 @@ use App\Models\BobotSkor;
 use App\Models\MasterPegawai;
 use App\Models\Outsourcing;
 use App\Models\Siklus;
-use App\Models\User;
 use App\Services\Penilaian\RekapHasilService;
+use App\Services\Penilaian\SaranPerbaikanEvaluator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -192,7 +191,7 @@ class PenugasanPenilaiController extends Controller
         $PenugasanPenilai->delete();
     }
 
-    public function card(): Response
+    public function home(): Response
     {
         // 1. Ambil semua penugasan milik user login (lengkap untuk hitung nilai)
         $penugasans = Auth::user()
@@ -306,5 +305,14 @@ class PenugasanPenilaiController extends Controller
             'catatan' => null,
             'status' => 'incomplete',
         ]);
+    }
+
+    public function saranPerbaikan(SaranPerbaikanEvaluator $service): Response
+    {
+        $data = [
+            'Outsourcings' => $service->saran()
+        ];
+
+        return Inertia::render('admin/saranperbaikan/page', $data);
     }
 }

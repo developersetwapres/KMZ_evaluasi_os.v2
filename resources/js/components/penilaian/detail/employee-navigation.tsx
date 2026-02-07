@@ -51,7 +51,7 @@ export function EmployeeNavigation({ employeeUuid }: EmployeeNavigationProps) {
                 const Icon = navigasi.icon;
 
                 return (
-                    <Link href={navigasi.link} className="contents">
+                    <Link href={navigasi.link} className="contents" key={index}>
                         <Button
                             variant="ghost"
                             className={`flex items-center space-x-2 rounded-md ${

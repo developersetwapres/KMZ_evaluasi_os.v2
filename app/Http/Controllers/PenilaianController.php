@@ -9,6 +9,7 @@ use App\Models\Outsourcing;
 use App\Models\Penilaian;
 use App\Models\PenugasanPenilai;
 use App\Services\Penilaian\NilaiPeraspek;
+use App\Services\Penilaian\RankingScoreByJabatan;
 use App\Services\Penilaian\RekapHasilService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -154,5 +155,15 @@ class PenilaianController extends Controller
         ];
 
         return Inertia::render('admin/rekaphasil/page', $data);
+    }
+
+
+    public function ranking(RankingScoreByJabatan $service): Response
+    {
+        $data = [
+            'outsourcingData' => $service->ranking()
+        ];
+
+        return Inertia::render('admin/ranking/page', $data);
     }
 }

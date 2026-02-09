@@ -31,6 +31,8 @@ import { BarChart3, Calculator, Users } from 'lucide-react';
 import { useState } from 'react';
 
 export default function nilaiAkhir({ rekapAspekEvaluator }: any) {
+    console.log(rekapAspekEvaluator);
+
     const [isResetNilaiOpen, setIsResetNilaiOpen] = useState(false);
     const [selectedPenilaian, setSelectedPenilaian] = useState<any>(null);
 

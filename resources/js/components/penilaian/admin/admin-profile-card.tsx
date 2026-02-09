@@ -39,9 +39,32 @@ export function AdminProfileCard() {
                         </div>
                         <div className="flex items-center space-x-2">
                             <span className="font-medium">Role:</span>
-                            {user.role.map((r, o) => (
-                                <span key={o}>{r},</span>
-                            ))}
+
+                            {user.role.map((r: string, i: number) => {
+                                const role = r.toLowerCase();
+
+                                const href =
+                                    role === 'administrator'
+                                        ? '/dashboard/administrator'
+                                        : role === 'operator'
+                                          ? '/dashboard'
+                                          : '/';
+
+                                const label =
+                                    role.charAt(0).toUpperCase() +
+                                    role.slice(1);
+
+                                return (
+                                    <Link
+                                        key={i}
+                                        href={href}
+                                        className="hover:underline"
+                                    >
+                                        {label}
+                                        {i < user.role.length - 1 && ', '}
+                                    </Link>
+                                );
+                            })}
                         </div>
                     </div>
                     <div className="space-y-2">

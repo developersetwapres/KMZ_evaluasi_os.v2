@@ -10,7 +10,6 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Services\Penilaian\AspectEvaluationService;
 use App\Services\Penilaian\NilaiPeraspek;
-use App\Services\Penilaian\RankingScoreByJabatan;
 use App\Services\Penilaian\RekapHasilService;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -129,6 +128,7 @@ class OutsourcingController extends Controller
 
     public function catatanEvaluator(Outsourcing $outsourcing): Response
     {
+
         $data = [
             'penugasans' => $outsourcing->penugasan->load('evaluators.userable'),
             'uuidOs' => $outsourcing->uuid,
@@ -165,20 +165,5 @@ class OutsourcingController extends Controller
         ];
 
         return Inertia::render('admin/detail/nilai-perkriteria', $data);
-    }
-
-    public function saranPerbaikanEvaluator(): Response
-    {
-        return Inertia::render('admin/saranperbaikan/page');
-    }
-
-
-    public function ranking(RankingScoreByJabatan $service): Response
-    {
-        $data = [
-            'outsourcingData' => $service->ranking()
-        ];
-
-        return Inertia::render('admin/ranking/page', $data);
     }
 }

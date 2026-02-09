@@ -124,27 +124,29 @@ export default function EvaluatorPage({
                                 </div>
 
                                 {/* KANAN – score */}
-                                <div className="text-right">
-                                    <div className="mb-2 text-4xl font-bold md:text-5xl">
-                                        {ressultScore?.finalTotalScore?.toFixed(
-                                            2,
-                                        )}
+                                {typeUser === 'outsourcing' && (
+                                    <div className="text-right">
+                                        <div className="mb-2 text-4xl font-bold md:text-5xl">
+                                            {ressultScore?.finalTotalScore?.toFixed(
+                                                2,
+                                            )}
+                                        </div>
+
+                                        <Badge
+                                            className={`${getScoreBadgeColor(
+                                                ressultScore?.finalTotalScore,
+                                            )} border-2 text-sm md:px-4 md:py-1.5`}
+                                        >
+                                            {getScoreLabel(
+                                                ressultScore?.finalTotalScore,
+                                            )}
+                                        </Badge>
+
+                                        <p className="mt-2 text-xs text-indigo-100 md:text-lg">
+                                            Nilai Akhir Penilaian
+                                        </p>
                                     </div>
-
-                                    <Badge
-                                        className={`${getScoreBadgeColor(
-                                            ressultScore?.finalTotalScore,
-                                        )} border-2 text-sm md:px-4 md:py-1.5`}
-                                    >
-                                        {getScoreLabel(
-                                            ressultScore?.finalTotalScore,
-                                        )}
-                                    </Badge>
-
-                                    <p className="mt-2 text-xs text-indigo-100 md:text-lg">
-                                        Nilai Akhir Penilaian
-                                    </p>
-                                </div>
+                                )}
                             </CardHeader>
                         </Card>
 
@@ -325,17 +327,17 @@ export default function EvaluatorPage({
                                                         Daftar Pegawai yang
                                                         Dinilai
                                                     </h3>
-                                                    <p className="text-sm text-gray-500">
+                                                    <p className="text-xs text-gray-500 sm:text-sm">
                                                         Pegawai outsourcing yang
                                                         harus dinilai
                                                     </p>
                                                 </div>
                                             </div>
 
-                                            <div className="flex items-center gap-4">
-                                                <div className="rounded-lg bg-white px-4 py-2 shadow-md">
+                                            <div className="items-center gap-4 md:flex">
+                                                <div className="mb-2 rounded-lg bg-white px-2 py-1 shadow-md md:mb-0 md:px-4 md:py-2">
                                                     <div className="text-center">
-                                                        <div className="text-2xl font-bold text-blue-600">
+                                                        <div className="text-lg font-bold text-blue-600 md:text-2xl">
                                                             {
                                                                 penugasanPeer?.length
                                                             }
@@ -345,9 +347,9 @@ export default function EvaluatorPage({
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="rounded-lg bg-white px-4 py-2 shadow-md">
+                                                <div className="mb-2 rounded-lg bg-white px-2 py-1 shadow-md md:mb-0 md:px-4 md:py-2">
                                                     <div className="text-center">
-                                                        <div className="text-2xl font-bold text-green-600">
+                                                        <div className="text-lg font-bold text-green-600 md:text-2xl">
                                                             {
                                                                 penugasanPeer?.filter(
                                                                     (
@@ -364,7 +366,7 @@ export default function EvaluatorPage({
                                                     </div>
                                                 </div>
                                                 {/* NANTI KETIKA SUDAH DIBUAT SAVE PENDING */}
-                                                {/* <div className="rounded-lg bg-white px-4 py-2 shadow-md">
+                                                {/* <div className="mb-2 rounded-lg bg-white px-2 py-1 shadow-md md:mb-0 md:px-4 md:py-2">
                                                         <div className="text-center">
                                                             <div className="text-2xl font-bold text-orange-600">
                                                                 {penugasanPeer.pending}

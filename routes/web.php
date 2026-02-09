@@ -36,6 +36,7 @@ Route::middleware(['auth', 'verified', 'role:operator'])->group(function () {
 
     Route::get('/dashboard/penugasan-peer', [PenugasanPenilaiController::class, 'index'])->name('penugasan.index');
     Route::post('/dashboard/penugasan-peer/store/{outsourcing:uuid}', [PenugasanPenilaiController::class, 'store'])->name('penugasan.store');
+    Route::get('/dashboard/evaluators', [PenugasanPenilaiController::class, 'evaluators'])->name('penugasan.evaluators');
 
     Route::post('/upload-temp-image', [UploadController::class, 'uploadTempImage'])->name('upload.tempImage');
 });

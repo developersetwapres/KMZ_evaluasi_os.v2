@@ -4,45 +4,53 @@ import { index as indexPenugasan } from '@/actions/App/Http/Controllers/Penugasa
 import { cn } from '@/lib/utils';
 import { dashboard } from '@/routes';
 import { ranking, saranEvaluator } from '@/routes/os';
+import { statuspenilaian } from '@/routes/penugasan';
 import { index as userIndex } from '@/routes/user';
 import { Link, usePage } from '@inertiajs/react';
-import { BarChart3, MessageSquareText, UserCog } from 'lucide-react';
-
-const navItems = [
-    {
-        href: dashboard.url(),
-        label: 'Rekap Hasil',
-        icon: BarChart3,
-    },
-    {
-        href: ranking.url(),
-        label: 'Ranking Skor',
-        icon: BarChart3,
-    },
-    {
-        href: saranEvaluator.url(),
-        label: 'Saran Evaluator',
-        icon: BarChart3,
-    },
-    {
-        href: indexPenugasan.url(),
-        label: 'Penugasan Peer',
-        icon: MessageSquareText,
-    },
-    // {
-    //     href: '/admin/evaluasi-360',
-    //     label: 'Evaluasi 360',
-    //     icon: Settings,
-    // },
-    {
-        href: userIndex.url('outsourcings'),
-        label: 'Kelola User',
-        icon: UserCog,
-    },
-];
+import {
+    BarChart3,
+    ClipboardCheck,
+    MessageSquareText,
+    Trophy,
+    UserCog,
+    UsersRound,
+} from 'lucide-react';
 
 export function AdminNav() {
     const { url } = usePage();
+
+    const navItems = [
+        {
+            href: dashboard.url(),
+            label: 'Rekap Hasil',
+            icon: BarChart3,
+        },
+        {
+            href: ranking.url(),
+            label: 'Ranking Skor',
+            icon: Trophy,
+        },
+        {
+            href: saranEvaluator.url(),
+            label: 'Saran Evaluator',
+            icon: MessageSquareText,
+        },
+        {
+            href: indexPenugasan.url(),
+            label: 'Penugasan Peer',
+            icon: UsersRound,
+        },
+        {
+            href: statuspenilaian.url(),
+            label: 'Status Penilaian',
+            icon: ClipboardCheck,
+        },
+        {
+            href: userIndex.url('outsourcings'),
+            label: 'Kelola User',
+            icon: UserCog,
+        },
+    ];
 
     return (
         <nav

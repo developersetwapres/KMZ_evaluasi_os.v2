@@ -53,9 +53,7 @@ export function AdminNav() {
     ];
 
     return (
-        <nav
-            className={`grid h-12 w-full grid-cols-${navItems.length} rounded-lg bg-muted p-1`}
-        >
+        <nav className={`grid h-12 w-full grid-cols-6 rounded-lg bg-muted p-1`}>
             {navItems.map((item) => {
                 const Icon = item.icon;
                 const pathname = url; // mirip usePathname()

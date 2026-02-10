@@ -40,7 +40,9 @@ Route::middleware(['auth', 'verified', 'role:administrator'])->group(function ()
 
     Route::get('/dashboard/penugasan-peer', [PenugasanPenilaiController::class, 'index'])->name('penugasan.index');
     Route::post('/dashboard/penugasan-peer/store/{outsourcing:uuid}', [PenugasanPenilaiController::class, 'store'])->name('penugasan.store');
-    Route::get('/dashboard/evaluators', [PenugasanPenilaiController::class, 'evaluators'])->name('penugasan.evaluators');
+    Route::get('/dashboard/status-penilaian', [PenugasanPenilaiController::class, 'statusPenilaian'])->name('penugasan.statuspenilaian');
+    Route::get('/dashboard/status-penilaian-by-evaluators', [PenugasanPenilaiController::class, 'byEvaluators'])->name('penugasan.evaluators');
+    Route::get('/dashboard/status-penilaian-by-outsourcing', [PenugasanPenilaiController::class, 'byOutsourcings'])->name('penugasan.outsourcings');
 
     Route::post('/dashboard/penugasan-peer/reset/{PenugasanPenilai:uuid}', [PenugasanPenilaiController::class, 'reset'])->name('penugasan.reset');
 

@@ -295,7 +295,48 @@ class PenugasanPenilaiController extends Controller
         return Inertia::render('evaluator/page', $data);
     }
 
-    public function evaluators(): Response
+    public function byOutsourcings(): Response
+    {
+        $outsourcings = Outsourcing::with([
+            'penugasan.evaluators.userable',
+        ])
+            ->orderBy('name', 'asc')
+            ->where('is_active', 1)
+            ->get()
+            ->map(function ($os) {
+
+
+                return [
+                    'outsourcing_name' => $os->name,
+                    'outsourcing_image' => $os->image,
+                    'outsourcing_jabatan' => optional($os->jabatan)->nama_jabatan,
+                    'evaluatorsAtasan' => [
+                        'name' => $os->penugasan->firstWhere('tipe_penilai', 'atasan')?->evaluators?->userable?->name,
+                        'image' => $os->penugasan->firstWhere('tipe_penilai', 'atasan')?->evaluators?->userable?->image,
+                        'uuid' => $os->penugasan->firstWhere('tipe_penilai', 'atasan')?->evaluators?->userable?->uuid,
+                        'status' => $os->penugasan->firstWhere('tipe_penilai', 'atasan')?->status,
+                    ],
+                    'evaluatorsTemanSetingkat' => [
+                        'name' => $os->penugasan->firstWhere('tipe_penilai', 'teman_setingkat')?->evaluators?->userable?->name,
+                        'image' => $os->penugasan->firstWhere('tipe_penilai', 'teman_setingkat')?->evaluators?->userable?->image,
+                        'uuid' => $os->penugasan->firstWhere('tipe_penilai', 'teman_setingkat')?->evaluators?->userable?->uuid,
+                        'status' => $os->penugasan->firstWhere('tipe_penilai', 'teman_setingkat')?->status,
+                    ],
+                    'evaluatorsPenerimaLayanan' => [
+                        'name' => $os->penugasan->firstWhere('tipe_penilai', 'penerima_layanan')?->evaluators?->userable?->name,
+                        'image' => $os->penugasan->firstWhere('tipe_penilai', 'penerima_layanan')?->evaluators?->userable?->image,
+                        'uuid' => $os->penugasan->firstWhere('tipe_penilai', 'penerima_layanan')?->evaluators?->userable?->uuid,
+                        'status' => $os->penugasan->firstWhere('tipe_penilai', 'penerima_layanan')?->status,
+                    ],
+                ];
+            });
+
+        return Inertia::render('admin/statuspenilaian/ETXpenilaianByOutsourcing', [
+            'outsourcings' => $outsourcings,
+        ]);
+    }
+
+    public function byEvaluators(): Response
     {
         $evaluators = PenugasanPenilai::select(['siklus_id', 'status', 'outsourcing_id', 'penilai_id', 'tipe_penilai'])
             ->whereHas('siklus', fn($q) => $q->where('is_active', 1))
@@ -319,10 +360,14 @@ class PenugasanPenilaiController extends Controller
                 ];
             });
 
-
-        return Inertia::render('admin/evaluators/page', [
+        return Inertia::render('admin/statuspenilaian/ETXpenilaianByEvaluator', [
             'evaluators' => $evaluators,
         ]);
+    }
+
+    public function statusPenilaian(): Response
+    {
+        return Inertia::render('admin/statuspenilaian/page');
     }
 
     public function reset(PenugasanPenilai $PenugasanPenilai)

@@ -43,8 +43,6 @@ export default function ResultsRecapPage({
         return matchesSearch && matchesUnit;
     });
 
-    console.log(filteredResults);
-
     const units = [...new Set(evaluationResults.map((r: any) => r.biro))];
 
     return (

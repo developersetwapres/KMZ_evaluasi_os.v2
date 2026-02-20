@@ -97,7 +97,7 @@ class OutsourcingController extends Controller
     {
         $outsourcing->load([
             'penugasan.bobotSkor',
-            'penugasan.penilian.kriteria.aspek.bobotSkor',
+            'penugasan.penilaian.kriteria.aspek.bobotSkor',
         ]);
 
         $data = [
@@ -143,7 +143,7 @@ class OutsourcingController extends Controller
         $penugasan = $outsourcing->penugasan->firstWhere('tipe_penilai', $tipePenilai);
 
         $data = [
-            'rekapPerAspek' => $service->getDetailByAspek($penugasan->penilian),
+            'rekapPerAspek' => $service->getDetailByAspek($penugasan->penilaian),
 
             'evaluationData' => Aspek::select(['id', 'title'])
                 ->with([

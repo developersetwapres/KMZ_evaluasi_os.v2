@@ -12,7 +12,6 @@ use App\Services\Penilaian\NilaiPeraspek;
 use App\Services\Penilaian\RankingScoreByJabatan;
 use App\Services\Penilaian\RekapHasilService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -49,7 +48,7 @@ class PenilaianController extends Controller
         $data = [
             'outsourcing' => $penugasan->outsourcings->load(['jabatan', 'biro']),
             'evaluator' => $evaluator,
-            'rekapPerAspek' => $service->getDetailByAspek($penugasan->penilian),
+            'rekapPerAspek' => $service->getDetailByAspek($penugasan->penilaian),
             'uuidPenugasanPeer' => $penugasan->uuid,
             'tipePenilai' => $penugasan->tipe_penilai,
             'overallNotes' =>  $penugasan->catatan,
@@ -132,7 +131,7 @@ class PenilaianController extends Controller
     {
         $Outsourcings = Outsourcing::with([
             'penugasan.bobotSkor',
-            'penugasan.penilian.kriteria.aspek.bobotSkor',
+            'penugasan.penilaian.kriteria.aspek.bobotSkor',
         ])
             ->orderBy('name', 'asc')
             ->where('is_active', 1)

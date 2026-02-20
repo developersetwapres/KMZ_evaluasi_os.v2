@@ -32,7 +32,7 @@ class PenugasanPenilai extends Model
         'outsourcings',
         'evaluators',
 
-        'penilian',
+        'penilaian',
     ];
 
 
@@ -61,7 +61,7 @@ class PenugasanPenilai extends Model
 
 
     //------------------------ HasMany------------------------------
-    public function penilian(): HasMany
+    public function penilaian(): HasMany
     {
         return $this->hasMany(Penilaian::class, 'penugasan_id');
     }

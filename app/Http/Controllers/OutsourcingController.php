@@ -8,9 +8,8 @@ use App\Http\Requests\UpdateOutsourcingRequest;
 use App\Models\Aspek;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use App\Services\Penilaian\AspectEvaluationService;
+use App\Services\Penilaian\EvaluationEngine;
 use App\Services\Penilaian\NilaiPeraspek;
-use App\Services\Penilaian\RekapHasilService;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -92,35 +91,58 @@ class OutsourcingController extends Controller
         //
     }
 
+    public function nilaiAkhir(
+        Outsourcing $outsourcing,
+        EvaluationEngine $engine
+    ): Response {
 
-    public function nilaiAkhir(Outsourcing $outsourcing): Response
-    {
         $outsourcing->load([
             'penugasan.bobotSkor',
+            'penugasan.evaluators.userable',
             'penugasan.penilaian.kriteria.aspek.bobotSkor',
+            'jabatan',
+            'biro',
         ]);
 
-        $data = [
+        $penugasanCollection = $outsourcing->penugasan;
+
+        $result = $engine->calculate($penugasanCollection);
+
+        return Inertia::render('admin/detail/nilai-akhir', [
             'rekapAspekEvaluator' => [
                 'id' => $outsourcing->id,
                 'name' => $outsourcing->name,
                 'uuid' => $outsourcing->uuid,
                 'image' => $outsourcing->image,
-                'jabatan' => $outsourcing->jabatan->nama_jabatan,
+                'jabatan' => $outsourcing->jabatan?->nama_jabatan,
                 'unit_kerja' => $outsourcing->biro?->nama_biro,
-                ...app(RekapHasilService::class)
-                    ->hitung($outsourcing->penugasan->load('evaluators'))
-            ]
-        ];
 
-        return Inertia::render('admin/detail/nilai-akhir', $data);
+                // kalau butuh satu uuid untuk reset
+                // ambil dari evaluator saat klik saja (lebih clean)
+                'status' => $result['status'],
+                'finalTotalScore' => $result['finalScore'],
+                'aspekScores' => $result['aspectsGlobal'],
+                'evaluatorScores' => $result['evaluators'],
+            ]
+        ]);
     }
 
-    public function rekapNilai(Outsourcing $outsourcing, AspectEvaluationService $service): Response
-    {
+    public function rekapNilai(
+        Outsourcing $outsourcing,
+        EvaluationEngine $engine
+    ): Response {
+
+        $outsourcing->load([
+            'penugasan.bobotSkor',
+            'penugasan.evaluators.userable',
+            'penugasan.penilaian.kriteria.aspek.bobotSkor',
+        ]);
 
         $data = [
-            'peraspek' =>  $service->getDetailByAspek($outsourcing)
+            'peraspek' => $engine->calculateDetailPerAspek(
+                $outsourcing->penugasan,
+                $outsourcing->uuid
+            )
         ];
 
         return Inertia::render('admin/detail/rekap-nilai', $data);
@@ -141,6 +163,14 @@ class OutsourcingController extends Controller
     {
 
         $penugasan = $outsourcing->penugasan->firstWhere('tipe_penilai', $tipePenilai);
+
+        if (!$penugasan) {
+            return Inertia::render('admin/detail/nilai-perkriteria', [
+                'rekapPerAspek' => null,
+                'evaluationData' => [],
+                'uuidOs' => $outsourcing->uuid,
+            ]);
+        }
 
         $data = [
             'rekapPerAspek' => $service->getDetailByAspek($penugasan->penilaian),

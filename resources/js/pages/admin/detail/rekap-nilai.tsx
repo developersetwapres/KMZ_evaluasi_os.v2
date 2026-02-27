@@ -37,7 +37,9 @@ const getScoreColor = (score: number) => {
 };
 
 export default function rekapNilai({ peraspek }: any) {
-    console.log(peraspek);
+    if (!peraspek || !peraspek.aspects) {
+        return null;
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -45,7 +47,9 @@ export default function rekapNilai({ peraspek }: any) {
 
             <main className="mx-auto max-w-7xl px-4 pb-8 sm:px-6 lg:px-8">
                 <div className="space-y-8">
-                    <EmployeeNavigation employeeUuid={peraspek.uuid} />
+                    {peraspek?.uuid && (
+                        <EmployeeNavigation employeeUuid={peraspek.uuid} />
+                    )}
 
                     {/* Weighted Scoring Info */}
                     <Card className="border-blue-200 bg-blue-50 pt-0 pb-6">
@@ -53,151 +57,147 @@ export default function rekapNilai({ peraspek }: any) {
                             <div className="mb-4 flex items-center space-x-2">
                                 <Calculator className="h-6 w-6 text-blue-600" />
                                 <span className="text-lg font-bold text-blue-800">
-                                    Bobot Nilai
+                                    Bobot Evaluator
                                 </span>
                             </div>
+
                             <div className="grid grid-cols-3 gap-6">
-                                <div className="rounded-lg border border-blue-300 bg-blue-100 p-4 text-center">
-                                    <div className="text-2xl font-bold text-blue-800">
-                                        50%
-                                    </div>
-                                    <div className="font-medium text-blue-700">
-                                        Atasan
-                                    </div>
-                                </div>
-                                <div className="rounded-lg border border-blue-300 bg-blue-100 p-4 text-center">
-                                    <div className="text-2xl font-bold text-blue-800">
-                                        30%
-                                    </div>
-                                    <div className="font-medium text-blue-700">
-                                        Penerima Layanan
-                                    </div>
-                                </div>
-                                <div className="rounded-lg border border-blue-300 bg-blue-100 p-4 text-center">
-                                    <div className="text-2xl font-bold text-blue-800">
-                                        20%
-                                    </div>
-                                    <div className="font-medium text-blue-700">
-                                        Outsourcing
-                                    </div>
-                                </div>
+                                {peraspek.aspects.length > 0 &&
+                                    peraspek.aspects[0].evaluators.map(
+                                        (e: any, i: number) => (
+                                            <div
+                                                key={i}
+                                                className="rounded-lg border border-blue-300 bg-blue-100 p-4 text-center"
+                                            >
+                                                <div className="text-2xl font-bold text-blue-800">
+                                                    {(e.bobot * 100).toFixed(0)}
+                                                    %
+                                                </div>
+                                                <div className="font-medium text-blue-700">
+                                                    {e.evaluatorType}
+                                                </div>
+                                            </div>
+                                        ),
+                                    )}
                             </div>
                         </CardContent>
                     </Card>
 
                     {/* Perhitungan Berbobot per Aspek */}
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                        {peraspek.aspects.map((aspek: any, index: number) => (
-                            <Card key={index}>
-                                <CardHeader>
-                                    <CardTitle className="text-xl text-green-800">
-                                        {aspek.aspectTitle}
-                                    </CardTitle>
-                                    <CardDescription>
-                                        Disiplin, kerjasama dan komunikasi
-                                        dengan perhitungan bobot
-                                    </CardDescription>
-                                </CardHeader>
-                                <CardContent>
-                                    {aspek.evaluators.map(
-                                        (penilai: any, index: number) => (
-                                            <div
-                                                key={index}
-                                                className="mb-4 rounded-lg border-2 border-green-200 bg-gradient-to-r from-green-50 to-green-100 p-6"
-                                            >
-                                                <div className="mb-4 flex items-center justify-between">
-                                                    <div>
-                                                        <h4 className="text-lg font-bold text-green-800">
-                                                            {
-                                                                penilai?.evaluatorName
-                                                            }
-                                                        </h4>
-                                                        <p className="text-sm text-green-600">
-                                                            {penilai?.evaluatorType ==
-                                                            'atasan'
-                                                                ? 'Atasan'
-                                                                : penilai?.evaluatorType ==
-                                                                    'penerima_layanan'
-                                                                  ? 'Penerima Layanan'
-                                                                  : 'Teman Setingkat'}
-                                                        </p>
-                                                    </div>
-                                                </div>
+                        {peraspek.aspects.map((aspek: any, index: number) => {
+                            const weightedList = aspek.evaluators.map(
+                                (e: any) => Number(e.weightedScore).toFixed(2),
+                            );
 
-                                                <div className="mb-4 flex items-center justify-between rounded-sm bg-white p-3 text-sm">
-                                                    <span className="text-gray-600">
-                                                        Score Inputan:
-                                                    </span>
-                                                    <div className="flex items-center space-x-2">
-                                                        <span
-                                                            className={`text-lg font-bold ${getScoreColor(penilai?.weightedScore)}`}
-                                                        >
+                            return (
+                                <Card key={index}>
+                                    <CardHeader>
+                                        <CardTitle className="text-xl text-green-800">
+                                            {aspek.aspectTitle}
+                                        </CardTitle>
+                                        <CardDescription>
+                                            Disiplin, kerjasama dan komunikasi
+                                            dengan perhitungan bobot
+                                        </CardDescription>
+                                    </CardHeader>
+                                    <CardContent>
+                                        {aspek.evaluators.map(
+                                            (penilai: any, index: number) => (
+                                                <div
+                                                    key={index}
+                                                    className="mb-4 rounded-lg border-2 border-green-200 bg-gradient-to-r from-green-50 to-green-100 p-6"
+                                                >
+                                                    <div className="mb-4 flex items-center justify-between">
+                                                        <div>
+                                                            <h4 className="text-lg font-bold text-green-800">
+                                                                {
+                                                                    penilai?.evaluatorName
+                                                                }
+                                                            </h4>
+                                                            <p className="text-sm text-green-600">
+                                                                {penilai?.evaluatorType ==
+                                                                'atasan'
+                                                                    ? 'Atasan'
+                                                                    : penilai?.evaluatorType ==
+                                                                        'penerima_layanan'
+                                                                      ? 'Penerima Layanan'
+                                                                      : 'Teman Setingkat'}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="mb-4 flex items-center justify-between rounded-sm bg-white p-3 text-sm">
+                                                        <span className="text-gray-600">
+                                                            Score Inputan:
+                                                        </span>
+                                                        <div className="flex items-center space-x-2">
+                                                            <span
+                                                                className={`text-lg font-bold ${getScoreColor(penilai?.averageScore)}`}
+                                                            >
+                                                                {
+                                                                    penilai?.averageScore
+                                                                }
+                                                            </span>
+                                                            <Badge
+                                                                className={`${getScoreBadgeColor(penilai?.averageScore)} text-xs`}
+                                                            >
+                                                                {getScoreLabel(
+                                                                    penilai?.averageScore,
+                                                                )}
+                                                            </Badge>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="rounded-4xl bg-white p-4 text-center">
+                                                        <div className="mb-2 text-center font-mono text-xs text-green-600">
                                                             {
                                                                 penilai?.averageScore
                                                             }
-                                                        </span>
-                                                        <Badge
-                                                            className={`${getScoreBadgeColor(penilai?.averageScore)} text-xs`}
-                                                        >
-                                                            {getScoreLabel(
-                                                                penilai?.averageScore,
-                                                            )}
-                                                        </Badge>
+                                                            {' × '}
+                                                            {penilai.bobot *
+                                                                100}
+                                                            {'% = '}
+                                                        </div>
+                                                        <div className="text-4xl font-bold text-red-500">
+                                                            {
+                                                                penilai?.weightedScore
+                                                            }
+                                                        </div>
+                                                        <div className="mt-1 text-xs text-green-500">
+                                                            Kontribusi ke nilai
+                                                            akhir
+                                                        </div>
                                                     </div>
                                                 </div>
+                                            ),
+                                        )}
 
-                                                <div className="rounded-4xl bg-white p-4 text-center">
-                                                    <div className="mb-2 text-center font-mono text-xs text-green-600">
-                                                        {penilai?.averageScore}
-                                                        {' × '}
-                                                        {penilai.bobot * 100}
-                                                        {'% = '}
-                                                    </div>
-                                                    <div className="text-4xl font-bold text-red-500">
-                                                        {penilai?.weightedScore}
-                                                    </div>
-                                                    <div className="mt-1 text-xs text-green-500">
-                                                        Kontribusi ke nilai
-                                                        akhir
+                                        {/* Total */}
+                                        <div className="rounded-lg border border-blue-400 bg-gradient-to-r from-blue-100 to-blue-200 p-6">
+                                            <div className="text-center">
+                                                <h4 className="mb-2 text-xl font-bold text-blue-800">
+                                                    {aspek.aspectTitle}
+                                                </h4>
+                                                <div className="mt-2 mb-3 text-xs text-blue-600">
+                                                    <div className="mt-2 mb-3 text-xs text-blue-600">
+                                                        {weightedList.join(
+                                                            ' + ',
+                                                        )}{' '}
+                                                        =
                                                     </div>
                                                 </div>
-                                            </div>
-                                        ),
-                                    )}
-
-                                    {/* Total */}
-                                    <div className="rounded-lg border border-blue-400 bg-gradient-to-r from-blue-100 to-blue-200 p-6">
-                                        <div className="text-center">
-                                            <h4 className="mb-2 text-xl font-bold text-blue-800">
-                                                {aspek.aspectTitle}
-                                            </h4>
-                                            <div className="mt-2 mb-3 text-xs text-blue-600">
-                                                {aspek.totalByEvaluator
-                                                    .map(
-                                                        (e: any, i: number) =>
-                                                            e,
-                                                    )
-                                                    .join(' + ')}
-                                                {' ='}
-                                            </div>
-                                            <div className="text-5xl font-bold text-blue-900">
                                                 <div className="text-5xl font-bold text-blue-900">
-                                                    {aspek.totalByEvaluator
-                                                        ?.reduce(
-                                                            (
-                                                                total: any,
-                                                                val: any,
-                                                            ) => total + val,
-                                                            0,
-                                                        )
-                                                        .toFixed(2)}
+                                                    <div className="text-5xl font-bold text-blue-900">
+                                                        {aspek.total.toFixed(2)}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        ))}
+                                    </CardContent>
+                                </Card>
+                            );
+                        })}
                     </div>
                 </div>
             </main>

@@ -8,6 +8,7 @@ use App\Models\Aspek;
 use App\Models\Outsourcing;
 use App\Models\Penilaian;
 use App\Models\PenugasanPenilai;
+use App\Services\Penilaian\EvaluationEngine;
 use App\Services\Penilaian\NilaiPeraspek;
 use App\Services\Penilaian\RankingScoreByJabatan;
 use App\Services\Penilaian\RekapHasilService;
@@ -127,33 +128,39 @@ class PenilaianController extends Controller
         //
     }
 
-    public function rekaphasil(): Response
+    public function rekaphasil(EvaluationEngine $engine): Response
     {
-        $Outsourcings = Outsourcing::with([
+        $outsourcings = Outsourcing::with([
             'penugasan.bobotSkor',
+            'penugasan.evaluators.userable',
             'penugasan.penilaian.kriteria.aspek.bobotSkor',
+            'biro',
+            'jabatan',
         ])
-            ->orderBy('name', 'asc')
             ->where('is_active', 1)
+            ->orderBy('name', 'asc')
             ->get();
 
-        $evaluationResults = $Outsourcings->map(function ($os) {
+        $evaluationResults = $outsourcings->map(function ($os) use ($engine) {
+
+            $result = $engine->calculate($os->penugasan);
+
             return [
                 'id' => $os->id,
                 'name' => $os->name,
                 'uuid' => $os->uuid,
                 'image' => $os->image,
                 'biro' => $os->biro?->nama_biro,
-                'jabatan' => $os->jabatan->nama_jabatan,
-                ...app(RekapHasilService::class)->hitung($os->penugasan),
+                'jabatan' => $os->jabatan?->nama_jabatan,
+
+                'finalTotalScore' => $result['finalScore'],
+                'evaluatorScores' => $result['evaluators'],
             ];
         });
 
-        $data = [
+        return Inertia::render('admin/rekaphasil/page', [
             'evaluationResults' => $evaluationResults,
-        ];
-
-        return Inertia::render('admin/rekaphasil/page', $data);
+        ]);
     }
 
 

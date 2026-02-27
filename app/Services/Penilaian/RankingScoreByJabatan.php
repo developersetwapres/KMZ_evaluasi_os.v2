@@ -13,7 +13,7 @@ class RankingScoreByJabatan
 
         $jabatans = Jabatan::with([
             'outsourcings.penugasan.bobotSkor',
-            'outsourcings.penugasan.penilian.kriteria.aspek.bobotSkor',
+            'outsourcings.penugasan.penilaian.kriteria.aspek.bobotSkor',
         ])->get();
 
         foreach ($jabatans as $jabatan) {

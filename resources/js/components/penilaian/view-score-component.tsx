@@ -37,8 +37,6 @@ const getScoreClassification = (score: number) => {
 };
 
 export function ViewScoreComponent({ rekapPerAspek, evaluationData }: any) {
-    const aspects = Object.keys(evaluationData);
-
     function getAspectStats(aspectKey: string) {
         const aspect = evaluationData[aspectKey as keyof typeof evaluationData];
         if (!aspect) return { total: 0, count: 0, avg: 0 };
@@ -120,10 +118,7 @@ export function ViewScoreComponent({ rekapPerAspek, evaluationData }: any) {
             </Card>
 
             {/* Detailed Review by Aspect - UPDATED to show Total, Count, and emphasize Avg */}
-            {aspects.map((aspectKey, aspectIndex) => {
-                const aspect =
-                    evaluationData[aspectKey as keyof typeof evaluationData];
-
+            {evaluationData.map((aspect: any, aspectIndex: number) => {
                 return (
                     <Card
                         key={aspectIndex}
@@ -146,8 +141,9 @@ export function ViewScoreComponent({ rekapPerAspek, evaluationData }: any) {
                                 </div>
 
                                 {(() => {
-                                    const { total, avg } =
-                                        getAspectStats(aspectKey);
+                                    const { total, avg } = getAspectStats(
+                                        aspect.key,
+                                    );
                                     return (
                                         <div
                                             className={`rounded-xl px-6 py-3 ${getScoreColor(avg)}`}

@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth', 'verified', 'role:evaluator'])->group(function () {
     Route::get('/', [PenugasanPenilaiController::class, 'home'])->name('home');
 
-    Route::get('/penilaian/view-score/{penugasan:uuid}', [PenilaianController::class, 'show'])->name('penilaian.show'); //??
-
     Route::get('/penilaian/{penugasan:uuid}', [PenilaianController::class, 'create'])->name('penilaian.create');
 
     Route::post('/penilaian/store/{penugasan:uuid}', [PenilaianController::class, 'store'])->name('penilaian.store');

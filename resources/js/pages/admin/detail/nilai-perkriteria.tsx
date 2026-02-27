@@ -12,7 +12,7 @@ export default function nilaiPerItemKriteria({
     rekapPerAspek,
     evaluationData,
     uuidOs,
-}) {
+}: any) {
     const { url } = usePage();
     const isActive = (path: string) => url == path;
 

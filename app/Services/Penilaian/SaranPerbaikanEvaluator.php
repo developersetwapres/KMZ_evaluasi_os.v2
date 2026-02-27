@@ -13,7 +13,7 @@ class SaranPerbaikanEvaluator
 
         $jabatans = Jabatan::with([
             'outsourcings.penugasan' => function ($q) {
-                $q->without(['outsourcings', 'penilian',])
+                $q->without(['outsourcings', 'penilaian',])
                     ->select('id', 'outsourcing_id', 'catatan', 'tipe_penilai', 'uuid', 'penilai_id');
                 $q->with('evaluators.userable');
             },

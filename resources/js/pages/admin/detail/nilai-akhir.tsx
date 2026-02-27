@@ -40,7 +40,19 @@ export default function nilaiAkhir({ rekapAspekEvaluator }: any) {
         setIsResetNilaiOpen(false);
         setSelectedPenilaian(null);
 
-        (router.post(reset.url(selectedPenilaian.uuidPenugasan)),
+        // (router.post(reset.url(selectedPenilaian.uuidPenugasan)),
+        //     {
+        //         onSuccess: () => {
+        //             toast({
+        //                 title: 'Berhasil',
+        //                 description: 'Nilai sudah direset',
+        //             });
+        //         },
+        //     });
+
+        router.post(
+            reset.url(selectedPenilaian.uuidPenugasan),
+            {},
             {
                 onSuccess: () => {
                     toast({
@@ -48,7 +60,8 @@ export default function nilaiAkhir({ rekapAspekEvaluator }: any) {
                         description: 'Nilai sudah direset',
                     });
                 },
-            });
+            },
+        );
     };
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -141,8 +154,7 @@ export default function nilaiAkhir({ rekapAspekEvaluator }: any) {
                                                     <Calculator className="h-8 w-8" />
                                                 </div>
                                                 <h3 className="mb-2 text-xl font-bold">
-                                                    Aspek Teknis dan Kualitas
-                                                    Kerja
+                                                    {aspek.title}
                                                 </h3>
                                                 <div className="mb-4 inline-block rounded-full bg-white/20 px-3 py-1 text-sm font-medium backdrop-blur-sm">
                                                     Nilai Akhir
@@ -197,8 +209,7 @@ export default function nilaiAkhir({ rekapAspekEvaluator }: any) {
                                                   : 'Rekan Kerja';
 
                                         const weightedScore =
-                                            evaluator?.averageScore *
-                                            evaluator.bobot;
+                                            evaluator.weightedScore;
 
                                         return (
                                             <div

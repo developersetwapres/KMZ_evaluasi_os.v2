@@ -9,33 +9,6 @@ import { Outsourcing } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft, ClipboardCheck, FileText, UserCheck } from 'lucide-react';
 
-// Classification function (untouched)
-const getScoreClassification = (score: number) => {
-    if (score <= 50)
-        return {
-            label: 'SK (Sangat Kurang)',
-            color: 'bg-red-100 text-red-800 border-red-200',
-            range: '≤50',
-        };
-    if (score <= 75)
-        return {
-            label: 'K (Kurang)',
-            color: 'bg-orange-100 text-orange-800 border-orange-200',
-            range: '51-75',
-        };
-    if (score <= 90)
-        return {
-            label: 'B (Baik)',
-            color: 'bg-blue-100 text-blue-800 border-blue-200',
-            range: '76-90',
-        };
-    return {
-        label: 'SB (Sangat Baik)',
-        color: 'bg-green-100 text-green-800 border-green-200',
-        range: '91-100',
-    };
-};
-
 interface ViewScoreProps {
     outsourcing: Outsourcing;
     evaluator: any;
@@ -53,46 +26,6 @@ export default function ViewScore({
     rekapPerAspek,
     tipePenilai,
 }: ViewScoreProps) {
-    const aspects = Object.keys(evaluationData);
-
-    // Average per aspect (kept for compatibility if needed elsewhere)
-    const calculateAspectScore = (aspectKey: string) => {
-        const aspect = evaluationData[aspectKey as keyof typeof evaluationData];
-        if (!aspect) return 0;
-        const criteriaScores = aspect.kriteria.map(
-            (criterion: any) => criterion.score || 0,
-        );
-        const totalScore = criteriaScores.reduce(
-            (sum: number, s: number) => sum + s,
-            0,
-        );
-        return criteriaScores.length > 0
-            ? totalScore / criteriaScores.length
-            : 0;
-    };
-
-    // Helper stats for each aspect: total, count, avg (same konsep as evaluation-form.tsx)
-    function getAspectStats(aspectKey: string) {
-        const aspect = evaluationData[aspectKey as keyof typeof evaluationData];
-        if (!aspect) return { total: 0, count: 0, avg: 0 };
-        const scoresList = aspect.kriteria.map(
-            (c: any) => c.penilaian?.nilai || 0,
-        );
-
-        const total = scoresList.reduce((a: number, b: number) => a + b, 0);
-        const count = aspect.kriteria.length;
-        const avg = count ? parseFloat((total / count).toFixed(2)) : 0;
-        return { total, count, avg };
-    }
-
-    const getScoreColor = (score: number) => {
-        if (score >= 91) return 'text-green-600 bg-green-50';
-        if (score >= 81) return 'text-blue-600 bg-blue-50';
-        if (score >= 71) return 'text-yellow-600 bg-yellow-50';
-        if (score >= 61) return 'text-orange-600 bg-orange-50';
-        return 'text-red-600 bg-red-50';
-    };
-
     return (
         <>
             <Head title="View Score" />

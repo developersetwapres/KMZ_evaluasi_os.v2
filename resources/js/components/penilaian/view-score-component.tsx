@@ -37,8 +37,9 @@ const getScoreClassification = (score: number) => {
 };
 
 export function ViewScoreComponent({ rekapPerAspek, evaluationData }: any) {
-    function getAspectStats(aspectKey: string) {
-        const aspect = evaluationData[aspectKey as keyof typeof evaluationData];
+    function getAspectStats(aspectTitle: string) {
+        const aspect = evaluationData.find((a: any) => a.title === aspectTitle);
+
         if (!aspect) return { total: 0, count: 0, avg: 0 };
 
         const scoresList = aspect.kriteria.map(
@@ -46,8 +47,10 @@ export function ViewScoreComponent({ rekapPerAspek, evaluationData }: any) {
         );
 
         const total = scoresList.reduce((a: number, b: number) => a + b, 0);
+
         const count = aspect.kriteria.length;
         const avg = count ? parseFloat((total / count).toFixed(2)) : 0;
+
         return { total, count, avg };
     }
 
@@ -119,6 +122,8 @@ export function ViewScoreComponent({ rekapPerAspek, evaluationData }: any) {
 
             {/* Detailed Review by Aspect - UPDATED to show Total, Count, and emphasize Avg */}
             {evaluationData.map((aspect: any, aspectIndex: number) => {
+                console.log(aspect);
+
                 return (
                     <Card
                         key={aspectIndex}
@@ -142,7 +147,7 @@ export function ViewScoreComponent({ rekapPerAspek, evaluationData }: any) {
 
                                 {(() => {
                                     const { total, avg } = getAspectStats(
-                                        aspect.key,
+                                        aspect.title,
                                     );
                                     return (
                                         <div

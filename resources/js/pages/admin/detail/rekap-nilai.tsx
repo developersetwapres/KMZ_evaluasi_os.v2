@@ -3,13 +3,7 @@
 import { EmployeeHeader } from '@/components/penilaian/detail/employee-header';
 import { EmployeeNavigation } from '@/components/penilaian/detail/employee-navigation';
 import { Badge } from '@/components/ui/badge';
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Calculator } from 'lucide-react';
 
 const getScoreLabel = (score: number) => {
@@ -91,15 +85,11 @@ export default function rekapNilai({ peraspek }: any) {
                             );
 
                             return (
-                                <Card key={index}>
+                                <Card key={index} className="gap-3">
                                     <CardHeader>
                                         <CardTitle className="text-xl text-green-800">
                                             {aspek.aspectTitle}
                                         </CardTitle>
-                                        <CardDescription>
-                                            Disiplin, kerjasama dan komunikasi
-                                            dengan perhitungan bobot
-                                        </CardDescription>
                                     </CardHeader>
                                     <CardContent>
                                         {aspek.evaluators.map(

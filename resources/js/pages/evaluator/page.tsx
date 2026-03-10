@@ -55,8 +55,6 @@ export default function EvaluatorPage({
         router.flushAll();
     };
 
-    console.log(ressultScore);
-
     return (
         <>
             <Head title="Evaluator" />
@@ -194,7 +192,7 @@ export default function EvaluatorPage({
                                             </div>
 
                                             <div className="mt-4 grid gap-2 md:grid-cols-3">
-                                                {ressultScore.evaluatorScores.map(
+                                                {ressultScore.map(
                                                     (
                                                         score: any,
                                                         index: number,
@@ -230,7 +228,15 @@ export default function EvaluatorPage({
                                                                                         c: string,
                                                                                     ) =>
                                                                                         c.toUpperCase(),
-                                                                                )}
+                                                                                )}{' '}
+                                                                            (
+                                                                            {(
+                                                                                score?.bobot *
+                                                                                100
+                                                                            ).toFixed(
+                                                                                0,
+                                                                            )}
+                                                                            %)
                                                                         </h4>
 
                                                                         <p className="text-xs text-gray-500">

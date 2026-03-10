@@ -30,7 +30,7 @@ class PenilaianController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(PenugasanPenilai $penugasan, NilaiPeraspek $service): Response | RedirectResponse
+    public function create(PenugasanPenilai $penugasan, EvaluationEngine $engine): Response | RedirectResponse
     {
         abort_if(!$penugasan->outsourcings, 404);
 
@@ -49,24 +49,11 @@ class PenilaianController extends Controller
         $data = [
             'outsourcing' => $penugasan->outsourcings->load(['jabatan', 'biro']),
             'evaluator' => $evaluator,
-            'rekapPerAspek' => $service->getDetailByAspek($penugasan->penilaian),
+            'rekapPerAspek' => $engine->calculateSingleSummary($penugasan->penilaian),
             'uuidPenugasanPeer' => $penugasan->uuid,
             'tipePenilai' => $penugasan->tipe_penilai,
             'overallNotes' =>  $penugasan->catatan,
-            'evaluationData' => Aspek::select(['id', 'title'])
-                ->with([
-                    'kriteria' => fn($q) =>
-                    $q->with([
-                        'penilaian' => fn($qPenilaian) =>
-                        $qPenilaian->where('penugasan_id', $penugasan->id),
-
-                        'indikators' => fn($q2) =>
-                        $q2->where('jabatan_id', $jabatanId)
-                            ->orWhere('jabatan_id', 16),
-                    ]),
-                ])
-                ->latest()
-                ->get(),
+            'evaluationData' => $engine->getEvaluationData($penugasan, $jabatanId),
         ];
 
         if ($penugasan->status === 'completed') {
@@ -164,12 +151,20 @@ class PenilaianController extends Controller
     }
 
 
-    public function ranking(RankingScoreByJabatan $service): Response
+    public function ranking(EvaluationEngine $engine): Response
     {
-        $data = [
-            'outsourcingData' => $service->ranking()
-        ];
+        $outsourcings = Outsourcing::with([
+            'jabatan',
+            'penugasan.penilaian.kriteria.aspek.bobotSkor',
+            'penugasan.bobotSkor'
+        ])
+            ->where('is_active', true)
+            ->get();
 
-        return Inertia::render('admin/ranking/page', $data);
+        $outsourcingData = $engine->calculateRankingByJabatan($outsourcings);
+
+        return Inertia::render('admin/ranking/page', [
+            'outsourcingData' => $outsourcingData
+        ]);
     }
 }

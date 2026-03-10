@@ -9,6 +9,7 @@ use App\Models\BobotSkor;
 use App\Models\MasterPegawai;
 use App\Models\Outsourcing;
 use App\Models\Siklus;
+use App\Services\Penilaian\EvaluationEngine;
 use App\Services\Penilaian\RekapHasilService;
 use App\Services\Penilaian\SaranPerbaikanEvaluator;
 use Illuminate\Support\Facades\Auth;
@@ -191,7 +192,7 @@ class PenugasanPenilaiController extends Controller
         $PenugasanPenilai->delete();
     }
 
-    public function home(): Response
+    public function home(EvaluationEngine $evaluationEngine): Response
     {
         // 1. Ambil semua penugasan milik user login (lengkap untuk hitung nilai)
         $penugasans = Auth::user()
@@ -199,32 +200,25 @@ class PenugasanPenilaiController extends Controller
             ->with([
                 'siklus',
                 'outsourcings.jabatan',
-                'penilian.kriteria.aspek.bobotSkor',
+                'penilaian.kriteria.aspek.bobotSkor',
                 'bobotSkor',
                 'evaluators.userable',
             ])
             ->whereHas('siklus', fn($q) => $q->where('is_active', false))
             ->get();
 
-
         // 2. Group berdasarkan siklus
         $semesterHistory = $penugasans
             ->groupBy('siklus_id')
-            ->map(function ($penugasanBySiklus) {
+            ->map(function ($penugasanBySiklus) use ($evaluationEngine) {
                 $siklus = $penugasanBySiklus->first()->siklus;
 
 
                 // 3. Di dalam siklus, group lagi berdasarkan outsourcing
                 $employees = $penugasanBySiklus
                     ->groupBy('outsourcing_id')
-                    ->map(function ($penugasanByOutsourcing) {
+                    ->map(function ($penugasanByOutsourcing) use ($evaluationEngine) {
                         $first = $penugasanByOutsourcing->first();
-
-
-                        // hitung score menggunakan service yang SUDAH ADA
-                        $rekap = app(RekapHasilService::class)
-                            ->hitung($penugasanByOutsourcing);
-
 
                         return [
                             'id' => $first->outsourcings->id,
@@ -236,7 +230,7 @@ class PenugasanPenilaiController extends Controller
                             ],
                             'status' => $first->status,
                             'tipe_penilai' => $first->tipe_penilai,
-                            'score' => $rekap['finalTotalScore'],
+                            'score' => $evaluationEngine->calculateRawScore($first),
                         ];
                     })
                     ->values();
@@ -273,11 +267,11 @@ class PenugasanPenilaiController extends Controller
             ->with([
                 'bobotSkor',
                 'evaluators.userable',
-                'penilian.kriteria.aspek.bobotSkor',
+                'penilaian.kriteria.aspek.bobotSkor',
             ])
             ->get();
 
-        $hasil = app(RekapHasilService::class)->hitung($penugasan);
+        $hasil = $evaluationEngine->calculate($penugasan)['evaluators'];
 
         $typeUser = Auth::user()->userable_type === Outsourcing::class ? 'outsourcing' : 'pegawai';
 
@@ -297,39 +291,7 @@ class PenugasanPenilaiController extends Controller
 
     public function byOutsourcings(): Response
     {
-        $outsourcings = Outsourcing::with([
-            'penugasan.evaluators.userable',
-        ])
-            ->orderBy('name', 'asc')
-            ->where('is_active', 1)
-            ->get()
-            ->map(function ($os) {
-
-
-                return [
-                    'outsourcing_name' => $os->name,
-                    'outsourcing_image' => $os->image,
-                    'outsourcing_jabatan' => optional($os->jabatan)->nama_jabatan,
-                    'evaluatorsAtasan' => [
-                        'name' => $os->penugasan->firstWhere('tipe_penilai', 'atasan')?->evaluators?->userable?->name,
-                        'image' => $os->penugasan->firstWhere('tipe_penilai', 'atasan')?->evaluators?->userable?->image,
-                        'uuid' => $os->penugasan->firstWhere('tipe_penilai', 'atasan')?->evaluators?->userable?->uuid,
-                        'status' => $os->penugasan->firstWhere('tipe_penilai', 'atasan')?->status,
-                    ],
-                    'evaluatorsTemanSetingkat' => [
-                        'name' => $os->penugasan->firstWhere('tipe_penilai', 'teman_setingkat')?->evaluators?->userable?->name,
-                        'image' => $os->penugasan->firstWhere('tipe_penilai', 'teman_setingkat')?->evaluators?->userable?->image,
-                        'uuid' => $os->penugasan->firstWhere('tipe_penilai', 'teman_setingkat')?->evaluators?->userable?->uuid,
-                        'status' => $os->penugasan->firstWhere('tipe_penilai', 'teman_setingkat')?->status,
-                    ],
-                    'evaluatorsPenerimaLayanan' => [
-                        'name' => $os->penugasan->firstWhere('tipe_penilai', 'penerima_layanan')?->evaluators?->userable?->name,
-                        'image' => $os->penugasan->firstWhere('tipe_penilai', 'penerima_layanan')?->evaluators?->userable?->image,
-                        'uuid' => $os->penugasan->firstWhere('tipe_penilai', 'penerima_layanan')?->evaluators?->userable?->uuid,
-                        'status' => $os->penugasan->firstWhere('tipe_penilai', 'penerima_layanan')?->status,
-                    ],
-                ];
-            });
+        $outsourcings = app(Outsourcing::class)->byOutsourcings();
 
         return Inertia::render('admin/statuspenilaian/ETXpenilaianByOutsourcing', [
             'outsourcings' => $outsourcings,
@@ -338,27 +300,7 @@ class PenugasanPenilaiController extends Controller
 
     public function byEvaluators(): Response
     {
-        $evaluators = PenugasanPenilai::select(['siklus_id', 'status', 'outsourcing_id', 'penilai_id', 'tipe_penilai'])
-            ->whereHas('siklus', fn($q) => $q->where('is_active', 1))
-            ->withOnly([
-                'outsourcings:id,name,uuid,image,jabatan_id,nip',
-                'evaluators.userable',
-            ])
-            ->get()
-            ->map(function ($item) {
-                $userable = $item->evaluators?->userable;
-
-                return [
-                    'outsourcing_name' => $item->outsourcings->name,
-                    'outsourcing_image' => $item->outsourcings->image,
-                    'outsourcing_jabatan' => optional($item->outsourcings->jabatan)->nama_jabatan,
-                    'tipe_penilai' => $item->tipe_penilai,
-                    'status' => $item->status,
-                    'evaluator_name' => $userable?->name,
-                    'evaluator_image' => $userable?->image,
-                    'evaluator_uuid' => $userable?->uuid,
-                ];
-            });
+        $evaluators = app(PenugasanPenilai::class)->byEvaluators();
 
         return Inertia::render('admin/statuspenilaian/ETXpenilaianByEvaluator', [
             'evaluators' => $evaluators,
@@ -367,12 +309,17 @@ class PenugasanPenilaiController extends Controller
 
     public function statusPenilaian(): Response
     {
-        return Inertia::render('admin/statuspenilaian/page');
+        $data = [
+            'byOutsourcings' => app(Outsourcing::class)->byOutsourcings(),
+            'byEvaluators' => app(PenugasanPenilai::class)->byEvaluators(),
+        ];
+
+        return Inertia::render('admin/statuspenilaian/page', $data);
     }
 
     public function reset(PenugasanPenilai $PenugasanPenilai)
     {
-        foreach ($PenugasanPenilai->penilian as $key => $penugasan) {
+        foreach ($PenugasanPenilai->penilaian as $key => $penugasan) {
             $penugasan->delete();
         };
 

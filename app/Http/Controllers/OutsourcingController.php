@@ -117,8 +117,6 @@ class OutsourcingController extends Controller
                 'jabatan' => $outsourcing->jabatan?->nama_jabatan,
                 'unit_kerja' => $outsourcing->biro?->nama_biro,
 
-                // kalau butuh satu uuid untuk reset
-                // ambil dari evaluator saat klik saja (lebih clean)
                 'status' => $result['status'],
                 'finalTotalScore' => $result['finalScore'],
                 'aspekScores' => $result['aspectsGlobal'],
@@ -159,7 +157,7 @@ class OutsourcingController extends Controller
         return Inertia::render('admin/detail/catatan-evaluator', $data);
     }
 
-    public function nilaiPerkriteria(Outsourcing $outsourcing, NilaiPeraspek $service, $tipePenilai = 'atasan'): Response
+    public function nilaiPerkriteria(Outsourcing $outsourcing, EvaluationEngine $engine, $tipePenilai = 'atasan'): Response
     {
 
         $penugasan = $outsourcing->penugasan->firstWhere('tipe_penilai', $tipePenilai);
@@ -173,7 +171,7 @@ class OutsourcingController extends Controller
         }
 
         $data = [
-            'rekapPerAspek' => $service->getDetailByAspek($penugasan->penilaian),
+            'rekapPerAspek' => $engine->calculateSingleSummary($penugasan->penilaian),
 
             'evaluationData' => Aspek::select(['id', 'title'])
                 ->with([

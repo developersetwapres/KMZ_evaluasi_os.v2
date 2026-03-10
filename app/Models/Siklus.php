@@ -11,4 +11,9 @@ class Siklus extends Model
     /** @use HasFactory<\Database\Factories\SiklusFactory> */
     use HasFactory;
     use HasUuid;
+
+    protected $casts = [
+        'tanggal_mulai' => 'date',
+        'tanggal_selesai' => 'date',
+    ];
 }

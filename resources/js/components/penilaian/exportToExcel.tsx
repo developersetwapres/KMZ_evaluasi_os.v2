@@ -1,32 +1,31 @@
 import * as XLSX from 'xlsx';
 
 export default function exportToExcel(evaluationResults: any[]) {
-    // 1. Transformasi data agar sesuai dengan kolom yang mau diexport
     const formattedData = evaluationResults.map((item: any) => {
-        // Buka evaluatorScores jadi kolom terpisah
         const atasan = item.evaluatorScores.find(
             (e: any) => e.type === 'atasan',
         );
         const penerima = item.evaluatorScores.find(
             (e: any) => e.type === 'penerima_layanan',
         );
-        const teman = item.evaluatorScores.find((e: any) => e.type === 'teman');
+        const teman = item.evaluatorScores.find(
+            (e: any) => e.type === 'teman_setingkat',
+        );
 
         return {
-            ID: item.id,
-            Nama: item.name,
-            'Unit Kerja': item.unit_kerja,
-            Jabatan: item.jabatan,
-            // Atasan: atasan?.evaluatorName ?? '',
-            // 'Nilai Atasan': atasan?.averageScore ?? 0,
-            // 'Penerima Layanan': penerima?.evaluatorName ?? '',
-            // 'Nilai Penerima': penerima?.averageScore ?? 0,
-            // Teman: teman?.evaluatorName ?? '',
-            // 'Nilai Teman': teman?.averageScore ?? 0,
-            'Nilai Akhir': item.weightedOverallScore,
+            'NRP Outsourcing': item.nip,
+            'Nama Outsourcing': item.name,
+            'Unit Kerja Outsourcing': item.biro,
+            'Jabatan Outsourcing': item.jabatan,
+            'Evaluator Atasan (50%)': atasan?.evaluatorName ?? '',
+            'Nilai Atasan': atasan?.averageScore ?? 0,
+            'Evaluator Penerima Layanan (30%)': penerima?.evaluatorName ?? '',
+            'Nilai Penerima': penerima?.averageScore ?? 0,
+            'Evaluator Teman (20%)': teman?.evaluatorName ?? '',
+            'Nilai Teman': teman?.averageScore ?? 0,
+            'Nilai Akhir': item.finalTotalScore,
         };
     });
-
     // 2. Buat worksheet dari data
     const worksheet = XLSX.utils.json_to_sheet(formattedData);
 

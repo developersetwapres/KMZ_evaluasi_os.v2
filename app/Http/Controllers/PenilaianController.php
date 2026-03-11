@@ -134,6 +134,7 @@ class PenilaianController extends Controller
 
             return [
                 'id' => $os->id,
+                'nip' => $os->nip,
                 'name' => $os->name,
                 'uuid' => $os->uuid,
                 'image' => $os->image,

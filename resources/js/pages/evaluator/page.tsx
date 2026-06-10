@@ -44,6 +44,7 @@ export default function EvaluatorPage({
     semesterHistory,
     typeUser,
     ressultScore,
+    siklusAktif,
 }: any) {
     const { auth } = usePage<SharedData>().props;
     const user = auth.user;
@@ -73,7 +74,7 @@ export default function EvaluatorPage({
                                     </h1>
                                     <p className="flex items-center gap-2 text-xs text-gray-500 md:text-sm">
                                         <Calendar className="h-4 w-4 text-gray-400" />
-                                        Semester I 2025
+                                        {siklusAktif}
                                     </p>
                                 </div>
                             </div>

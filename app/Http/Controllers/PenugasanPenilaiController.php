@@ -258,8 +258,11 @@ class PenugasanPenilaiController extends Controller
         $outsourcing = $user->userable;
 
         $siklusAktif = Siklus::query()
+            ->select(['id', 'title'])
             ->where('is_active', true)
             ->first();
+
+
 
         $penugasan = PenugasanPenilai::query()
             ->where('outsourcing_id', $outsourcing->id)
@@ -284,6 +287,7 @@ class PenugasanPenilaiController extends Controller
                 ->get(),
             'ressultScore' => $typeUser == 'outsourcing' ? $hasil : null,
             'typeUser' => $typeUser,
+            'siklusAktif' => $siklusAktif->title
         ];
 
         return Inertia::render('evaluator/page', $data);

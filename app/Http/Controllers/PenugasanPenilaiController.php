@@ -194,8 +194,10 @@ class PenugasanPenilaiController extends Controller
 
     public function home(EvaluationEngine $evaluationEngine): Response
     {
+        $user = Auth::user();
+
         // 1. Ambil semua penugasan milik user login (lengkap untuk hitung nilai)
-        $penugasans = Auth::user()
+        $myPenugasans = $user
             ->penugasan()
             ->with([
                 'siklus',
@@ -208,7 +210,7 @@ class PenugasanPenilaiController extends Controller
             ->get();
 
         // 2. Group berdasarkan siklus
-        $semesterHistory = $penugasans
+        $semesterHistory = $myPenugasans
             ->groupBy('siklus_id')
             ->map(function ($penugasanBySiklus) use ($evaluationEngine) {
                 $siklus = $penugasanBySiklus->first()->siklus;
@@ -252,8 +254,6 @@ class PenugasanPenilaiController extends Controller
 
         //----------------------------------------------------------
 
-        $user = Auth::user();
-
         /** @var Outsourcing $outsourcing */
         $outsourcing = $user->userable;
 
@@ -262,7 +262,15 @@ class PenugasanPenilaiController extends Controller
             ->where('is_active', true)
             ->first();
 
-
+        $evaluatorsHistory = PenugasanPenilai::query()
+            ->where('outsourcing_id', $outsourcing->id)
+            ->whereNot('siklus_id', $siklusAktif->id)
+            ->with([
+                'bobotSkor',
+                'evaluators.userable',
+                'penilaian.kriteria.aspek.bobotSkor',
+            ])
+            ->get();
 
         $penugasan = PenugasanPenilai::query()
             ->where('outsourcing_id', $outsourcing->id)
@@ -274,7 +282,9 @@ class PenugasanPenilaiController extends Controller
             ])
             ->get();
 
+
         $hasil = $evaluationEngine->calculate($penugasan)['evaluators'];
+        $hasilHistory = $evaluationEngine->calculate($evaluatorsHistory)['evaluators'];
 
         $typeUser = Auth::user()->userable_type === Outsourcing::class ? 'outsourcing' : 'pegawai';
 
@@ -286,6 +296,7 @@ class PenugasanPenilaiController extends Controller
                 ->with(['siklus', 'outsourcings'])
                 ->get(),
             'ressultScore' => $typeUser == 'outsourcing' ? $hasil : null,
+            'ressultScoreHistory' => $typeUser == 'outsourcing' ? $hasilHistory : null,
             'typeUser' => $typeUser,
             'siklusAktif' => $siklusAktif->title
         ];

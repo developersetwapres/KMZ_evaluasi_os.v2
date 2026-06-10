@@ -34,7 +34,6 @@ import {
     Clock,
     History,
     LogOut,
-    MessageCircle,
     User,
     Users,
 } from 'lucide-react';
@@ -42,6 +41,7 @@ import {
 export default function EvaluatorPage({
     penugasanPeer,
     semesterHistory,
+    ressultScoreHistory,
     typeUser,
     ressultScore,
     siklusAktif,
@@ -540,7 +540,7 @@ export default function EvaluatorPage({
                             {/* History Tab */}
                             <TabsContent value="history" className="space-y-6">
                                 {typeUser === 'outsourcing' && (
-                                    <Card className="border-0 bg-linear-to-br from-blue-50 shadow-md">
+                                    <Card className="border-0 bg-linear-to-br from-blue-50 pb-7 shadow-md">
                                         <CardContent>
                                             <div className="flex items-center justify-between">
                                                 <div className="flex items-center gap-3">
@@ -564,128 +564,222 @@ export default function EvaluatorPage({
                                                 <Accordion
                                                     type="single"
                                                     collapsible
-                                                    className="space-y-2"
+                                                    className="space-y-4"
                                                 >
                                                     {semesterHistory.map(
-                                                        (sem: any) => (
-                                                            <AccordionItem
-                                                                key={sem.id}
-                                                                value={sem.id}
-                                                                className="border"
-                                                            >
-                                                                <AccordionTrigger>
-                                                                    <div className="flex w-full items-center justify-between">
-                                                                        <div>
-                                                                            <div className="font-semibold">
-                                                                                {
-                                                                                    sem.name
-                                                                                }
-                                                                            </div>
-                                                                            <div className="text-xs text-gray-500">
-                                                                                {
-                                                                                    sem.period
-                                                                                }
-                                                                            </div>
-                                                                        </div>
-                                                                        <div className="text-sm text-gray-600">
-                                                                            {
-                                                                                sem
-                                                                                    .employees
-                                                                                    .length
-                                                                            }{' '}
-                                                                            pegawai
-                                                                        </div>
-                                                                    </div>
-                                                                </AccordionTrigger>
-
-                                                                <AccordionContent>
-                                                                    <div className="grid gap-3">
-                                                                        {[
-                                                                            {
-                                                                                key: 'atasan_langsung',
-                                                                                title: 'Atasan',
-                                                                                icon: Briefcase,
-                                                                            },
-                                                                            {
-                                                                                key: 'penerima_layanan',
-                                                                                title: 'Penerima Layanan',
-                                                                                icon: Users,
-                                                                            },
-                                                                            {
-                                                                                key: 'peer',
-                                                                                title: 'Rekan',
-                                                                                icon: MessageCircle,
-                                                                            },
-                                                                        ].map(
+                                                        (semester: any) => {
+                                                            const semesterStats =
+                                                                {
+                                                                    total: semester
+                                                                        .employees
+                                                                        .length,
+                                                                    completed:
+                                                                        semester.employees.filter(
                                                                             (
-                                                                                t,
-                                                                            ) => {
-                                                                                const found =
-                                                                                    sem.employees.find(
-                                                                                        (
-                                                                                            e: any,
-                                                                                        ) =>
-                                                                                            e.tipe_penilai?.includes(
-                                                                                                t.key.replace(
-                                                                                                    '_',
-                                                                                                    '',
-                                                                                                ),
-                                                                                            ) ||
-                                                                                            e.tipe_penilai?.includes(
-                                                                                                t.key,
-                                                                                            ),
-                                                                                    );
-                                                                                const Icon =
-                                                                                    (
-                                                                                        t as any
-                                                                                    )
-                                                                                        .icon;
-                                                                                return (
-                                                                                    <div
-                                                                                        key={
-                                                                                            t.key
+                                                                                emp: any,
+                                                                            ) =>
+                                                                                emp.status ===
+                                                                                'completed',
+                                                                        )
+                                                                            .length,
+                                                                    avgScore:
+                                                                        Math.round(
+                                                                            semester.employees.reduce(
+                                                                                (
+                                                                                    acc: number,
+                                                                                    emp: any,
+                                                                                ) =>
+                                                                                    acc +
+                                                                                    (emp.score ||
+                                                                                        0),
+                                                                                0,
+                                                                            ) /
+                                                                                semester
+                                                                                    .employees
+                                                                                    .length,
+                                                                        ),
+                                                                };
+
+                                                            return (
+                                                                <AccordionItem
+                                                                    key={
+                                                                        semester.id
+                                                                    }
+                                                                    value={
+                                                                        semester.id
+                                                                    }
+                                                                    className="overflow-hidden rounded-xl border-0 bg-white"
+                                                                >
+                                                                    <AccordionTrigger className="px-6 py-4 hover:bg-gradient-to-r hover:from-purple-50 hover:to-indigo-50 hover:no-underline">
+                                                                        <div className="flex w-full items-center justify-between pr-4">
+                                                                            <div className="flex items-center gap-4 text-left">
+                                                                                <div className="rounded-lg bg-gradient-to-br from-purple-100 to-indigo-100 p-3">
+                                                                                    <Calendar className="h-6 w-6 text-purple-600" />
+                                                                                </div>
+                                                                                <div>
+                                                                                    <h3 className="text-lg font-bold text-gray-900">
+                                                                                        {
+                                                                                            semester.name
                                                                                         }
-                                                                                        className="flex items-center justify-between rounded-md border bg-white p-3"
+                                                                                    </h3>
+                                                                                    <p className="text-sm text-gray-500">
+                                                                                        {
+                                                                                            semester.period
+                                                                                        }
+                                                                                    </p>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            {/* Mini Stats */}
+                                                                            <div className="text-center">
+                                                                                <div className="text-lg font-bold text-blue-600">
+                                                                                    {
+                                                                                        semesterStats.total
+                                                                                    }
+                                                                                </div>
+                                                                                <div className="text-xs text-gray-500">
+                                                                                    Pegawai
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </AccordionTrigger>
+
+                                                                    <AccordionContent className="bg-gradient-to-br from-gray-100 to-purple-50/30 p-6 px-6">
+                                                                        {/* Employee List */}
+                                                                        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                                                                            {ressultScoreHistory.map(
+                                                                                (
+                                                                                    score: any,
+                                                                                    index: number,
+                                                                                ) => (
+                                                                                    <Card
+                                                                                        className="gap-2.5 border-l-4 border-l-purple-500 bg-gradient-to-br from-purple-50 to-white px-4 py-7 shadow-md"
+                                                                                        key={
+                                                                                            index
+                                                                                        }
                                                                                     >
-                                                                                        <div className="flex items-center gap-3">
-                                                                                            <div className="rounded-md bg-gray-50 p-2">
-                                                                                                <Icon className="h-4 w-4 text-gray-600" />
+                                                                                        <div className="mb-3 flex items-start justify-between">
+                                                                                            <div className="flex items-center gap-2">
+                                                                                                <div className="rounded-md bg-indigo-50 p-2">
+                                                                                                    {score.type ===
+                                                                                                    'atasan' ? (
+                                                                                                        <Briefcase className="h-5 w-5 text-indigo-600" />
+                                                                                                    ) : score.type ===
+                                                                                                      'teman_setingkat' ? (
+                                                                                                        <Users className="h-5 w-5 text-indigo-600" />
+                                                                                                    ) : score.type ===
+                                                                                                      'penerima_layanan' ? (
+                                                                                                        <Award className="h-5 w-5 text-indigo-600" />
+                                                                                                    ) : null}
+                                                                                                </div>
+                                                                                                <div>
+                                                                                                    <h4 className="text-sm font-semibold text-gray-900">
+                                                                                                        {score.type
+                                                                                                            .replace(
+                                                                                                                '_',
+                                                                                                                ' ',
+                                                                                                            )
+                                                                                                            .replace(
+                                                                                                                /^./,
+                                                                                                                (
+                                                                                                                    c: string,
+                                                                                                                ) =>
+                                                                                                                    c.toUpperCase(),
+                                                                                                            )}{' '}
+                                                                                                        (
+                                                                                                        {(
+                                                                                                            score?.bobot *
+                                                                                                            100
+                                                                                                        ).toFixed(
+                                                                                                            0,
+                                                                                                        )}
+                                                                                                        %)
+                                                                                                    </h4>
+
+                                                                                                    <p className="text-xs text-gray-500">
+                                                                                                        {score.type ===
+                                                                                                        'atasan'
+                                                                                                            ? 'Penilaian oleh atasan langsung'
+                                                                                                            : ''}
+                                                                                                        {score.type ===
+                                                                                                        'teman_setingkat'
+                                                                                                            ? 'Penilaian oleh teman setingkat'
+                                                                                                            : ''}
+                                                                                                        {score.type ===
+                                                                                                        'penerima_layanan'
+                                                                                                            ? 'Penilaian oleh penerima layanan'
+                                                                                                            : ''}
+                                                                                                    </p>
+                                                                                                </div>
                                                                                             </div>
-                                                                                            <div>
-                                                                                                <div className="text-sm font-medium">
+                                                                                            <Badge
+                                                                                                className={`${
+                                                                                                    score.status ===
+                                                                                                    'completed'
+                                                                                                        ? 'bg-green-100 text-green-800'
+                                                                                                        : 'bg-gray-100 text-gray-800'
+                                                                                                } shadow-sm`}
+                                                                                            >
+                                                                                                {score.status ===
+                                                                                                'completed'
+                                                                                                    ? 'Selesai'
+                                                                                                    : 'Belum Menilai'}
+                                                                                            </Badge>
+                                                                                        </div>
+
+                                                                                        <div className="flex flex-col items-center">
+                                                                                            <div className="mb-6 w-2/3 rounded-lg bg-white p-3 text-center shadow-sm">
+                                                                                                <div className="text-sm text-gray-600">
+                                                                                                    Score
+                                                                                                    Asli
+                                                                                                </div>
+                                                                                                <div
+                                                                                                    className={`text-2xl font-bold ${getScoreColor(score?.averageScore)}`}
+                                                                                                >
                                                                                                     {
-                                                                                                        t.title
+                                                                                                        score?.averageScore
                                                                                                     }
                                                                                                 </div>
-                                                                                                <div className="text-xs text-gray-500">
-                                                                                                    {found
-                                                                                                        ? found
-                                                                                                              .outsourcings
-                                                                                                              .name
-                                                                                                        : 'Tidak ada data'}
-                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div className="text-center font-mono text-sm opacity-90">
+                                                                                                {
+                                                                                                    score?.averageScore
+                                                                                                }{' '}
+                                                                                                ×{' '}
+                                                                                                {(
+                                                                                                    score?.bobot *
+                                                                                                    100
+                                                                                                ).toFixed(
+                                                                                                    0,
+                                                                                                )}
+
+                                                                                                %
+                                                                                                =
+                                                                                            </div>
+
+                                                                                            <div className="text-center text-4xl font-bold text-gray-900">
+                                                                                                {
+                                                                                                    score.weightedScore
+                                                                                                }
                                                                                             </div>
                                                                                         </div>
 
-                                                                                        <div className="text-right">
-                                                                                            <div className="text-sm font-semibold text-purple-600">
-                                                                                                {found?.score ??
-                                                                                                    '-'}
-                                                                                            </div>
-                                                                                            <div className="text-xs text-gray-500">
-                                                                                                {found
-                                                                                                    ? 'Catatan tersedia'
-                                                                                                    : '—'}
-                                                                                            </div>
+                                                                                        <div className="text-center text-sm text-gray-600">
+                                                                                            {score.notes
+                                                                                                ? score.notes
+                                                                                                : score.status ===
+                                                                                                    'completed'
+                                                                                                  ? '"Tidak ada saran dari penilai"'
+                                                                                                  : '"Belum ada catatan"'}
                                                                                         </div>
-                                                                                    </div>
-                                                                                );
-                                                                            },
-                                                                        )}
-                                                                    </div>
-                                                                </AccordionContent>
-                                                            </AccordionItem>
-                                                        ),
+                                                                                    </Card>
+                                                                                ),
+                                                                            )}
+                                                                        </div>
+                                                                    </AccordionContent>
+                                                                </AccordionItem>
+                                                            );
+                                                        },
                                                     )}
                                                 </Accordion>
                                             </div>
@@ -719,57 +813,61 @@ export default function EvaluatorPage({
                                             collapsible
                                             className="space-y-4"
                                         >
-                                            {semesterHistory.map((semester) => {
-                                                const semesterStats = {
-                                                    total: semester.employees
-                                                        .length,
-                                                    completed:
-                                                        semester.employees.filter(
-                                                            (emp) =>
-                                                                emp.status ===
-                                                                'completed',
-                                                        ).length,
-                                                    avgScore: Math.round(
-                                                        semester.employees.reduce(
-                                                            (acc, emp) =>
-                                                                acc +
-                                                                (emp.score ||
-                                                                    0),
-                                                            0,
-                                                        ) /
-                                                            semester.employees
-                                                                .length,
-                                                    ),
-                                                };
+                                            {semesterHistory.map(
+                                                (semester: any) => {
+                                                    const semesterStats = {
+                                                        total: semester
+                                                            .employees.length,
+                                                        completed:
+                                                            semester.employees.filter(
+                                                                (emp: any) =>
+                                                                    emp.status ===
+                                                                    'completed',
+                                                            ).length,
+                                                        avgScore: Math.round(
+                                                            semester.employees.reduce(
+                                                                (
+                                                                    acc: number,
+                                                                    emp: any,
+                                                                ) =>
+                                                                    acc +
+                                                                    (emp.score ||
+                                                                        0),
+                                                                0,
+                                                            ) /
+                                                                semester
+                                                                    .employees
+                                                                    .length,
+                                                        ),
+                                                    };
 
-                                                return (
-                                                    <AccordionItem
-                                                        key={semester.id}
-                                                        value={semester.id}
-                                                        className="overflow-hidden rounded-xl border-0 bg-white shadow-md"
-                                                    >
-                                                        <AccordionTrigger className="px-6 py-4 hover:bg-gradient-to-r hover:from-purple-50 hover:to-indigo-50 hover:no-underline">
-                                                            <div className="flex w-full items-center justify-between pr-4">
-                                                                <div className="flex items-center gap-4 text-left">
-                                                                    <div className="rounded-lg bg-gradient-to-br from-purple-100 to-indigo-100 p-3">
-                                                                        <Calendar className="h-6 w-6 text-purple-600" />
+                                                    return (
+                                                        <AccordionItem
+                                                            key={semester.id}
+                                                            value={semester.id}
+                                                            className="overflow-hidden rounded-xl border-0 bg-white shadow-md"
+                                                        >
+                                                            <AccordionTrigger className="px-6 py-4 hover:bg-gradient-to-r hover:from-purple-50 hover:to-indigo-50 hover:no-underline">
+                                                                <div className="flex w-full items-center justify-between pr-4">
+                                                                    <div className="flex items-center gap-4 text-left">
+                                                                        <div className="rounded-lg bg-gradient-to-br from-purple-100 to-indigo-100 p-3">
+                                                                            <Calendar className="h-6 w-6 text-purple-600" />
+                                                                        </div>
+                                                                        <div>
+                                                                            <h3 className="text-lg font-bold text-gray-900">
+                                                                                {
+                                                                                    semester.name
+                                                                                }
+                                                                            </h3>
+                                                                            <p className="text-sm text-gray-500">
+                                                                                {
+                                                                                    semester.period
+                                                                                }
+                                                                            </p>
+                                                                        </div>
                                                                     </div>
-                                                                    <div>
-                                                                        <h3 className="text-lg font-bold text-gray-900">
-                                                                            {
-                                                                                semester.name
-                                                                            }
-                                                                        </h3>
-                                                                        <p className="text-sm text-gray-500">
-                                                                            {
-                                                                                semester.period
-                                                                            }
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
 
-                                                                {/* Mini Stats */}
-                                                                <div className="hidden items-center gap-6 sm:flex">
+                                                                    {/* Mini Stats */}
                                                                     <div className="text-center">
                                                                         <div className="text-lg font-bold text-blue-600">
                                                                             {
@@ -780,108 +878,98 @@ export default function EvaluatorPage({
                                                                             Pegawai
                                                                         </div>
                                                                     </div>
-                                                                    <div className="text-center">
-                                                                        <div className="text-lg font-bold text-green-600">
-                                                                            {
-                                                                                semesterStats.completed
-                                                                            }
-                                                                        </div>
-                                                                        <div className="text-xs text-gray-500">
-                                                                            Selesai
-                                                                        </div>
-                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                        </AccordionTrigger>
+                                                            </AccordionTrigger>
 
-                                                        <AccordionContent className="bg-gradient-to-br from-gray-100 to-purple-50/30 p-6 px-6">
-                                                            {/* Employee List */}
-                                                            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                                                                {semester.employees.map(
-                                                                    (
-                                                                        employee,
-                                                                    ) => (
-                                                                        <Card
-                                                                            key={
-                                                                                employee.id
-                                                                            }
-                                                                            className="group overflow-hidden border-0 bg-white shadow-md transition-all duration-300 hover:scale-105 hover:shadow-xl"
-                                                                        >
-                                                                            <CardContent className="p-4">
-                                                                                <div className="flex items-start gap-3">
-                                                                                    <img
-                                                                                        src={`/${employee.outsourcings.image}`}
-                                                                                        alt={
-                                                                                            employee
-                                                                                                .outsourcings
-                                                                                                .name
-                                                                                        }
-                                                                                        className="h-14 w-14 rounded-full border-2 border-purple-200 object-cover shadow-sm"
-                                                                                    />
-                                                                                    <div className="min-w-0 flex-1">
-                                                                                        <h4 className="truncate font-semibold text-gray-900">
-                                                                                            {
+                                                            <AccordionContent className="bg-gradient-to-br from-gray-100 to-purple-50/30 p-6 px-6">
+                                                                {/* Employee List */}
+                                                                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                                                                    {semester.employees.map(
+                                                                        (
+                                                                            employee: any,
+                                                                        ) => (
+                                                                            <Card
+                                                                                key={
+                                                                                    employee.id
+                                                                                }
+                                                                                className="group overflow-hidden border-0 bg-white shadow-md transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                                                                            >
+                                                                                <CardContent className="p-4">
+                                                                                    <div className="flex items-start gap-3">
+                                                                                        <img
+                                                                                            src={`/${employee.outsourcings.image}`}
+                                                                                            alt={
                                                                                                 employee
                                                                                                     .outsourcings
                                                                                                     .name
                                                                                             }
-                                                                                        </h4>
-                                                                                        <p className="text-xs text-gray-500">
-                                                                                            {
-                                                                                                employee
-                                                                                                    .outsourcings
-                                                                                                    .jabatan
-                                                                                            }
-                                                                                        </p>
-                                                                                        <div className="mt-2 flex items-center justify-between">
-                                                                                            <Badge
-                                                                                                className={`text-xs ${
-                                                                                                    employee.status ===
+                                                                                            className="h-14 w-14 rounded-full border-2 border-purple-200 object-cover shadow-sm"
+                                                                                        />
+                                                                                        <div className="min-w-0 flex-1">
+                                                                                            <h4 className="truncate font-semibold text-gray-900">
+                                                                                                {
+                                                                                                    employee
+                                                                                                        .outsourcings
+                                                                                                        .name
+                                                                                                }
+                                                                                            </h4>
+                                                                                            <p className="text-xs text-gray-500">
+                                                                                                {
+                                                                                                    employee
+                                                                                                        .outsourcings
+                                                                                                        .jabatan
+                                                                                                }
+                                                                                            </p>
+                                                                                            <div className="mt-2 flex items-center justify-between">
+                                                                                                <Badge
+                                                                                                    className={`text-xs ${
+                                                                                                        employee.status ===
+                                                                                                        'completed'
+                                                                                                            ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                                                                                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                                                                                    }`}
+                                                                                                >
+                                                                                                    {employee.status ===
+                                                                                                    'completed' ? (
+                                                                                                        <CheckCircle className="mr-1 h-3 w-3" />
+                                                                                                    ) : (
+                                                                                                        <Clock className="mr-1 h-3 w-3" />
+                                                                                                    )}
+                                                                                                    {employee.status ===
                                                                                                     'completed'
-                                                                                                        ? 'bg-green-100 text-green-700 hover:bg-green-200'
-                                                                                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                                                                                }`}
-                                                                                            >
-                                                                                                {employee.status ===
-                                                                                                'completed' ? (
-                                                                                                    <CheckCircle className="mr-1 h-3 w-3" />
-                                                                                                ) : (
-                                                                                                    <Clock className="mr-1 h-3 w-3" />
+                                                                                                        ? 'Selesai'
+                                                                                                        : 'Pending'}
+                                                                                                </Badge>
+                                                                                                {employee.score && (
+                                                                                                    <div className="flex items-center gap-1 text-sm font-bold text-purple-600">
+                                                                                                        <Award className="h-4 w-4" />
+                                                                                                        {
+                                                                                                            employee.score
+                                                                                                        }
+                                                                                                    </div>
                                                                                                 )}
-                                                                                                {employee.status ===
-                                                                                                'completed'
-                                                                                                    ? 'Selesai'
-                                                                                                    : 'Pending'}
-                                                                                            </Badge>
-                                                                                            {employee.score && (
-                                                                                                <div className="flex items-center gap-1 text-sm font-bold text-purple-600">
-                                                                                                    <Award className="h-4 w-4" />
-                                                                                                    {
-                                                                                                        employee.score
-                                                                                                    }
-                                                                                                </div>
-                                                                                            )}
+                                                                                            </div>
                                                                                         </div>
                                                                                     </div>
-                                                                                </div>
 
-                                                                                <Link
-                                                                                    href={`/penilaian/${employee.uuid}`}
-                                                                                    className="mt-3 flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-600 py-2 text-sm font-medium text-white transition-all hover:from-purple-600 hover:to-indigo-700"
-                                                                                >
-                                                                                    <ClipboardList className="h-4 w-4" />
-                                                                                    Lihat
-                                                                                    Detail
-                                                                                </Link>
-                                                                            </CardContent>
-                                                                        </Card>
-                                                                    ),
-                                                                )}
-                                                            </div>
-                                                        </AccordionContent>
-                                                    </AccordionItem>
-                                                );
-                                            })}
+                                                                                    <Link
+                                                                                        href={`/penilaian/${employee.uuid}`}
+                                                                                        className="mt-3 flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-600 py-2 text-sm font-medium text-white transition-all hover:from-purple-600 hover:to-indigo-700"
+                                                                                    >
+                                                                                        <ClipboardList className="h-4 w-4" />
+                                                                                        Lihat
+                                                                                        Detail
+                                                                                    </Link>
+                                                                                </CardContent>
+                                                                            </Card>
+                                                                        ),
+                                                                    )}
+                                                                </div>
+                                                            </AccordionContent>
+                                                        </AccordionItem>
+                                                    );
+                                                },
+                                            )}
                                         </Accordion>
 
                                         {/* Empty State for History */}

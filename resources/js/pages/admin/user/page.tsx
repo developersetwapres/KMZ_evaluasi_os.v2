@@ -30,7 +30,14 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import AdminLayout from '@/layouts/app/app-adminkmz-layout';
 import { cn } from '@/lib/utils';
-import { update as updateOutsourcing } from '@/routes/outsourcing';
+import {
+    store as storeOutsourcing,
+    update as updateOutsourcing,
+} from '@/routes/outsourcing';
+import {
+    store as storePegawai,
+    update as updatePegawai,
+} from '@/routes/pegawai';
 import { tempImage } from '@/routes/upload';
 import { index } from '@/routes/user';
 import { Link, router, usePage } from '@inertiajs/react';
@@ -76,14 +83,15 @@ export default function UserManagement({
     const [selectedUser, setSelectedUser] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [isDialogAsnOpen, setIsDialogAsnOpen] = useState(false);
     const [editingUser, setEditingUser] = useState<any>(null);
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         jabatan: '',
+        nip: '',
         unit_kerja: '',
-        role: '',
         status: '',
         image: '',
         password: '',
@@ -120,7 +128,7 @@ export default function UserManagement({
             email: '',
             jabatan: '',
             unit_kerja: '',
-            role: '',
+            nip: '',
             status: '',
             image: '',
             password: '',
@@ -135,21 +143,34 @@ export default function UserManagement({
             email: user.email,
             jabatan: user.id_jabatan,
             unit_kerja: user.kode_biro,
-            role: user.role,
-            status: user.is_active.toString(),
+            nip: user.nip,
+            status: user.is_active?.toString(),
             image: user.image,
             password: '',
         });
-        setIsDialogOpen(true);
+
+        if (user.type == 'pegawai') {
+            setIsDialogAsnOpen(true);
+        } else {
+            setIsDialogOpen(true);
+        }
     };
 
     const handleDelete = (id: number) => {
         //
     };
 
-    const handleSave = () => {
+    const handleSave = (type: string) => {
+        const update =
+            type == 'os'
+                ? updateOutsourcing.url(editingUser.id)
+                : updatePegawai.url(editingUser.id);
+
+        const store =
+            type == 'os' ? storePegawai.url() : storeOutsourcing.url();
+
         if (editingUser) {
-            router.put(updateOutsourcing.url(editingUser.id), formData, {
+            router.put(update, formData, {
                 onSuccess: () => {
                     setIsDialogOpen(false);
                     toast({
@@ -158,8 +179,6 @@ export default function UserManagement({
                     });
                 },
                 onError: (err) => {
-                    console.log(err);
-
                     toast({
                         title: 'Validasi gagal',
                         description: Object.values(err)[0],
@@ -168,7 +187,7 @@ export default function UserManagement({
                 },
             });
         } else {
-            router.post(route('user.store'), formData, {
+            router.post(store, formData, {
                 onSuccess: () => {
                     toast({
                         title: 'Validasi Berhasil',
@@ -471,7 +490,7 @@ export default function UserManagement({
                                                     <div className="flex items-center gap-2">
                                                         <Star className="h-4 w-4 text-yellow-500" />
                                                         <span className="text-sm font-medium">
-                                                            Role:
+                                                            Role :
                                                         </span>
                                                         {user.role.map(
                                                             (
@@ -494,6 +513,35 @@ export default function UserManagement({
                                                             Jumlah yang dinilai:{' '}
                                                             {user.jumlahDinilai}{' '}
                                                             OS
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div className="flex space-x-2 pt-6">
+                                                    <Button
+                                                        size="sm"
+                                                        variant="outline"
+                                                        onClick={() =>
+                                                            handleEdit(user)
+                                                        }
+                                                    >
+                                                        <Edit className="h-3 w-3" />
+                                                    </Button>
+                                                    <Button
+                                                        size="sm"
+                                                        variant="outline"
+                                                        onClick={() =>
+                                                            handleDelete(
+                                                                user.id,
+                                                            )
+                                                        }
+                                                        className="hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+                                                    >
+                                                        <Trash2 className="h-3 w-3" />
+                                                    </Button>
+                                                    <div className="ml-2 flex items-center gap-1 rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-600">
+                                                        <HashIcon className="h-3 w-3" />
+                                                        <span className="">
+                                                            {index + 1}
                                                         </span>
                                                     </div>
                                                 </div>
@@ -584,26 +632,6 @@ export default function UserManagement({
                                                         <span className="text-sm">
                                                             {user.biro}
                                                         </span>
-                                                    </div>
-                                                    <div className="flex items-center gap-2">
-                                                        <Star className="h-4 w-4 text-yellow-500" />
-                                                        <span className="text-sm font-medium">
-                                                            Role:
-                                                        </span>
-                                                        {user?.role?.map(
-                                                            (
-                                                                role: string,
-                                                                index: number,
-                                                            ) => (
-                                                                <Badge
-                                                                    key={index}
-                                                                    variant="outline"
-                                                                    className="text-xs"
-                                                                >
-                                                                    {role}
-                                                                </Badge>
-                                                            ),
-                                                        )}
                                                     </div>
 
                                                     <div className="flex items-center gap-2">
@@ -763,38 +791,58 @@ export default function UserManagement({
                                 </div>
                             </div>
 
-                            <div className="space-y-2">
-                                <Label htmlFor="unit_kerja">Unit Kerja</Label>
-                                <Select
-                                    value={formData.unit_kerja}
-                                    onValueChange={(value) =>
-                                        setFormData({
-                                            ...formData,
-                                            unit_kerja: value,
-                                        })
-                                    }
-                                >
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Pilih unit kerja" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {biros.map((biro: any) => (
-                                            <SelectItem
-                                                key={biro.id}
-                                                value={biro.kode_biro}
-                                            >
-                                                {biro.kode_biro}
-                                                {'_'}
-                                                {biro.nama_biro}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="nip">NIP/ NRP</Label>
+                                    <Input
+                                        id="nip"
+                                        value={formData.nip}
+                                        onChange={(e) =>
+                                            setFormData({
+                                                ...formData,
+                                                nip: e.target.value,
+                                            })
+                                        }
+                                        disabled={editingUser}
+                                        placeholder="Masukkan NIP/NRP"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="unit_kerja">
+                                        Unit Kerja
+                                    </Label>
+                                    <Select
+                                        value={formData.unit_kerja}
+                                        onValueChange={(value) =>
+                                            setFormData({
+                                                ...formData,
+                                                unit_kerja: value,
+                                            })
+                                        }
+                                    >
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Pilih unit kerja" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {biros.map((biro: any) => (
+                                                <SelectItem
+                                                    key={biro.id}
+                                                    value={biro.kode_biro}
+                                                >
+                                                    {biro.kode_biro}
+                                                    {'_'}
+                                                    {biro.nama_biro}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="unit_kerja">Jabatan</Label>
+                                    <Label htmlFor="jabatan">Jabatan</Label>
                                     <Select
                                         value={formData.jabatan}
                                         onValueChange={(value) =>
@@ -896,7 +944,179 @@ export default function UserManagement({
                             >
                                 Batal
                             </Button>
-                            <Button onClick={handleSave}>
+                            <Button onClick={() => handleSave('os')}>
+                                {editingUser ? 'Update' : 'Simpan'}
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
+
+                <Dialog
+                    open={isDialogAsnOpen}
+                    onOpenChange={setIsDialogAsnOpen}
+                >
+                    <DialogContent className="max-h-[80vh] gap-0.5 overflow-y-auto sm:max-w-[700px]">
+                        <DialogHeader>
+                            <DialogTitle>
+                                {editingUser ? 'Edit User' : 'Tambah User Baru'}
+                            </DialogTitle>
+                            <DialogDescription>
+                                {editingUser
+                                    ? 'Edit informasi user'
+                                    : 'Tambahkan user baru ke sistem'}
+                            </DialogDescription>
+                        </DialogHeader>
+
+                        <div className="grid gap-4 py-4">
+                            {/* Image Upload */}
+                            <div className="space-y-2">
+                                <Label htmlFor="image">Foto Profil</Label>
+                                <div className="flex items-center space-x-4">
+                                    <Avatar className="h-16 w-16">
+                                        <AvatarImage
+                                            src={
+                                                `/storage/${formData.image}` ||
+                                                '/placeholder.svg'
+                                            }
+                                            alt="Preview"
+                                        />
+                                        <AvatarFallback>
+                                            {formData.name
+                                                ? formData.name
+                                                      .split(' ')
+                                                      .map((n) => n[0])
+                                                      .join('')
+                                                      .substring(0, 2)
+                                                      .toUpperCase()
+                                                : 'U'}
+                                        </AvatarFallback>
+                                    </Avatar>
+                                    <div className="flex-1">
+                                        <Input
+                                            id="image"
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={handleImageUpload}
+                                            className="hidden"
+                                        />
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            onClick={() =>
+                                                document
+                                                    .getElementById('image')
+                                                    ?.click()
+                                            }
+                                            className="flex items-center space-x-2"
+                                        >
+                                            <Upload className="h-4 w-4" />
+                                            <span>Upload Foto</span>
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="name">Nama Lengkap</Label>
+                                    <Input
+                                        id="name"
+                                        value={formData.name}
+                                        onChange={(e) =>
+                                            setFormData({
+                                                ...formData,
+                                                name: e.target.value,
+                                            })
+                                        }
+                                        placeholder="Masukkan nama lengkap"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="email">Email</Label>
+                                    <Input
+                                        id="email"
+                                        type="email"
+                                        value={formData.email}
+                                        onChange={(e) =>
+                                            setFormData({
+                                                ...formData,
+                                                email: e.target.value,
+                                            })
+                                        }
+                                        placeholder="Masukkan email"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="nip">NIP</Label>
+                                    <Input
+                                        id="nip"
+                                        value={formData.nip}
+                                        onChange={(e) =>
+                                            setFormData({
+                                                ...formData,
+                                                nip: e.target.value,
+                                            })
+                                        }
+                                        disabled={editingUser}
+                                        placeholder="Masukkan NIP/NRP"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="jabatan">Jabatan</Label>
+                                    <Input
+                                        id="jabatan"
+                                        value={formData.jabatan}
+                                        onChange={(e) =>
+                                            setFormData({
+                                                ...formData,
+                                                jabatan: e.target.value,
+                                            })
+                                        }
+                                        placeholder="Masukkan jabatan"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label htmlFor="unit_kerja">Unit Kerja</Label>
+                                <Select
+                                    value={formData.unit_kerja}
+                                    onValueChange={(value) =>
+                                        setFormData({
+                                            ...formData,
+                                            unit_kerja: value,
+                                        })
+                                    }
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Pilih unit kerja" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {biros.map((biro: any) => (
+                                            <SelectItem
+                                                key={biro.id}
+                                                value={biro.kode_biro}
+                                            >
+                                                {biro.kode_biro}
+                                                {'_'}
+                                                {biro.nama_biro}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+
+                        <DialogFooter>
+                            <Button
+                                variant="outline"
+                                onClick={() => setIsDialogAsnOpen(false)}
+                            >
+                                Batal
+                            </Button>
+                            <Button onClick={() => handleSave('asn')}>
                                 {editingUser ? 'Update' : 'Simpan'}
                             </Button>
                         </DialogFooter>

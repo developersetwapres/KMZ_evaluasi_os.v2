@@ -9,7 +9,7 @@ use App\Models\Aspek;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Services\Penilaian\EvaluationEngine;
-use App\Services\Penilaian\NilaiPeraspek;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -36,7 +36,31 @@ class OutsourcingController extends Controller
      */
     public function store(StoreOutsourcingRequest $request)
     {
-        //
+        DB::transaction(function () use ($request) {
+            $moveImageFromTemp = app(UploadController::class)->moveImageFromTemp(...);
+            $finalImagePath = $moveImageFromTemp($request->image, 'os');
+
+            Outsourcing::create([
+                'name' => $request->name,
+                'jabatan_id' => $request->jabatan,
+                'kode_biro' => $request->unit_kerja,
+                'is_active' => $request->status,
+                'nip' => $request->nip,
+                'image' => $finalImagePath,
+            ]);
+
+            User::create([
+                'userable_id' => $request->nip,
+                'userable_type' => Outsourcing::class,
+                'nip' => $request->nip,
+                'is_ldap' => false,
+                'email' => $request->email,
+                'role' => ['evaluator'],
+                'password' => Hash::make($request->password),
+            ]);
+        });
+
+        return redirect()->back()->with('success', 'Data Outsourcing berhasil dibuat.');
     }
 
     /**
@@ -58,27 +82,30 @@ class OutsourcingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateOutsourcingRequest $request, Outsourcing $Outsourcing)
+    public function update(UpdateOutsourcingRequest $request, Outsourcing $outsourcing)
     {
-        $moveImageFromTemp = app(UploadController::class)->moveImageFromTemp(...);
-        $finalImagePath = $moveImageFromTemp($request->image,  'os');
+        DB::transaction(function () use ($request, $outsourcing) {
+            $moveImageFromTemp = app(UploadController::class)->moveImageFromTemp(...);
+            $finalImagePath = $moveImageFromTemp($request->image, 'os');
 
-        $Outsourcing->update([
-            'name' => $request->name,
-            'jabatan_id' => $request->jabatan,
-            'kode_biro' => $request->unit_kerja,
-            'is_active' => $request->status,
-            // 'nip' => $request->nip,
-            'image' => $finalImagePath,
-        ]);
+            $outsourcing->update([
+                'name' => $request->name,
+                'jabatan_id' => $request->jabatan,
+                'kode_biro' => $request->unit_kerja,
+                'is_active' => $request->status,
+                'image' => $finalImagePath,
+            ]);
 
-        $idUser = $Outsourcing->load('user')->user->id;
+            $userData = [
+                'email' => $request->email,
+            ];
 
-        User::findOrFail($idUser)->update([
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            // 'role' => $request->role,
-        ]);
+            if ($request->filled('password')) {
+                $userData['password'] = Hash::make($request->password);
+            }
+
+            $outsourcing->user->update($userData);
+        });
 
         return redirect()->back()->with('success', 'Data Outsourcing berhasil diperbarui.');
     }

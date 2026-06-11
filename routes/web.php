@@ -5,6 +5,7 @@ use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\PenugasanPenilaiController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\MasterPegawaiController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -35,6 +36,10 @@ Route::middleware(['auth', 'verified', 'role:operator'])->group(function () {
 
 Route::middleware(['auth', 'verified', 'role:administrator'])->group(function () {
     Route::put('/dashboard/outsourcing-update/{outsourcing:uuid}', [OutsourcingController::class, 'update'])->name('outsourcing.update');
+    Route::post('/dashboard/outsourcing-store', [OutsourcingController::class, 'store'])->name('outsourcing.store');
+
+    Route::put('/dashboard/pegawai-update/{pegawai:uuid}', [MasterPegawaiController::class, 'update'])->name('pegawai.update');
+    Route::post('/dashboard/pegawai-store', [MasterPegawaiController::class, 'store'])->name('pegawai.store');
 
     Route::get('/dashboard/penugasan-peer', [PenugasanPenilaiController::class, 'index'])->name('penugasan.index');
     Route::post('/dashboard/penugasan-peer/store/{outsourcing:uuid}', [PenugasanPenilaiController::class, 'store'])->name('penugasan.store');

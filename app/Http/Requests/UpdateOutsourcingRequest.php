@@ -25,10 +25,7 @@ class UpdateOutsourcingRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:250'],
 
-            'email' => [
-                'required',
-                'email',
-            ],
+            'email' => ['required', 'email',],
 
             'password' => ['nullable', 'string', 'min:8'],
 

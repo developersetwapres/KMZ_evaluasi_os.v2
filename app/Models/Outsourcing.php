@@ -41,6 +41,11 @@ class Outsourcing extends Model
 
     public function penugasan(): HasMany
     {
+        return $this->hasMany(PenugasanPenilai::class, 'outsourcing_id')
+            ->whereHas('siklus', function ($q) {
+                $q->where('is_active', 1);
+            });
+
         return $this->hasMany(PenugasanPenilai::class, 'outsourcing_id');
     }
 
@@ -55,6 +60,14 @@ class Outsourcing extends Model
             'userable_id',
             'nip'
         );
+    }
+
+    public function penugasanAktif(): HasMany
+    {
+        return $this->hasMany(PenugasanPenilai::class, 'outsourcing_id')
+            ->whereHas('siklus', function ($q) {
+                $q->where('is_active', 1);
+            });
     }
 
 

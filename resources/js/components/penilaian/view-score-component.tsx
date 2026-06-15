@@ -113,7 +113,7 @@ export function ViewScoreComponent({ rekapPerAspek, evaluationData }: any) {
                             </div>
 
                             <div className="mt-1 text-3xl font-extrabold tracking-tight">
-                                {rekapPerAspek.finalTotalScore.toFixed(2)}
+                                {rekapPerAspek?.finalTotalScore?.toFixed(2)}
                             </div>
                         </div>
                     </div>

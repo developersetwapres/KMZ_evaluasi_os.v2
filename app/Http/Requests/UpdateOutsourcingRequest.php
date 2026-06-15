@@ -22,26 +22,20 @@ class UpdateOutsourcingRequest extends FormRequest
      */
     public function rules(): array
     {
-        $outsourcing = $this->route('outsourcing');
+        $outsourcing = $this->route('outsourcing')->user;
         // sesuaikan dengan nama parameter route
 
         return [
             'name' => ['required', 'string', 'max:250'],
-
             'email' => [
                 'required',
                 'email',
                 Rule::unique('users', 'email')->ignore($outsourcing->id),
             ],
-
             'password' => ['nullable', 'string', 'min:8'],
-
             'jabatan' => ['nullable', 'exists:jabatans,id'],
-
             'unit_kerja' => ['nullable', 'string', 'max:191', 'exists:biros,kode_biro'],
-
             'status' => ['required', 'boolean'],
-
             'image' => [
                 'nullable',
                 'string',

@@ -796,6 +796,7 @@ export default function UserManagement({
                                                 email: e.target.value,
                                             })
                                         }
+                                        disabled={!editingUser}
                                         placeholder="Masukkan email"
                                     />
                                 </div>

@@ -31,24 +31,12 @@ import { BarChart3, Calculator, Users } from 'lucide-react';
 import { useState } from 'react';
 
 export default function nilaiAkhir({ rekapAspekEvaluator }: any) {
-    console.log(rekapAspekEvaluator);
-
     const [isResetNilaiOpen, setIsResetNilaiOpen] = useState(false);
     const [selectedPenilaian, setSelectedPenilaian] = useState<any>(null);
 
     const handleResetNilai = () => {
         setIsResetNilaiOpen(false);
         setSelectedPenilaian(null);
-
-        // (router.post(reset.url(selectedPenilaian.uuidPenugasan)),
-        //     {
-        //         onSuccess: () => {
-        //             toast({
-        //                 title: 'Berhasil',
-        //                 description: 'Nilai sudah direset',
-        //             });
-        //         },
-        //     });
 
         router.post(
             reset.url(selectedPenilaian.uuidPenugasan),

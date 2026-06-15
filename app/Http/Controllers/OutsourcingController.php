@@ -8,7 +8,7 @@ use App\Http\Requests\UpdateOutsourcingRequest;
 use App\Models\Aspek;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use App\Services\Penilaian\EvaluationEngine;
+use Illuminate\Support\Str;
 use App\Services\Penilaian\EvaluationEngineService;
 use App\Services\Uploadfile\FotoUserService;
 use Illuminate\Support\Facades\DB;
@@ -48,15 +48,28 @@ class OutsourcingController extends Controller
                 'kode_biro' => $request->unit_kerja,
                 'is_active' => $request->status,
                 'nip' => $request->nip,
-                'image' => $finalImagePath,
+                'image' => $finalImagePath ?? 'foto_default.png',
             ]);
+
+            $emailPrefix = Str::of($request->name)
+                ->lower()
+                ->replaceMatches('/\s+/', '.')
+                ->toString();
+
+            $email = "{$emailPrefix}@set.wapresri.go.id";
+
+            while (User::where('email', $email)->exists()) {
+                $suffix = Str::lower(Str::random(3));
+
+                $email = "{$emailPrefix}.{$suffix}@set.wapresri.go.id";
+            }
 
             User::create([
                 'userable_id' => $request->nip,
                 'userable_type' => Outsourcing::class,
                 'nip' => $request->nip,
                 'is_ldap' => false,
-                'email' => $request->email,
+                'email' => $email,
                 'role' => ['evaluator'],
                 'password' => Hash::make($request->password),
             ]);
@@ -94,8 +107,11 @@ class OutsourcingController extends Controller
                 'jabatan_id' => $request->jabatan,
                 'kode_biro' => $request->unit_kerja,
                 'is_active' => $request->status,
-                'image' => $finalImagePath,
             ]);
+
+            if ($finalImagePath) {
+                $outsourcing->update(['image' => $finalImagePath]);
+            }
 
             $userData = [
                 'email' => $request->email,

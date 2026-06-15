@@ -16,8 +16,11 @@ class MasterPegawaiController extends Controller
             'name' => $request->name,
             'jabatan' => $request->jabatan,
             'kode_biro' => $request->unit_kerja,
-            'image' => $finalImagePath ?? 'foto_default.png',
         ]);
+
+        if ($finalImagePath) {
+            $pegawai->update(['image' => $finalImagePath]);
+        }
 
 
         return redirect()->back()->with('success', 'Data Outsourcing berhasil diperbarui.');

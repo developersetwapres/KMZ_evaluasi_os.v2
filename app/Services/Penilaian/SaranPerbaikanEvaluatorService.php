@@ -3,9 +3,8 @@
 namespace App\Services\Penilaian;
 
 use App\Models\Jabatan;
-use App\Services\Penilaian\RekapHasilService;
 
-class SaranPerbaikanEvaluator
+class SaranPerbaikanEvaluatorService
 {
     public function saran()
     {

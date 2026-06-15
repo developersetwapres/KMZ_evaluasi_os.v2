@@ -3,9 +3,9 @@
 use App\Http\Controllers\OutsourcingController;
 use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\PenugasanPenilaiController;
-use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MasterPegawaiController;
+use App\Services\Uploadfile\FotoUserService;
 use Illuminate\Support\Facades\Route;
 
 
@@ -49,7 +49,7 @@ Route::middleware(['auth', 'verified', 'role:administrator'])->group(function ()
 
     Route::post('/dashboard/penugasan-peer/reset/{PenugasanPenilai:uuid}', [PenugasanPenilaiController::class, 'reset'])->name('penugasan.reset');
 
-    Route::post('/upload-temp-image', [UploadController::class, 'uploadTempImage'])->name('upload.tempImage');
+    Route::post('/upload-temp-image', [FotoUserService::class, 'uploadTempImage'])->name('upload.tempImage');
 });
 
 require __DIR__ . '/settings.php';

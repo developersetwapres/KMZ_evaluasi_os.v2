@@ -86,6 +86,7 @@ export default function UserManagement({
     const [isDialogAsnOpen, setIsDialogAsnOpen] = useState(false);
     const [editingUser, setEditingUser] = useState<any>(null);
     const [showPassword, setShowPassword] = useState(false);
+    const [onProcessing, setOnProcessing] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -161,18 +162,18 @@ export default function UserManagement({
     };
 
     const handleSave = (type: string) => {
-        const update =
-            type == 'os'
-                ? updateOutsourcing.url(editingUser.id)
-                : updatePegawai.url(editingUser.id);
-
-        const store =
-            type == 'os' ? storePegawai.url() : storeOutsourcing.url();
-
         if (editingUser) {
+            const update =
+                type == 'os'
+                    ? updateOutsourcing.url(editingUser.id)
+                    : updatePegawai.url(editingUser.id);
+
             router.put(update, formData, {
                 onSuccess: () => {
                     setIsDialogOpen(false);
+                    setIsDialogAsnOpen(false);
+                    setOnProcessing(false);
+
                     toast({
                         title: 'Validasi Berhasil',
                         description: 'Data user berhasil diperbarui.',
@@ -184,11 +185,19 @@ export default function UserManagement({
                         description: Object.values(err)[0],
                         variant: 'destructive',
                     });
+                    setOnProcessing(false);
                 },
             });
         } else {
+            const store =
+                type == 'os' ? storeOutsourcing.url() : storePegawai.url();
+
             router.post(store, formData, {
                 onSuccess: () => {
+                    setIsDialogOpen(false);
+                    setIsDialogAsnOpen(false);
+                    setOnProcessing(false);
+
                     toast({
                         title: 'Validasi Berhasil',
                         description: 'Data user berhasil ditambahkan.',
@@ -200,11 +209,10 @@ export default function UserManagement({
                         description: Object.values(err)[0],
                         variant: 'destructive',
                     });
+                    setOnProcessing(false);
                 },
             });
         }
-
-        setIsDialogOpen(false);
     };
 
     const toggleUserStatus = (id: number) => {
@@ -426,7 +434,7 @@ export default function UserManagement({
                                 className="flex items-center space-x-2"
                             >
                                 <Plus className="h-4 w-4" />
-                                <span>Tambah User</span>
+                                <span>Tambah User Os</span>
                             </Button>
                         </div>
 
@@ -702,7 +710,9 @@ export default function UserManagement({
                     <DialogContent className="max-h-[80vh] gap-0.5 overflow-y-auto sm:max-w-[700px]">
                         <DialogHeader>
                             <DialogTitle>
-                                {editingUser ? 'Edit User' : 'Tambah User Baru'}
+                                {editingUser
+                                    ? 'Edit User Outsourcing'
+                                    : 'Tambah User Outsourcing Baru'}
                             </DialogTitle>
                             <DialogDescription>
                                 {editingUser
@@ -940,12 +950,24 @@ export default function UserManagement({
                         <DialogFooter>
                             <Button
                                 variant="outline"
-                                onClick={() => setIsDialogOpen(false)}
+                                onClick={() => {
+                                    (setIsDialogOpen(false),
+                                        setOnProcessing(false));
+                                }}
                             >
                                 Batal
                             </Button>
-                            <Button onClick={() => handleSave('os')}>
-                                {editingUser ? 'Update' : 'Simpan'}
+                            <Button
+                                onClick={() => {
+                                    (handleSave('os'), setOnProcessing(true));
+                                }}
+                                disabled={onProcessing}
+                            >
+                                {onProcessing
+                                    ? 'Sedang memproses...'
+                                    : editingUser
+                                      ? 'Update'
+                                      : 'Simpan'}
                             </Button>
                         </DialogFooter>
                     </DialogContent>
@@ -957,13 +979,9 @@ export default function UserManagement({
                 >
                     <DialogContent className="max-h-[80vh] gap-0.5 overflow-y-auto sm:max-w-[700px]">
                         <DialogHeader>
-                            <DialogTitle>
-                                {editingUser ? 'Edit User' : 'Tambah User Baru'}
-                            </DialogTitle>
+                            <DialogTitle>'Edit User Pegawai</DialogTitle>
                             <DialogDescription>
-                                {editingUser
-                                    ? 'Edit informasi user'
-                                    : 'Tambahkan user baru ke sistem'}
+                                Edit informasi user pegawai
                             </DialogDescription>
                         </DialogHeader>
 
@@ -1031,24 +1049,6 @@ export default function UserManagement({
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="email">Email</Label>
-                                    <Input
-                                        id="email"
-                                        type="email"
-                                        value={formData.email}
-                                        onChange={(e) =>
-                                            setFormData({
-                                                ...formData,
-                                                email: e.target.value,
-                                            })
-                                        }
-                                        placeholder="Masukkan email"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-2">
                                     <Label htmlFor="nip">NIP</Label>
                                     <Input
                                         id="nip"
@@ -1063,20 +1063,21 @@ export default function UserManagement({
                                         placeholder="Masukkan NIP/NRP"
                                     />
                                 </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="jabatan">Jabatan</Label>
-                                    <Input
-                                        id="jabatan"
-                                        value={formData.jabatan}
-                                        onChange={(e) =>
-                                            setFormData({
-                                                ...formData,
-                                                jabatan: e.target.value,
-                                            })
-                                        }
-                                        placeholder="Masukkan jabatan"
-                                    />
-                                </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label htmlFor="jabatan">Jabatan</Label>
+                                <Input
+                                    id="jabatan"
+                                    value={formData.jabatan}
+                                    onChange={(e) =>
+                                        setFormData({
+                                            ...formData,
+                                            jabatan: e.target.value,
+                                        })
+                                    }
+                                    placeholder="Masukkan jabatan"
+                                />
                             </div>
 
                             <div className="space-y-2">
@@ -1112,12 +1113,22 @@ export default function UserManagement({
                         <DialogFooter>
                             <Button
                                 variant="outline"
-                                onClick={() => setIsDialogAsnOpen(false)}
+                                onClick={() => {
+                                    (setIsDialogAsnOpen(false),
+                                        setOnProcessing(false));
+                                }}
                             >
                                 Batal
                             </Button>
-                            <Button onClick={() => handleSave('asn')}>
-                                {editingUser ? 'Update' : 'Simpan'}
+                            <Button
+                                onClick={() => {
+                                    (handleSave('asn'), setOnProcessing(true));
+                                }}
+                                disabled={onProcessing}
+                            >
+                                {onProcessing
+                                    ? 'Sedang memproses...'
+                                    : 'Simpan'}
                             </Button>
                         </DialogFooter>
                     </DialogContent>

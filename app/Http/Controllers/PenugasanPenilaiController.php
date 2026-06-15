@@ -10,8 +10,10 @@ use App\Models\MasterPegawai;
 use App\Models\Outsourcing;
 use App\Models\Siklus;
 use App\Services\Penilaian\EvaluationEngine;
+use App\Services\Penilaian\EvaluationEngineService;
 use App\Services\Penilaian\RekapHasilService;
 use App\Services\Penilaian\SaranPerbaikanEvaluator;
+use App\Services\Penilaian\SaranPerbaikanEvaluatorService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -192,7 +194,7 @@ class PenugasanPenilaiController extends Controller
         $PenugasanPenilai->delete();
     }
 
-    public function home(EvaluationEngine $evaluationEngine): Response
+    public function home(EvaluationEngineService $evaluationEngine): Response
     {
         $user = Auth::user();
 
@@ -344,7 +346,7 @@ class PenugasanPenilaiController extends Controller
         ]);
     }
 
-    public function saranPerbaikan(SaranPerbaikanEvaluator $service): Response
+    public function saranPerbaikan(SaranPerbaikanEvaluatorService $service): Response
     {
         $data = [
             'Outsourcings' => $service->saran()

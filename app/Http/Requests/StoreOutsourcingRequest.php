@@ -24,17 +24,12 @@ class StoreoutsourcingRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:250'],
-
-            'email' => ['required', 'email',],
-
+            'email' => ['required', 'email', 'unique:users,email'],
+            'nip' => ['required', 'string', 'max:250', 'unique:users,nip'],
             'password' => ['nullable', 'string', 'min:8'],
-
             'jabatan' => ['nullable', 'exists:jabatans,id'],
-
             'unit_kerja' => ['nullable', 'string', 'max:191'],
-
             'status' => ['required', 'boolean'],
-
             'image' => [
                 'nullable',
                 'string', // karena diproses moveImageFromTemp
@@ -52,6 +47,11 @@ class StoreoutsourcingRequest extends FormRequest
             'email.required' => 'Email wajib diisi.',
             'email.email' => 'Format email tidak valid.',
             'email.unique' => 'Email sudah digunakan.',
+
+            'nip.required' => 'NIP wajib diisi.',
+            'nip.max' => 'NIP maksimal 250 karakter',
+            'nip.unique' => 'NIP sudah digunakan.',
+
 
             'password.min' => 'Password minimal 8 karakter.',
 

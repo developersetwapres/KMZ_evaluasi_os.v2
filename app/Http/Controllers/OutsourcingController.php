@@ -9,6 +9,8 @@ use App\Models\Aspek;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Services\Penilaian\EvaluationEngine;
+use App\Services\Penilaian\EvaluationEngineService;
+use App\Services\Uploadfile\FotoUserService;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -37,7 +39,7 @@ class OutsourcingController extends Controller
     public function store(StoreOutsourcingRequest $request)
     {
         DB::transaction(function () use ($request) {
-            $moveImageFromTemp = app(UploadController::class)->moveImageFromTemp(...);
+            $moveImageFromTemp = app(FotoUserService::class)->moveImageFromTemp(...);
             $finalImagePath = $moveImageFromTemp($request->image, 'os');
 
             Outsourcing::create([
@@ -82,11 +84,10 @@ class OutsourcingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateOutsourcingRequest $request, Outsourcing $outsourcing)
+    public function update(UpdateOutsourcingRequest $request, Outsourcing $outsourcing, FotoUserService $service)
     {
-        DB::transaction(function () use ($request, $outsourcing) {
-            $moveImageFromTemp = app(UploadController::class)->moveImageFromTemp(...);
-            $finalImagePath = $moveImageFromTemp($request->image, 'os');
+        DB::transaction(function () use ($request, $outsourcing, $service) {
+            $finalImagePath = $service->moveImageFromTemp($request->image, 'os');
 
             $outsourcing->update([
                 'name' => $request->name,
@@ -120,7 +121,7 @@ class OutsourcingController extends Controller
 
     public function nilaiAkhir(
         Outsourcing $outsourcing,
-        EvaluationEngine $engine
+        EvaluationEngineService $engine
     ): Response {
 
         $outsourcing->load([
@@ -154,7 +155,7 @@ class OutsourcingController extends Controller
 
     public function rekapNilai(
         Outsourcing $outsourcing,
-        EvaluationEngine $engine
+        EvaluationEngineService $engine
     ): Response {
 
         $outsourcing->load([
@@ -184,7 +185,7 @@ class OutsourcingController extends Controller
         return Inertia::render('admin/detail/catatan-evaluator', $data);
     }
 
-    public function nilaiPerkriteria(Outsourcing $outsourcing, EvaluationEngine $engine, $tipePenilai = 'atasan'): Response
+    public function nilaiPerkriteria(Outsourcing $outsourcing, EvaluationEngineService $engine, $tipePenilai = 'atasan'): Response
     {
 
         $penugasan = $outsourcing->penugasan->firstWhere('tipe_penilai', $tipePenilai);

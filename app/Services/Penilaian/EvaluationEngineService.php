@@ -5,7 +5,7 @@ namespace App\Services\Penilaian;
 use App\Models\Aspek;
 use Illuminate\Support\Collection;
 
-class EvaluationEngine
+class EvaluationEngineService
 {
     public function calculate(Collection $penugasanCollection): array
     {

@@ -9,6 +9,7 @@ use App\Models\Outsourcing;
 use App\Models\Penilaian;
 use App\Models\PenugasanPenilai;
 use App\Services\Penilaian\EvaluationEngine;
+use App\Services\Penilaian\EvaluationEngineService;
 use App\Services\Penilaian\NilaiPeraspek;
 use App\Services\Penilaian\RankingScoreByJabatan;
 use App\Services\Penilaian\RekapHasilService;
@@ -30,7 +31,7 @@ class PenilaianController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(PenugasanPenilai $penugasan, EvaluationEngine $engine): Response | RedirectResponse
+    public function create(PenugasanPenilai $penugasan, EvaluationEngineService $engine): Response | RedirectResponse
     {
         abort_if(!$penugasan->outsourcings, 404);
 
@@ -115,7 +116,7 @@ class PenilaianController extends Controller
         //
     }
 
-    public function rekaphasil(EvaluationEngine $engine): Response
+    public function rekaphasil(EvaluationEngineService $engine): Response
     {
         $outsourcings = Outsourcing::with([
             'penugasan.bobotSkor',
@@ -152,7 +153,7 @@ class PenilaianController extends Controller
     }
 
 
-    public function ranking(EvaluationEngine $engine): Response
+    public function ranking(EvaluationEngineService $engine): Response
     {
         $outsourcings = Outsourcing::with([
             'jabatan',

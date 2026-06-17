@@ -1073,6 +1073,11 @@ export default function UserManagement({
                                         }
                                         disabled={editingUser}
                                         placeholder="Masukkan NIP/NRP"
+                                        className={
+                                            editingUser
+                                                ? 'border-gray-400 bg-gray-200'
+                                                : ''
+                                        }
                                     />
                                 </div>
                             </div>

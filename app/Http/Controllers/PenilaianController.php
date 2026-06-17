@@ -133,6 +133,12 @@ class PenilaianController extends Controller
 
             $result = $engine->calculate($os->penugasan);
 
+            $status = collect($result['evaluators'])
+                ->pluck('status')
+                ->every(fn($status) => $status === 'completed')
+                ? 'completed'
+                : 'progress';
+
             return [
                 'id' => $os->id,
                 'nip' => $os->nip,
@@ -141,6 +147,7 @@ class PenilaianController extends Controller
                 'image' => $os->image,
                 'biro' => $os->biro?->nama_biro,
                 'jabatan' => $os->jabatan?->nama_jabatan,
+                'status' => $status,
 
                 'finalTotalScore' => $result['finalScore'],
                 'evaluatorScores' => $result['evaluators'],

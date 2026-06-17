@@ -25,7 +25,6 @@ class StoreoutsourcingRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:250'],
             'nip' => ['required', 'string', 'max:250', 'unique:users,nip'],
-            'password' => ['nullable', 'string', 'min:8'],
             'jabatan' => ['nullable', 'exists:jabatans,id'],
             'unit_kerja' => ['nullable', 'string', 'max:191'],
             'status' => ['required', 'boolean'],
@@ -47,9 +46,6 @@ class StoreoutsourcingRequest extends FormRequest
             'nip.required' => 'NIP wajib diisi.',
             'nip.max' => 'NIP maksimal 250 karakter',
             'nip.unique' => 'NIP sudah digunakan.',
-
-
-            'password.min' => 'Password minimal 8 karakter.',
 
             'jabatan.exists' => 'Jabatan tidak valid.',
 

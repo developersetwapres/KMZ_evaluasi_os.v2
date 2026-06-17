@@ -796,8 +796,13 @@ export default function UserManagement({
                                                 email: e.target.value,
                                             })
                                         }
-                                        disabled={!editingUser}
                                         placeholder="Masukkan email"
+                                        disabled={!editingUser}
+                                        className={
+                                            !editingUser
+                                                ? 'border-gray-400 bg-gray-200'
+                                                : ''
+                                        }
                                     />
                                 </div>
                             </div>
@@ -926,6 +931,12 @@ export default function UserManagement({
                                                 editingUser
                                                     ? 'Kosongkan jika tidak ingin mengubah'
                                                     : 'Masukkan password'
+                                            }
+                                            disabled={!editingUser}
+                                            className={
+                                                !editingUser
+                                                    ? 'border-gray-400 bg-gray-200'
+                                                    : ''
                                             }
                                         />
                                         <Button

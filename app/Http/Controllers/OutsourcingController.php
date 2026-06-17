@@ -71,7 +71,7 @@ class OutsourcingController extends Controller
                 'is_ldap' => false,
                 'email' => $email,
                 'role' => ['evaluator'],
-                'password' => Hash::make($request->password),
+                'password' => Hash::make($request->nip),
             ]);
         });
 

@@ -8,13 +8,11 @@ use App\Models\Aspek;
 use App\Models\Outsourcing;
 use App\Models\Penilaian;
 use App\Models\PenugasanPenilai;
-use App\Services\Penilaian\EvaluationEngine;
 use App\Services\Penilaian\EvaluationEngineService;
-use App\Services\Penilaian\NilaiPeraspek;
-use App\Services\Penilaian\RankingScoreByJabatan;
-use App\Services\Penilaian\RekapHasilService;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -68,20 +66,21 @@ class PenilaianController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(StorePenilaianRequest $request, PenugasanPenilai $penugasan)
-    // public function store(Request $request, PenugasanPenilai $penugasan)
     {
-        foreach ($request->nilai as $key => $value) {
-            Penilaian::create([
-                'penugasan_id' => $penugasan->id,
-                'kriteria_id' => $value['kriteria_id'],
-                'nilai' => $value['skor'],
-            ]);
+        DB::transaction(function () use ($request, $penugasan) {
+            foreach ($request->nilai as $value) {
+                Penilaian::create([
+                    'penugasan_id' => $penugasan->id,
+                    'kriteria_id' => $value['kriteria_id'],
+                    'nilai' => $value['skor'],
+                ]);
+            }
 
             $penugasan->update([
                 'catatan' => $request->catatan,
-                'status' => 'completed'
+                'status' => 'completed',
             ]);
-        }
+        });
     }
 
     /**

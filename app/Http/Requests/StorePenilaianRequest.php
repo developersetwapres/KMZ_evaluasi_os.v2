@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Penilaian;
+use Illuminate\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StorePenilaianRequest extends FormRequest
@@ -59,6 +59,22 @@ class StorePenilaianRequest extends FormRequest
             'nilai.*.skor.integer' => 'Skor harus berupa angka.',
             'nilai.*.skor.min' => 'Skor minimal adalah 50.',
             'nilai.*.skor.max' => 'Skor maksimal adalah 100.',
+        ];
+    }
+
+    public function after(): array
+    {
+        return [
+            function (Validator $validator) {
+                $penugasan = $this->route('penugasan');
+
+                if ($penugasan->siklus->is_active === 0) {
+                    $validator->errors()->add(
+                        'siklus',
+                        'Siklus penilaian sudah ditutup.'
+                    );
+                }
+            }
         ];
     }
 }

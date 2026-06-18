@@ -282,9 +282,27 @@ class PenugasanPenilaiController extends Controller
 
 
         $hasil = $evaluationEngine->calculate($penugasan)['evaluators'];
-        $hasilHistory = $evaluationEngine->calculate($evaluatorsHistory)['evaluators'];
 
-        dd($hasilHistory);
+        $hasilHistory = $evaluatorsHistory
+            ->groupBy('siklus_id')
+            ->map(function ($penugasanBySiklus) use ($evaluationEngine) {
+                $siklus = $penugasanBySiklus->first()->siklus;
+
+                $evaluators = $evaluationEngine->calculate($penugasanBySiklus)['evaluators'];
+
+                return [
+                    'id' => $siklus->uuid,
+                    'name' => $siklus->title,
+                    'period' => sprintf(
+                        '%s - %s',
+                        optional($siklus->tanggal_mulai)->translatedFormat('F Y'),
+                        optional($siklus->tanggal_selesai)->translatedFormat('F Y')
+                    ),
+                    'status' => $siklus->is_active ? 'active' : 'completed',
+                    'evaluators' => $evaluators,
+                ];
+            })
+            ->values();
 
         $typeUser = Auth::user()->userable_type === Outsourcing::class ? 'outsourcing' : 'pegawai';
 
@@ -295,8 +313,8 @@ class PenugasanPenilaiController extends Controller
                 ->whereHas('siklus', fn($q) => $q->where('is_active', true))
                 ->with(['siklus', 'outsourcings'])
                 ->get(),
-            'ressultScore' => $typeUser == 'outsourcing' ? $hasil : null,
-            'ressultScoreHistory' => $typeUser == 'outsourcing' ? $hasilHistory : null,
+            'resultScore' => $typeUser == 'outsourcing' ? $hasil : null,
+            'resultScoreHistory' => $typeUser == 'outsourcing' ? $hasilHistory : null,
             'typeUser' => $typeUser,
             'siklusAktif' => $siklusAktif->title
         ];

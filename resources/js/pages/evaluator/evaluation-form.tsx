@@ -13,6 +13,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Toaster } from '@/components/ui/toaster';
 import { useToast } from '@/hooks/use-toast';
 import { home } from '@/routes';
 import { store } from '@/routes/penilaian';
@@ -193,6 +194,14 @@ export default function EvaluationForm({
             },
             onError: (err) => {
                 console.log(err);
+
+                toast({
+                    title: 'Penilaian Gagal Disimpan!',
+                    description: 'Terjadi kesalahan saat menyimpan penilaian.',
+                    // description:
+                    //     Object.values(err) ??
+                    //     'Terjadi kesalahan saat menyimpan penilaian.',
+                });
             },
             onFinish: () => {
                 setIsSubmitting(false);
@@ -986,6 +995,7 @@ export default function EvaluationForm({
                     </div>
                 </main>
             </div>
+            <Toaster />
         </>
     );
 }

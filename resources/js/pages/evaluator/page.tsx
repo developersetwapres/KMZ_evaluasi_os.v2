@@ -15,6 +15,7 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Toaster } from '@/components/ui/toaster';
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
 import { logout } from '@/routes';
 import { create } from '@/routes/penilaian';
@@ -41,9 +42,9 @@ import {
 export default function EvaluatorPage({
     penugasanPeer,
     semesterHistory,
-    ressultScoreHistory,
+    resultScoreHistory,
     typeUser,
-    ressultScore,
+    resultScore,
     siklusAktif,
 }: any) {
     const { auth } = usePage<SharedData>().props;
@@ -126,18 +127,18 @@ export default function EvaluatorPage({
                                 {typeUser === 'outsourcing' && (
                                     <div className="text-right">
                                         <div className="mb-2 text-4xl font-bold md:text-5xl">
-                                            {ressultScore?.finalTotalScore?.toFixed(
+                                            {resultScore?.finalTotalScore?.toFixed(
                                                 2,
                                             )}
                                         </div>
 
                                         <Badge
                                             className={`${getScoreBadgeColor(
-                                                ressultScore?.finalTotalScore,
+                                                resultScore?.finalTotalScore,
                                             )} border-2 text-sm md:px-4 md:py-1.5`}
                                         >
                                             {getScoreLabel(
-                                                ressultScore?.finalTotalScore,
+                                                resultScore?.finalTotalScore,
                                             )}
                                         </Badge>
 
@@ -193,7 +194,7 @@ export default function EvaluatorPage({
                                             </div>
 
                                             <div className="mt-4 grid gap-2 md:grid-cols-3">
-                                                {ressultScore.map(
+                                                {resultScore.map(
                                                     (
                                                         score: any,
                                                         index: number,
@@ -566,47 +567,19 @@ export default function EvaluatorPage({
                                                     collapsible
                                                     className="space-y-4"
                                                 >
-                                                    {semesterHistory.map(
-                                                        (semester: any) => {
-                                                            const semesterStats =
-                                                                {
-                                                                    total: semester
-                                                                        .employees
-                                                                        .length,
-                                                                    completed:
-                                                                        semester.employees.filter(
-                                                                            (
-                                                                                emp: any,
-                                                                            ) =>
-                                                                                emp.status ===
-                                                                                'completed',
-                                                                        )
-                                                                            .length,
-                                                                    avgScore:
-                                                                        Math.round(
-                                                                            semester.employees.reduce(
-                                                                                (
-                                                                                    acc: number,
-                                                                                    emp: any,
-                                                                                ) =>
-                                                                                    acc +
-                                                                                    (emp.score ||
-                                                                                        0),
-                                                                                0,
-                                                                            ) /
-                                                                                semester
-                                                                                    .employees
-                                                                                    .length,
-                                                                        ),
-                                                                };
-
+                                                    {resultScoreHistory.map(
+                                                        (
+                                                            resultScore: any,
+                                                            index: number,
+                                                        ) => {
                                                             return (
                                                                 <AccordionItem
                                                                     key={
-                                                                        semester.id
+                                                                        resultScore.id ||
+                                                                        index
                                                                     }
                                                                     value={
-                                                                        semester.id
+                                                                        resultScore.id
                                                                     }
                                                                     className="overflow-hidden rounded-xl border-0 bg-white"
                                                                 >
@@ -619,27 +592,20 @@ export default function EvaluatorPage({
                                                                                 <div>
                                                                                     <h3 className="text-lg font-bold text-gray-900">
                                                                                         {
-                                                                                            semester.name
+                                                                                            resultScore.name
                                                                                         }
                                                                                     </h3>
                                                                                     <p className="text-sm text-gray-500">
                                                                                         {
-                                                                                            semester.period
+                                                                                            resultScore.period
                                                                                         }
                                                                                     </p>
                                                                                 </div>
                                                                             </div>
 
                                                                             {/* Mini Stats */}
-                                                                            <div className="text-center">
-                                                                                <div className="text-lg font-bold text-blue-600">
-                                                                                    {
-                                                                                        semesterStats.total
-                                                                                    }
-                                                                                </div>
-                                                                                <div className="text-xs text-gray-500">
-                                                                                    Pegawai
-                                                                                </div>
+                                                                            <div className="text-center text-sm font-bold text-blue-600">
+                                                                                Selesai
                                                                             </div>
                                                                         </div>
                                                                     </AccordionTrigger>
@@ -647,7 +613,7 @@ export default function EvaluatorPage({
                                                                     <AccordionContent className="bg-gradient-to-br from-gray-100 to-purple-50/30 p-6 px-6">
                                                                         {/* Employee List */}
                                                                         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                                                                            {ressultScoreHistory.map(
+                                                                            {resultScore?.evaluators.map(
                                                                                 (
                                                                                     score: any,
                                                                                     index: number,
@@ -674,7 +640,7 @@ export default function EvaluatorPage({
                                                                                                 </div>
                                                                                                 <div>
                                                                                                     <h4 className="text-sm font-semibold text-gray-900">
-                                                                                                        {score.type
+                                                                                                        {/* {score.type
                                                                                                             .replace(
                                                                                                                 '_',
                                                                                                                 ' ',
@@ -693,7 +659,7 @@ export default function EvaluatorPage({
                                                                                                         ).toFixed(
                                                                                                             0,
                                                                                                         )}
-                                                                                                        %)
+                                                                                                        %) */}
                                                                                                     </h4>
 
                                                                                                     <p className="text-xs text-gray-500">
@@ -998,6 +964,8 @@ export default function EvaluatorPage({
                     </div>
                 </main>
             </div>
+
+            <Toaster />
         </>
     );
 }

@@ -4349,10 +4349,7 @@ class PenugasanPenilaiSeeder extends Seeder
             ],
         ];
 
-        dd(count($dataLama));
-
-
-        $siklus = Siklus::where('title', 'Semester I tahun 2025')->firstOrFail();
+        $siklus = Siklus::where('is_active', 1)->firstOrFail();
 
         foreach ($dataLama as $item) {
 

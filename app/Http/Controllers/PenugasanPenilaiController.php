@@ -284,6 +284,8 @@ class PenugasanPenilaiController extends Controller
         $hasil = $evaluationEngine->calculate($penugasan)['evaluators'];
         $hasilHistory = $evaluationEngine->calculate($evaluatorsHistory)['evaluators'];
 
+        dd($hasilHistory);
+
         $typeUser = Auth::user()->userable_type === Outsourcing::class ? 'outsourcing' : 'pegawai';
 
         $data = [

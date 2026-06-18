@@ -7680,7 +7680,7 @@ class UserSeeder extends Seeder
 
         foreach ($users as $value) {
             if (!in_array($value['nip'], $masterNips)) {
-                continue; // skip user yg NIP-nya tidak ada
+                continue; // skip user yg NIP-nya tidak ada dari master pegawai
             }
 
             User::updateOrCreate(

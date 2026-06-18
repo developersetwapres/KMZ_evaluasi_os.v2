@@ -594,7 +594,7 @@ export default function UserManagement({
                                                             <CardTitle className="font-semibold text-gray-800">
                                                                 {user.name}
                                                             </CardTitle>
-                                                            <p className="text-sm text-gray-600">
+                                                            <p className="mt-0.5 text-xs text-gray-600">
                                                                 NRP: {user.nip}
                                                             </p>
                                                         </div>

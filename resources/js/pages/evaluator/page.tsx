@@ -15,7 +15,6 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Toaster } from '@/components/ui/toaster';
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
 import { logout } from '@/routes';
 import { create } from '@/routes/penilaian';
@@ -811,7 +810,7 @@ export default function EvaluatorPage({
                                                         <AccordionItem
                                                             key={semester.id}
                                                             value={semester.id}
-                                                            className="overflow-hidden rounded-xl border-0 bg-white shadow-md"
+                                                            className="overflow-hidden rounded-xl border-0 bg-white"
                                                         >
                                                             <AccordionTrigger className="px-6 py-4 hover:bg-gradient-to-r hover:from-purple-50 hover:to-indigo-50 hover:no-underline">
                                                                 <div className="flex w-full items-center justify-between pr-4">
@@ -964,8 +963,6 @@ export default function EvaluatorPage({
                     </div>
                 </main>
             </div>
-
-            <Toaster />
         </>
     );
 }

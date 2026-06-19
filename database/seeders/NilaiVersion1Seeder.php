@@ -10587,31 +10587,31 @@ class NilaiVersion1Seeder extends Seeder
         $osById = collect($view_os)->keyBy('id');
 
         $resultPenugasan = collect($view_evaluator)
-            ->filter(fn($item) => $osById->has($item['id']))
-            ->map(function ($item) use ($osById) {
-                $os = $osById[$item['id']];
+        ->filter(fn($item) => $osById->has($item['id']))
+        ->map(function ($item) use ($osById) {
+            $os = $osById[$item['id']];
 
-                return [
-                    'id' => $item['id'],
-                    'outsourcing_id' => $os['outsourcing_id'],
-                    'outsourcing_nrp' => $os['outsourcing_nrp'],
-                    'catatan' =>  $item['catatan'],
-                    'penilai_id' => $item['penilai_id'],
-                    'penilai_nrp' => $item['penilai_nrp'],
-                ];
-            })
-            ->values();
+            return [
+                'id' => $item['id'],
+                'outsourcing_id' => $os['outsourcing_id'],
+                'outsourcing_nrp' => $os['outsourcing_nrp'],
+                'catatan' =>  $item['catatan'],
+                'penilai_id' => $item['penilai_id'],
+                'penilai_nrp' => $item['penilai_nrp'],
+            ];
+        })
+        ->values();
 
         $evaluasiByPenugasan = collect($evaluasis)
-            ->groupBy('penugasan_peer_id');
+        ->groupBy('penugasan_peer_id');
 
         $resultHasMany = $resultPenugasan
-            ->map(function ($penugasan) use ($evaluasiByPenugasan) {
-                $penugasan['evaluasis'] =
-                    $evaluasiByPenugasan[$penugasan['id']] ?? collect();
+        ->map(function ($penugasan) use ($evaluasiByPenugasan) {
+            $penugasan['evaluasis'] =
+                $evaluasiByPenugasan[$penugasan['id']] ?? collect();
 
-                return $penugasan;
-            });
+            return $penugasan;
+        });
 
         $norm = fn($value) => preg_replace('/\s+/', '', strtolower(trim((string) $value)));
 
@@ -10619,24 +10619,24 @@ class NilaiVersion1Seeder extends Seeder
         $osById = collect($view_os)->keyBy('id');
 
         $resultPenugasan = collect($view_evaluator)
-            ->filter(fn($item) => $osById->has($item['id']))
-            ->map(function ($item) use ($osById) {
-                $os = $osById[$item['id']];
+        ->filter(fn($item) => $osById->has($item['id']))
+        ->map(function ($item) use ($osById) {
+            $os = $osById[$item['id']];
 
-                return [
-                    'id'             => $item['id'],
-                    'outsourcing_id' => $os['outsourcing_id'],
-                    'outsourcing_nrp' => $os['outsourcing_nrp'],
-                    'catatan'        => $item['catatan'] ?? null,
-                    'penilai_id'     => $item['penilai_id'],
-                    'penilai_nrp'    => $item['penilai_nrp'],
-                ];
-            })
-            ->values();
+            return [
+                'id'             => $item['id'],
+                'outsourcing_id' => $os['outsourcing_id'],
+                'outsourcing_nrp' => $os['outsourcing_nrp'],
+                'catatan'        => $item['catatan'] ?? null,
+                'penilai_id'     => $item['penilai_id'],
+                'penilai_nrp'    => $item['penilai_nrp'],
+            ];
+        })
+        ->values();
 
         // 2) Group evaluasi by penugasan_peer_id
         $evaluasiByPenugasan = collect($evaluasis)
-            ->groupBy('penugasan_peer_id');
+        ->groupBy('penugasan_peer_id');
 
         // 3) Tempel evaluasi ke penugasan
         $resultHasMany = $resultPenugasan->map(function ($penugasan) use ($evaluasiByPenugasan) {
@@ -10649,11 +10649,11 @@ class NilaiVersion1Seeder extends Seeder
         $penugasanModel = PenugasanPenilai::whereHas('siklus', function ($q) {
             $q->where('title', 'Semester I Tahun 2025');
         })
-            ->with([
-                'evaluators:id,nip',
-                'outsourcings:id,nip',
-            ])
-            ->get();
+        ->with([
+            'evaluators:id,nip',
+            'outsourcings:id,nip',
+        ])
+        ->get();
 
         // 5) Lookup penugasan berdasarkan kombinasi NIP evaluator + outsourcing
         $penugasanByKey = $penugasanModel->mapWithKeys(function ($item) use ($norm) {

@@ -19,7 +19,8 @@ class NilaiVersion1Seeder extends Seeder
             ['id' => '678', 'penilai_id' => '2', 'catatan' => '', 'penilai_nrp' => 'NA201111198701'],
             ['id' => '654', 'penilai_id' => '3', 'catatan' => 'Agar di tingkatkan kembali', 'penilai_nrp' => 'NA200405197401'],
             ['id' => '681', 'penilai_id' => '4', 'catatan' => 'Lebih semangat lagi dlm memperbaiki kinerja', 'penilai_nrp' => 'NA200405198303'],
-            ['id' => '633', 'penilai_id' => '5', 'catatan' => 'Pertahankan kinerja yang sudah baik..tetap semangat dalam bekerja  semoga kita bekerja semakin solid dan kekompakan.. Salam santun semangat', 'penilai_nrp' => 'NA200908197701'],
+            ['id' => '633', 'penilai_id' => '5', 'catatan' => 'Pertahankan kinerja yang sudah baik..tetap semangat dalam bekerja  semoga kita bekerja semakin solid dan kekompakan..
+            Salam santun semangat', 'penilai_nrp' => 'NA200908197701'],
             ['id' => '630', 'penilai_id' => '6', 'catatan' => 'Lebih ditingkatkan kembali', 'penilai_nrp' => 'NA200405198301'],
             ['id' => '651', 'penilai_id' => '7', 'catatan' => '', 'penilai_nrp' => 'NA201410197701'],
             ['id' => '642', 'penilai_id' => '8', 'catatan' => 'Lebih giat lagi', 'penilai_nrp' => 'NA200412197601'],
@@ -51,20 +52,21 @@ class NilaiVersion1Seeder extends Seeder
             ['id' => '720', 'penilai_id' => '34', 'catatan' => 'Tetap semangat', 'penilai_nrp' => 'NA202207199101'],
             ['id' => '723', 'penilai_id' => '35', 'catatan' => 'Cukup', 'penilai_nrp' => 'NA200404198201'],
             ['id' => '726', 'penilai_id' => '36', 'catatan' => 'Pertahankan dan tingkatkan kembali..', 'penilai_nrp' => 'NA201411199001'],
-            ['id' => '729', 'penilai_id' => '37', 'catatan' => 'Nihil,. Terima kasih', 'penilai_nrp' => 'vKzqnrb3RbqQttbuXFPPlCDyR9b0ApIwJ0XMlqdp'],
-            ['id' => '732', 'penilai_id' => '38', 'catatan' => 'Baik,', 'penilai_nrp' => 'DBNgMHHpv2ECHib4gDenO8Wzk7V1acK3zKohPIOl'],
-            ['id' => '735', 'penilai_id' => '39', 'catatan' => 'Mantap', 'penilai_nrp' => '0IIwamTADxw0lx2bxD03GYZUV0jBK0pgj2E0Lt5P'],
-            ['id' => '738', 'penilai_id' => '40', 'catatan' => '', 'penilai_nrp' => 'XOHeYmceCKUj7okPaCXtMSnNnJdTYczFglDbQSD6'],
-            ['id' => '741', 'penilai_id' => '41', 'catatan' => 'Semangat trus & jalani tugas dengan penuh syukur', 'penilai_nrp' => 'mc5XbCe7eaPQYBG9QSz4dThvTj3dUJO5REyfp6ZB'],
-            ['id' => '744', 'penilai_id' => '42', 'catatan' => 'Selalu berbuat baik dan lebih baik', 'penilai_nrp' => 'JZhqvfU2MQAcEFbD6X2pL39unVbDhlPEUxkNFxMP'],
-            ['id' => '747', 'penilai_id' => '43', 'catatan' => 'Beradap tasi dengan seluruh tim pengemudi mau oprasional maupun ajp untuk agar semakin kompak', 'penilai_nrp' => 'oexGtckvV9FWqZ16wOo5X72CkSRu5g2SyuZLk5z4'],
-            ['id' => '750', 'penilai_id' => '44', 'catatan' => 'tetap semangatt', 'penilai_nrp' => 'NotG090HzyjJATirFrry8c1DOE5Lwb8BvqMqggX1'],
-            ['id' => '753', 'penilai_id' => '45', 'catatan' => '', 'penilai_nrp' => '0GLZzEXfRDQnoNygeeQWOCo3b41iUXAGPfFhkLjQ'],
-            ['id' => '756', 'penilai_id' => '46', 'catatan' => '', 'penilai_nrp' => 'qRIuXbee6CDjru2if1d45dyS8HZy1Fwf3fOO2s7p'],
-            ['id' => '759', 'penilai_id' => '47', 'catatan' => 'Tetap semangat jaga kesehatan', 'penilai_nrp' => 'S5kKuhMgVOO64ZXLKXauHDsjlIY1S2SfOr72aGXr'],
-            ['id' => '762', 'penilai_id' => '48', 'catatan' => 'Ditingkatkan lagi', 'penilai_nrp' => 'hX3wJ9ctUOry6fqbn8QWlQUcBmmi6eOvOfGuBZW0'],
-            ['id' => '765', 'penilai_id' => '49', 'catatan' => 'Tingkatkan selalu tanggung jawab, kedisiplinan dan kejujuran.', 'penilai_nrp' => 'krdODocEbyQoQO88vI2cvstaRz8O63kqOYbPMoVd'],
-            ['id' => '684', 'penilai_id' => '50', 'catatan' => 'Tidak ada', 'penilai_nrp' => 'XxyWEJTvJ0qSGqsUPy5wBAQKjSdrxSggunJVz5ei'],
+            ['id' => '729', 'penilai_id' => '37', 'catatan' => 'Nihil
+            Terima kasih', 'penilai_nrp' => 'NA202504199401'],
+            ['id' => '732', 'penilai_id' => '38', 'catatan' => 'Baik,', 'penilai_nrp' => 'NA202505198701'],
+            ['id' => '735', 'penilai_id' => '39', 'catatan' => 'Mantap', 'penilai_nrp' => 'NA202512199001'],
+            ['id' => '738', 'penilai_id' => '40', 'catatan' => '', 'penilai_nrp' => 'NA202506198201'],
+            ['id' => '741', 'penilai_id' => '41', 'catatan' => 'Semangat trus & jalani tugas dengan penuh syukur', 'penilai_nrp' => 'NA202507198901'],
+            ['id' => '744', 'penilai_id' => '42', 'catatan' => 'Selalu berbuat baik dan lebih baik', 'penilai_nrp' => 'NA202507197301'],
+            ['id' => '747', 'penilai_id' => '43', 'catatan' => 'Beradap tasi dengan seluruh tim pengemudi mau oprasional maupun ajp untuk agar semakin kompak', 'penilai_nrp' => 'NA202502199501'],
+            ['id' => '750', 'penilai_id' => '44', 'catatan' => 'tetap semangatt', 'penilai_nrp' => 'NA202501199001'],
+            ['id' => '753', 'penilai_id' => '45', 'catatan' => '', 'penilai_nrp' => 'NA202501200101'],
+            ['id' => '756', 'penilai_id' => '46', 'catatan' => '', 'penilai_nrp' => 'NA202501200201'],
+            ['id' => '759', 'penilai_id' => '47', 'catatan' => 'Tetap semangat jaga kesehatan', 'penilai_nrp' => 'NA202511199501'],
+            ['id' => '762', 'penilai_id' => '48', 'catatan' => 'Ditingkatkan lagi', 'penilai_nrp' => 'NA202509198901'],
+            ['id' => '765', 'penilai_id' => '49', 'catatan' => 'Tingkatkan selalu tanggung jawab, kedisiplinan dan kejujuran.', 'penilai_nrp' => 'NA202502200001'],
+            ['id' => '684', 'penilai_id' => '50', 'catatan' => 'Tidak ada', 'penilai_nrp' => 'NA202506200408'],
             ['id' => '774', 'penilai_id' => '51', 'catatan' => '', 'penilai_nrp' => 'NA200705197801'],
             ['id' => '792', 'penilai_id' => '52', 'catatan' => '', 'penilai_nrp' => 'NA201011197401'],
             ['id' => '786', 'penilai_id' => '53', 'catatan' => '', 'penilai_nrp' => 'NA200705197901'],
@@ -84,7 +86,7 @@ class NilaiVersion1Seeder extends Seeder
             ['id' => '858', 'penilai_id' => '67', 'catatan' => 'Ditingkatkan lagi dalam melaksanakan tugas', 'penilai_nrp' => 'NA200907197901'],
             ['id' => '837', 'penilai_id' => '68', 'catatan' => '', 'penilai_nrp' => 'NA201403199001'],
             ['id' => '834', 'penilai_id' => '69', 'catatan' => '', 'penilai_nrp' => 'NA200512198301'],
-            ['id' => '828', 'penilai_id' => '70', 'catatan' => 'Selalu tetap kompak dalam bekerja tanpa kekompakan kerjaan akan jadi hasil yang kurang memuaskan...', 'penilai_nrp' => 'NA201508199001'],
+            ['id' => '828', 'penilai_id' => '70', 'catatan' => 'Selalu tetap kompak dalam bekerja\' tanpa kekompakan kerjaan akan jadi hasil yang kurang memuaskan...', 'penilai_nrp' => 'NA201508199001'],
             ['id' => '831', 'penilai_id' => '71', 'catatan' => 'Agar lebih giat lagi dalam menjalankan tugas dan tetep semangat dalam bekerja', 'penilai_nrp' => 'NA201411198801'],
             ['id' => '861', 'penilai_id' => '72', 'catatan' => '', 'penilai_nrp' => 'NA201805199901'],
             ['id' => '864', 'penilai_id' => '73', 'catatan' => '', 'penilai_nrp' => 'NA201505197201'],
@@ -119,7 +121,7 @@ class NilaiVersion1Seeder extends Seeder
             ['id' => '924', 'penilai_id' => '102', 'catatan' => '', 'penilai_nrp' => 'NA202404199701'],
             ['id' => '930', 'penilai_id' => '103', 'catatan' => '', 'penilai_nrp' => 'NA202408200001'],
             ['id' => '894', 'penilai_id' => '104', 'catatan' => 'So Far, bekerja bersama Mas Catur cukup menyenangkan dan sangat terbantu dengan koneksinya yang sangat luas..', 'penilai_nrp' => 'NA202412200201'],
-            ['id' => '909', 'penilai_id' => '105', 'catatan' => 'Senantiasa lebih update diri', 'penilai_nrp' => 'BI65qYn1GjYWUZR2wUkHA1lBkW0GJoV3zXHs8j7H'],
+            ['id' => '909', 'penilai_id' => '105', 'catatan' => 'Senantiasa lebih update diri', 'penilai_nrp' => 'NA202506199903'],
             ['id' => '942', 'penilai_id' => '106', 'catatan' => 'Tingkatkan kompetrnsi', 'penilai_nrp' => 'NA200008197701'],
             ['id' => '939', 'penilai_id' => '107', 'catatan' => '', 'penilai_nrp' => 'NA201203198801'],
             ['id' => '936', 'penilai_id' => '108', 'catatan' => '', 'penilai_nrp' => 'NA199703196801'],
@@ -144,7 +146,7 @@ class NilaiVersion1Seeder extends Seeder
             ['id' => '999', 'penilai_id' => '127', 'catatan' => '', 'penilai_nrp' => 'NA201201199201'],
             ['id' => '996', 'penilai_id' => '128', 'catatan' => '', 'penilai_nrp' => 'NA201107199201'],
             ['id' => '993', 'penilai_id' => '129', 'catatan' => '', 'penilai_nrp' => 'NA201209198501'],
-            ['id' => '990', 'penilai_id' => '130', 'catatan' => 'Pertahankan semuanya', 'penilai_nrp' => '09SebWo84MiZJG4HcwZN43jHo3ySUj5pJk2tNj12'],
+            ['id' => '990', 'penilai_id' => '130', 'catatan' => 'Pertahankan semuanya', 'penilai_nrp' => 'NA20250000001'],
             ['id' => '1011', 'penilai_id' => '131', 'catatan' => 'Tetap pertahankan kedisiplinan dan loyalitas. Konsisten dalam ketaatan adalah bentuk keseriusan dalam memberikan pelayanan terbaik.', 'penilai_nrp' => 'NA200503198301'],
             ['id' => '1008', 'penilai_id' => '132', 'catatan' => '', 'penilai_nrp' => 'NA199803197901'],
             ['id' => '1041', 'penilai_id' => '133', 'catatan' => 'Biar tambah lg semangat kerja nya biar hasil nya maksimal bersih', 'penilai_nrp' => 'NA201407198001'],
@@ -202,7 +204,7 @@ class NilaiVersion1Seeder extends Seeder
             ['id' => '1185', 'penilai_id' => '184', 'catatan' => '', 'penilai_nrp' => 'NA200505198401'],
             ['id' => '1182', 'penilai_id' => '185', 'catatan' => '', 'penilai_nrp' => 'NA201208199001'],
             ['id' => '1179', 'penilai_id' => '186', 'catatan' => 'Lebih bersemangat lagi dlm pekerjaan', 'penilai_nrp' => 'NA201411197501'],
-            ['id' => '1233', 'penilai_id' => '187', 'catatan' => '', 'penilai_nrp' => 'uc6EvZc8vd7zZcPUe7D1a5pRlDd4pRNnLyHtbw8H'],
+            ['id' => '1233', 'penilai_id' => '187', 'catatan' => '', 'penilai_nrp' => 'NA202403199301'],
             ['id' => '1173', 'penilai_id' => '188', 'catatan' => '', 'penilai_nrp' => 'NA201004197101'],
             ['id' => '1170', 'penilai_id' => '189', 'catatan' => 'Jangan terpaku pada apa yg dicapai jangan lelah buat belajar lebih baik lg.', 'penilai_nrp' => 'NA200808197001'],
             ['id' => '1167', 'penilai_id' => '190', 'catatan' => '', 'penilai_nrp' => 'NA200611198701'],
@@ -218,9 +220,9 @@ class NilaiVersion1Seeder extends Seeder
             ['id' => '1212', 'penilai_id' => '200', 'catatan' => '', 'penilai_nrp' => 'NA202301199501'],
             ['id' => '1221', 'penilai_id' => '201', 'catatan' => '', 'penilai_nrp' => 'NA202210198701'],
             ['id' => '1227', 'penilai_id' => '202', 'catatan' => 'Lebih tanggap dan lebih inisiatif', 'penilai_nrp' => 'NA200504197801'],
-            ['id' => '1197', 'penilai_id' => '203', 'catatan' => 'Tetap menjadi pengawas dan koordinator yang selalu dapat membimbing teman-temannya dan selalu totalitas dalam pekerjaan.', 'penilai_nrp' => 'uBYBwKcvf1LqNhy0fuNEipVuKZLi8lf8tL7jMzup'],
+            ['id' => '1197', 'penilai_id' => '203', 'catatan' => 'Tetap menjadi pengawas dan koordinator yang selalu dapat membimbing teman-temannya dan selalu totalitas dalam pekerjaan.', 'penilai_nrp' => 'NA123456789'],
             ['id' => '1218', 'penilai_id' => '204', 'catatan' => 'selalu melakukan semua pekerjaan dengan baik dan ikhlas', 'penilai_nrp' => 'NA202307200201'],
-            ['id' => '1236', 'penilai_id' => '205', 'catatan' => 'Tetap semangat', 'penilai_nrp' => 'eEbDwKv6v3n7OBk614ivEYNx3pbR8z3Aac2xnHG7'],
+            ['id' => '1236', 'penilai_id' => '205', 'catatan' => 'Tetap semangat', 'penilai_nrp' => 'NA20250501001'],
             ['id' => '1176', 'penilai_id' => '206', 'catatan' => 'Teruslah berproses', 'penilai_nrp' => 'NA201701199501'],
             ['id' => '1203', 'penilai_id' => '207', 'catatan' => 'Tetap semangat jangan putus asa', 'penilai_nrp' => 'NA201906199801'],
             ['id' => '619', 'penilai_id' => '208', 'catatan' => 'Tngkatkan kinerja, tingkatkan loyalitas,', 'penilai_nrp' => '197106261998031001'],
@@ -435,7 +437,9 @@ class NilaiVersion1Seeder extends Seeder
             ['id' => '857', 'penilai_id' => '228', 'catatan' => '', 'penilai_nrp' => '198401232008012004'],
             ['id' => '632', 'penilai_id' => '229', 'catatan' => '', 'penilai_nrp' => '198312012010121003'],
             ['id' => '767', 'penilai_id' => '229', 'catatan' => '', 'penilai_nrp' => '198312012010121003'],
-            ['id' => '635', 'penilai_id' => '230', 'catatan' => 'Untuk Pengemudi yang dinilai: (1) perlu peningkatan dan perbaikan cara berkomunikasi. (2) Saat penugasan dinas luar kota, agar berkoordinasi terlebih dahulu dengan bagian kendaraan untuk mencarikan Sopir penganti. Selama ini setiap Pengemudi Dinas, AJP dari komplek  tidak beroperasi. Apabbila sesekali, kami cukup bisa memahami, namun jika rutin dinas menyebabkan AJP tidak ke kantor. Untuk OB Gedung 1 Lt 4: (1) mohon untuk dibuat peraturan jika OB di pagi hari sbelum menyelesaikan pekerjaan bersih-bersih, tidak mendahulukan kepentingan pribadi pegawai sepert i membelikan makanan, mengantar barang kesana kemari dan keperluan pribadi lainya. (2) Toilet agar disikat secara berkala minimal 2 kali seminggu dan tindak menunggu menjadi kotor/kuning2 dahulu.', 'penilai_nrp' => '197804172005011002'],
+            ['id' => '635', 'penilai_id' => '230', 'catatan' => 'Untuk Pengemudi yang dinilai: (1) perlu peningkatan dan perbaikan cara berkomunikasi. (2) Saat penugasan dinas luar kota, agar berkoordinasi terlebih dahulu dengan bagian kendaraan untuk mencarikan Sopir penganti. Selama ini setiap Pengemudi Dinas, AJP dari komplek  tidak beroperasi. Apabbila sesekali, kami cukup bisa memahami, namun jika rutin dinas menyebabkan AJP tidak ke kantor.
+
+            Untuk OB Gedung 1 Lt 4: (1) mohon untuk dibuat peraturan jika OB di pagi hari sbelum menyelesaikan pekerjaan bersih-bersih, tidak mendahulukan kepentingan pribadi pegawai sepert i membelikan makanan, mengantar barang kesana kemari dan keperluan pribadi lainya. (2) Toilet agar disikat secara berkala minimal 2 kali seminggu dan tindak menunggu menjadi kotor/kuning2 dahulu.', 'penilai_nrp' => '197804172005011002'],
             ['id' => '641', 'penilai_id' => '231', 'catatan' => 'pertahankan dan lebih ditingkatkan lagi kinerja yang sudah di lakukan dalam pelayanan terhadap Pejabat/Pegawai dilingkungan Setwapres khususnya.', 'penilai_nrp' => '197205012005011001'],
             ['id' => '668', 'penilai_id' => '231', 'catatan' => 'Perbaiki kedisiplinan dan kejujuran dalam bekerja dan selalu tingkatkan kinerja yang baik untuk memberikan pelayanan prima terhadap pejabat /pegawai di lingkungan setwapres', 'penilai_nrp' => '197205012005011001'],
             ['id' => '671', 'penilai_id' => '231', 'catatan' => 'pertahanakan dan terus tingkatkan kinerjanya untuk memberikan pelayanan prima yang sangat baik', 'penilai_nrp' => '197205012005011001'],
@@ -476,49 +480,49 @@ class NilaiVersion1Seeder extends Seeder
             - agar sikap dan perilaku dapat dijaga dengan baik dan konsisten', 'penilai_nrp' => '196809271995032001'],
             ['id' => '764', 'penilai_id' => '250', 'catatan' => 'Perlu lebih hati-hati dalam menyetir, menjaga jarak dgn kendaraan di depan, samping kanan kiri, dan jangan sering rem mendadak, membuat tidak nyaman.', 'penilai_nrp' => '198204202005012004'],
             ['id' => '770', 'penilai_id' => '251', 'catatan' => 'Pak Nana sudah sangat baik dan sangat membantu dalam menjalankan tugasnya sebagai pramubakti. Selalu berpenampilah rapi dan baik, berprilaku sopan. Komunikasi dan kerja sama dengan sesama rekan OS di lantai 2 Set 1 juga terlihat kompak dan baik.
-  Mungkin pak Nana bisa dijadikan benchmark/role untuk para pramubakti lainnya dalam menjalankan tugasnya.', 'penilai_nrp' => '198706212015032002'],
+            Mungkin pak Nana bisa dijadikan benchmark/role untuk para pramubakti lainnya dalam menjalankan tugasnya.', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1007', 'penilai_id' => '251', 'catatan' => 'Mas Wandi merupakan koordinator OS Kebersihan dan Taman. Dalam melaksanakan tugasnya, sudah sesuai yang diharapkan user/pimpinan. Dalam mengkoordinasi dan komunikasi pekerjaan antara user dengan tim juga sudah baik. selalu bersikap sopan kepada pegawai, dan cukup mengayomi anak buahnya.', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1010', 'penilai_id' => '251', 'catatan' => 'Good Job Pak Anton dalam menjalankan tugasnya sebagai pengawas.
-  Mampu menggerakkan tim dengan baik sesuai arahan pimpinan/ user.
-  Semoga makin semangat lagi dalam bekerja ya ! :)', 'penilai_nrp' => '198706212015032002'],
+            Mampu menggerakkan tim dengan baik sesuai arahan pimpinan/ user.
+            Semoga makin semangat lagi dalam bekerja ya ! :)', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1013', 'penilai_id' => '251', 'catatan' => 'Good Job!
-  Teruslah berusaha menjadi lebih baik lagi ya', 'penilai_nrp' => '198706212015032002'],
+            Teruslah berusaha menjadi lebih baik lagi ya', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1016', 'penilai_id' => '251', 'catatan' => '', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1019', 'penilai_id' => '251', 'catatan' => 'Good Job!
-  Teruslah berusaha menjadi lebih baik lagi ya', 'penilai_nrp' => '198706212015032002'],
+            Teruslah berusaha menjadi lebih baik lagi ya', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1022', 'penilai_id' => '251', 'catatan' => 'Arman udah bekerja dengan baik, dan mengikuti arahan baik dari mandor maupun pimpinan. hasil pekerjaannya juga sesuai. berpenampilan bersih dan rapi, serta cukup baik dalam berkomunikasi.', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1025', 'penilai_id' => '251', 'catatan' => 'Good Job!
-  Teruslah berusaha menjadi lebih baik lagi ya, terutama lebih percaya diri lagi ketika bicara :)', 'penilai_nrp' => '198706212015032002'],
+            Teruslah berusaha menjadi lebih baik lagi ya, terutama lebih percaya diri lagi ketika bicara :)', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1028', 'penilai_id' => '251', 'catatan' => 'Ditingkatkan lagi keberanian untuk berbicara menyampaikan ide dan pendapatnya, dikuatkan rasa percaya dirinya.
-  Sehingga akan berpengaruh ke performa kinerjanya menjadi lebih baik.
-  Semangat yaaa :)', 'penilai_nrp' => '198706212015032002'],
+            Sehingga akan berpengaruh ke performa kinerjanya menjadi lebih baik.
+            Semangat yaaa :)', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1031', 'penilai_id' => '251', 'catatan' => 'Masih banyak perlu perbaikan terutama motivasi diri dan kedisiplinan terhadap tanggung jawab pekerjaannya. tidak hanya bekerja jika dilihat oleh pimpinan saja tapi bisa berinisiatif terhadap hal-hal sekitarnya. semangat memperbaiki diri ya!', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1034', 'penilai_id' => '251', 'catatan' => 'Mas Anto selalu helpful, user yang dilayani juga sangat terbantu dengan adanya mas Anto.
-    zero complain dan selalu dapat membantu ketika ada penugasan di luar tusi yang diberikan pimpinan.', 'penilai_nrp' => '198706212015032002'],
+            zero complain dan selalu dapat membantu ketika ada penugasan di luar tusi yang diberikan pimpinan.', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1037', 'penilai_id' => '251', 'catatan' => 'Mba Lina  mampu melaksanakan arahan dan perintah pimpinan, koordinator/ pengawas kebersihan, serta user dengan respon yang cepat, tepat, baik, dan sopan.
-    Mampu melaksanakan tugas perawatan dan kebersihan secara mandiri tanpa pengawasan
-    Memiliki kemauan untuk bekerja dan mau belajar.
-    Selalu bersikap sopan kepada siapapun baik rekan kerja, pegawai, pimpinan.
+            Mampu melaksanakan tugas perawatan dan kebersihan secara mandiri tanpa pengawasan
+            Memiliki kemauan untuk bekerja dan mau belajar.
+            Selalu bersikap sopan kepada siapapun baik rekan kerja, pegawai, pimpinan.
 
-    Good Job Mba Lina! ;)', 'penilai_nrp' => '198706212015032002'],
+            Good Job Mba Lina! ;)', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1040', 'penilai_id' => '251', 'catatan' => 'Semangat berusaha untuk terus menjadi lebih baik lagi ya', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1043', 'penilai_id' => '251', 'catatan' => 'Good Job Pak Jejen! :)', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1046', 'penilai_id' => '251', 'catatan' => 'Semangat berusaha untuk terus menjadi lebih baik lagi ya.
-    Tetap melayani Ibu2 DWP dengan baik :)', 'penilai_nrp' => '198706212015032002'],
+            Tetap melayani Ibu2 DWP dengan baik :)', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1049', 'penilai_id' => '251', 'catatan' => 'Semangat berusaha untuk terus menjadi lebih baik lagi ya', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1052', 'penilai_id' => '251', 'catatan' => 'Mas Rohman sudah sangat baik. dapat memahami instruksi dengan baik dan jelas, serta mengerjakannya dengan maksimal.
-    good job!', 'penilai_nrp' => '198706212015032002'],
+            good job!', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1055', 'penilai_id' => '251', 'catatan' => 'Semoga mas Oki  bisa terus menjaga semangat dan usaha baiknya dalam bekerja ya :)', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1058', 'penilai_id' => '251', 'catatan' => '', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1061', 'penilai_id' => '251', 'catatan' => 'Masih banyak perlu perbaikan terutama motivasi diri dan kedisiplinan terhadap tanggung jawab pekerjaannya.
-    tidak hanya bekerja jika dilihat oleh pimpinan saja tapi bisa berinisiatif terhadap hal-hal sekitarnya.
-    semangat memperbaiki diri ya!', 'penilai_nrp' => '198706212015032002'],
+            tidak hanya bekerja jika dilihat oleh pimpinan saja tapi bisa berinisiatif terhadap hal-hal sekitarnya.
+            semangat memperbaiki diri ya!', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1064', 'penilai_id' => '251', 'catatan' => 'Semangat berusaha untuk terus menjadi lebih baik lagi ya!', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1067', 'penilai_id' => '251', 'catatan' => 'Masih banyak perlu perbaikan terutama motivasi diri dan kedisiplinan terhadap tanggung jawab pekerjaannya. tidak hanya bekerja jika dilihat oleh pimpinan saja tapi bisa berinisiatif terhadap hal-hal sekitarnya. semangat memperbaiki diri ya!', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1070', 'penilai_id' => '251', 'catatan' => 'Masih banyak perlu perbaikan terutama berkomunikasi dan inisiatif diri. Belajar untuk lebih percaya diri untuk mampu berbicara menyampaikan pendapat ya.
-    Semangat berusaha untuk terus menjadi lebih baik lagi ya', 'penilai_nrp' => '198706212015032002'],
+            Semangat berusaha untuk terus menjadi lebih baik lagi ya', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1073', 'penilai_id' => '251', 'catatan' => 'Terima kasih sudah mampu beradaptasi dan mau belajar di tugas barunya.
-    Jangan lupa untuk terus belajar hal baru lainnya, upgrade skill baru, dan lebih percaya diri', 'penilai_nrp' => '198706212015032002'],
+            Jangan lupa untuk terus belajar hal baru lainnya, upgrade skill baru, dan lebih percaya diri', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1076', 'penilai_id' => '251', 'catatan' => '', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1079', 'penilai_id' => '251', 'catatan' => 'Masih banyak perlu perbaikan terutama motivasi diri dan kedisiplinan terhadap tanggung jawab pekerjaannya. tidak hanya bekerja jika dilihat oleh pimpinan saja tapi bisa berinisiatif terhadap hal-hal sekitarnya. semangat memperbaiki diri ya!', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1082', 'penilai_id' => '251', 'catatan' => '', 'penilai_nrp' => '198706212015032002'],
@@ -528,37 +532,37 @@ class NilaiVersion1Seeder extends Seeder
             ['id' => '1094', 'penilai_id' => '251', 'catatan' => 'Masih banyak perlu perbaikan terutama motivasi diri dan kedisiplinan terhadap tanggung jawab pekerjaannya. tidak hanya bekerja jika dilihat oleh pimpinan saja tapi bisa berinisiatif terhadap hal-hal sekitarnya. semangat memperbaiki diri ya!', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1097', 'penilai_id' => '251', 'catatan' => 'Masih banyak perlu perbaikan terutama motivasi diri dan kedisiplinan terhadap tanggung jawab pekerjaannya. tidak hanya bekerja jika dilihat oleh pimpinan saja tapi bisa berinisiatif terhadap hal-hal sekitarnya. semangat memperbaiki diri ya!', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1100', 'penilai_id' => '251', 'catatan' => 'Terima kasih sudah berusaha beradaptasi dan belajar hal baru di tugas yg baru ya.
-    Jangan berhenti belajar hal2 baru lainnya untuk mengupgrade skill diri.
-    Ditingkatkan lagi percaya diri ketika berhadapan dengan orang lain. Semangat!', 'penilai_nrp' => '198706212015032002'],
+            Jangan berhenti belajar hal2 baru lainnya untuk mengupgrade skill diri.
+            Ditingkatkan lagi percaya diri ketika berhadapan dengan orang lain. Semangat!', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1103', 'penilai_id' => '251', 'catatan' => 'Mas Hendrik sudah sangat baik. dapat memahami instruksi dengan baik dan jelas, serta mengerjakannya dengan maksimal.
-    good job!', 'penilai_nrp' => '198706212015032002'],
+            good job!', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1106', 'penilai_id' => '251', 'catatan' => 'Semangat berusaha untuk terus menjadi lebih baik lagi ya', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1109', 'penilai_id' => '251', 'catatan' => 'Toni selalu dapat diandalkan baik bekerja secara tim maupun secara mandiri.
-    Mampu memahami instruksi dengan baik.
-    dan selalu bersikap santun', 'penilai_nrp' => '198706212015032002'],
+            Mampu memahami instruksi dengan baik.
+            dan selalu bersikap santun', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1112', 'penilai_id' => '251', 'catatan' => 'Masih banyak perlu perbaikan terutama motivasi diri dan kedisiplinan terhadap tanggung jawab pekerjaannya. tidak hanya bekerja jika dilihat oleh pimpinan saja tapi bisa berinisiatif terhadap hal-hal sekitarnya. semangat memperbaiki diri ya!', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1115', 'penilai_id' => '251', 'catatan' => 'Inisiatif dalam bekerja sudah baik dan terus ditingkatkan lagi serta memastikan setiap area terjangkau', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1118', 'penilai_id' => '251', 'catatan' => 'Semua tugas yang dikerjakan Reza sudah sesuai dengan arahan dan perintah baik dari mandor maupun pimpinan.
-    Hasil pekerjaan juga sangat baik.', 'penilai_nrp' => '198706212015032002'],
+            Hasil pekerjaan juga sangat baik.', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1121', 'penilai_id' => '251', 'catatan' => 'Mas Yoyok bisa jadi role model pengawas karena kinerjanya sangat baik.
-    Tidak perlu diawasi karena sangat memahami instruksi yang diberikan dengan hasil yang sangat baik.
-    Kedepannya bisa lebih percaya diri lagi ketika menyampaikan ide atau masukan ya! :)', 'penilai_nrp' => '198706212015032002'],
+            Tidak perlu diawasi karena sangat memahami instruksi yang diberikan dengan hasil yang sangat baik.
+            Kedepannya bisa lebih percaya diri lagi ketika menyampaikan ide atau masukan ya! :)', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1124', 'penilai_id' => '251', 'catatan' => 'Lebih giat lagi dalam bekerja dan selalu berpenampilan rapih dalam bekerja', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1127', 'penilai_id' => '251', 'catatan' => 'Winardi sudah bekerja dengan baik, dan mengikuti arahan baik dari mandor maupun pimpinan. hasil pekerjaannya juga sesuai. berpenampilan bersih dan rapi, serta cukup baik dalam berkomunikasi.
-    Good!', 'penilai_nrp' => '198706212015032002'],
+            Good!', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1130', 'penilai_id' => '251', 'catatan' => 'Ditingkatkan terus semangat dalam bekerja dan memastikan seluruh pekerjaan dapat diselesaikan dengan baik', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1133', 'penilai_id' => '251', 'catatan' => 'Tetap semangat dalam bekerja dan terus tingkatkan komunikasi dengan rekan kerja', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1136', 'penilai_id' => '251', 'catatan' => 'Mas Diki mampu melaksanakan arahan dan perintah pimpinan, koordinator/ pengawas kebersihan, serta user dengan respon yang cepat, tepat, baik, dan sopan. Cepat beradaptasi dan belajar ketika tusi bertambah  dari petugas kebersihan menjadi petugas kebersihan dan pet keeper.
-    Hasil pekerjaanya juga sangat baik meskipun tidak diawasi.
+            Hasil pekerjaanya juga sangat baik meskipun tidak diawasi.
 
-    Terima kasih mas Diki udah merawat anabul2 Wapres :)', 'penilai_nrp' => '198706212015032002'],
+            Terima kasih mas Diki udah merawat anabul2 Wapres :)', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1139', 'penilai_id' => '251', 'catatan' => 'Masih banyak perlu perbaikan di inisiatif kerja dan komitmennya.
-    semangat memperbaiki diri ya!', 'penilai_nrp' => '198706212015032002'],
+            semangat memperbaiki diri ya!', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1142', 'penilai_id' => '251', 'catatan' => 'Semangat berusaha untuk terus menjadi lebih baik lagi ya! terutama di komunikasi, lebih percaya diri karena user yang dilayani tentara.', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1145', 'penilai_id' => '251', 'catatan' => 'Pak Eka, inisiatif harus ditingkatkan lagi ya.
-    Berkomunikasi juga harus diperhatikan kepada siapa berbicara dan bertindak supaya tidak salah jalan dan tidak ada komplain.
-    Cukup bekerja sebaik-baiknya baik ada pengawas atau tidak. Walaupun harus bekerja sendiri di satu area, harus tetap semangat ya!
-    Semangat! :)', 'penilai_nrp' => '198706212015032002'],
+            Berkomunikasi juga harus diperhatikan kepada siapa berbicara dan bertindak supaya tidak salah jalan dan tidak ada komplain.
+            Cukup bekerja sebaik-baiknya baik ada pengawas atau tidak. Walaupun harus bekerja sendiri di satu area, harus tetap semangat ya!
+            Semangat! :)', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1148', 'penilai_id' => '251', 'catatan' => '', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1151', 'penilai_id' => '251', 'catatan' => 'Masih banyak perlu perbaikan terutama motivasi diri dan kedisiplinan terhadap tanggung jawab pekerjaannya. tidak hanya bekerja jika dilihat oleh pimpinan saja tapi bisa berinisiatif terhadap hal-hal sekitarnya. semangat memperbaiki diri ya!', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1154', 'penilai_id' => '251', 'catatan' => 'Masih banyak perlu perbaikan terutama motivasi diri dan kedisiplinan terhadap tanggung jawab pekerjaannya. tidak hanya bekerja jika dilihat oleh pimpinan saja tapi bisa berinisiatif terhadap hal-hal sekitarnya. semangat memperbaiki diri ya!', 'penilai_nrp' => '198706212015032002'],
@@ -566,46 +570,64 @@ class NilaiVersion1Seeder extends Seeder
             ['id' => '1160', 'penilai_id' => '251', 'catatan' => 'Masih banyak perlu perbaikan terutama motivasi diri dan kedisiplinan terhadap tanggung jawab pekerjaannya. tidak hanya bekerja jika dilihat oleh pimpinan saja tapi bisa berinisiatif terhadap hal-hal sekitarnya. semangat memperbaiki diri ya!', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1163', 'penilai_id' => '251', 'catatan' => 'Semangat berusaha untuk terus menjadi lebih baik lagi ya', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1166', 'penilai_id' => '251', 'catatan' => 'Good Job Mas Madroi!
-    Selalu melakukan inisiatif dan inovasi dalam pekerjaannya.
-    Memberikan usaha yang terbaik untuk hasil yang terbaik jg.
-    Jangan lupa dibagikan ilmunya kepada yang lain supaya bisa maju bersama ya :)', 'penilai_nrp' => '198706212015032002'],
+
+            Selalu melakukan inisiatif dan inovasi dalam pekerjaannya.
+            Memberikan usaha yang terbaik untuk hasil yang terbaik jg.
+
+            Jangan lupa dibagikan ilmunya kepada yang lain supaya bisa maju bersama ya :)', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1169', 'penilai_id' => '251', 'catatan' => '', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1172', 'penilai_id' => '251', 'catatan' => 'Masih banyak perlu perbaikan terutama motivasi diri dan kedisiplinan terhadap tanggung jawab pekerjaannya. tidak hanya bekerja jika dilihat oleh pimpinan saja tapi bisa berinisiatif terhadap hal-hal sekitarnya. semangat memperbaiki diri ya!', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1175', 'penilai_id' => '251', 'catatan' => 'Meskipun baru bergabung sbg OS Taman, Fikri sudah menunjukkan niat bekerja dengan baik. masih dibutuhkan perbaikan dan bimbingan untuk bisa lebih baik lagi', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1178', 'penilai_id' => '251', 'catatan' => 'Masih banyak perlu perbaikan terutama motivasi diri dan kedisiplinan terhadap tanggung jawab pekerjaannya. tidak hanya bekerja jika dilihat oleh pimpinan saja tapi bisa berinisiatif terhadap hal-hal sekitarnya. semangat memperbaiki diri ya!', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1181', 'penilai_id' => '251', 'catatan' => 'tingkatkan lagi semangat dalam bekerja', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1184', 'penilai_id' => '251', 'catatan' => 'Mas Bosco cukup baik hasil kerjanya, namun masih terdapat beberapa catatan yang perlu perbaikan ke depannya.
-    inisiatif, inovasi, kemampuan untuk menggerakkan dan komitmen untuk menjalankan pekerjaan tanpa diawasi.
-    Semangat untuk perbaikan diri ya :)', 'penilai_nrp' => '198706212015032002'],
+            inisiatif, inovasi, kemampuan untuk menggerakkan dan komitmen untuk menjalankan pekerjaan tanpa diawasi.
+
+            Semangat untuk perbaikan diri ya :)', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1187', 'penilai_id' => '251', 'catatan' => '', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1190', 'penilai_id' => '251', 'catatan' => '', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1193', 'penilai_id' => '251', 'catatan' => 'Pak Haerudin termasuk orang yang cepat belajar dan adaptasi. Penambahan tusi menjadi pet keeper dan dilakukan dengan sangat baik.
-    Hasil pekerjaan juga sudah sesuai dengan instruksi. Tidak pernah menolak perintah.
-    yang harus diperbaiki lagi penampilannya, bisa belajar ke Pak Wandi atau Pak Yoyok yuk! atau kita agendakan kelas grooming untuk CS dan Taman, biar ga cuma kucing Wapres yang di grooming :)
+            Hasil pekerjaan juga sudah sesuai dengan instruksi. Tidak pernah menolak perintah.
+            yang harus diperbaiki lagi penampilannya, bisa belajar ke Pak Wandi atau Pak Yoyok yuk! atau kita agendakan kelas grooming untuk CS dan Taman, biar ga cuma kucing Wapres yang di grooming :)
 
-    Terima kasih udah menjaga anabul2 Wapres :D', 'penilai_nrp' => '198706212015032002'],
+            Terima kasih udah menjaga anabul2 Wapres :D', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1196', 'penilai_id' => '251', 'catatan' => 'Pengawas taman andalan Pak Ses!
-    semua sudah baik, kinerja, inisiatif, loyalitas.
+            semua sudah baik, kinerja, inisiatif, loyalitas.
 
-    Jangan lupa transfer knowledge ke yang lain ya, biar semua bisa ikut berkembang maju :)', 'penilai_nrp' => '198706212015032002'],
+            Jangan lupa transfer knowledge ke yang lain ya, biar semua bisa ikut berkembang maju :)', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1199', 'penilai_id' => '251', 'catatan' => 'Misna sudah bekerja dengan baik, dan mengikuti arahan baik dari mandor maupun pimpinan. hasil pekerjaannya juga sesuai. berpenampilan bersih dan rapi, serta cukup baik dalam berkomunikasi.', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1202', 'penilai_id' => '251', 'catatan' => 'tingkatkan lagi komunikasi dalam tim', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1208', 'penilai_id' => '251', 'catatan' => 'Mas Nana ini mirip cara kerjanya dengan mas Wahyudin tidak pernah membantah/ menolak arahan pengawas/pimpinan.
-    Hasil pekerjaan juga sangat baik karena mampu memahami instruksi pengawas/pimpinan dengan baik.
-    Mampu beradaptasi dengan situasi yang ada dan mampu belajar hal baru dengan cepat bahkan untuk pekerjaan di luar tusi.
-    dan termasuk Tim Saber andalan Pak Ses jg (wuhuuuuu)
+            Hasil pekerjaan juga sangat baik karena mampu memahami instruksi pengawas/pimpinan dengan baik.
+            Mampu beradaptasi dengan situasi yang ada dan mampu belajar hal baru dengan cepat bahkan untuk pekerjaan di luar tusi.
+            dan termasuk Tim Saber andalan Pak Ses jg (wuhuuuuu)
 
-    Semoga mas Nana bisa terus menjaga semangat dan usaha baiknya dalam bekerja ya :)', 'penilai_nrp' => '198706212015032002'],
+            Semoga mas Nana bisa terus menjaga semangat dan usaha baiknya dalam bekerja ya :)', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1211', 'penilai_id' => '251', 'catatan' => 'kerapihan lebih ditingkatkan lagi', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1214', 'penilai_id' => '251', 'catatan' => 'Semoga mas Harto bisa terus menjaga semangat dan usaha baiknya dalam bekerja ya :)', 'penilai_nrp' => '198706212015032002'],
-            ['id' => '1217', 'penilai_id' => '251', 'catatan' => 'Mas Edi sudah sangat baik. dapat memahami instruksi dengan baik dan jelas, serta mengerjakannya dengan maksimal.good job! Lebih percaya diri lg yaaa...', 'penilai_nrp' => '198706212015032002'],
+            ['id' => '1217', 'penilai_id' => '251', 'catatan' => 'Mas Edi sudah sangat baik. dapat memahami instruksi dengan baik dan jelas, serta mengerjakannya dengan maksimal.
+            good job!
+
+            Lebih percaya diri lg yaaa...', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1220', 'penilai_id' => '251', 'catatan' => '', 'penilai_nrp' => '198706212015032002'],
-            ['id' => '1223', 'penilai_id' => '251', 'catatan' => 'Marchela walapun baru tapi cepat belajar dan memahami arahan/ instruksi yang diberikan. Hasil pekerjaan yang diminta juga sesuai dengan yang diharapkan. Marchela punya potensi yang bisa berkembang menjadi lebih baik kedepannya, dan itu yang harus digali. Yang perlu diperbaiki adalah rasa percaya diri bahwa kemampuan diri melebihi ekspektasi yang dia pikirkan', 'penilai_nrp' => '198706212015032002'],
+            ['id' => '1223', 'penilai_id' => '251', 'catatan' => 'Marchela walapun baru tapi cepat belajar dan memahami arahan/ instruksi yang diberikan.
+            Hasil pekerjaan yang diminta juga sesuai dengan yang diharapkan.
+            Marchela punya potensi yang bisa berkembang menjadi lebih baik kedepannya, dan itu yang harus digali.
+            Yang perlu diperbaiki adalah rasa percaya diri bahwa kemampuan diri melebihi ekspektasi yang dia pikirkan', 'penilai_nrp' => '198706212015032002'],
             ['id' => '1226', 'penilai_id' => '251', 'catatan' => 'komunikasi lebih ditingkatkan terhadap lingkungan kerja', 'penilai_nrp' => '198706212015032002'],
-            ['id' => '1229', 'penilai_id' => '251', 'catatan' => 'Sebagai anak baru Rizky menunjukkan kemauan belajar yang tinggi, hasil pekerjaannya juga cukup baik. Masih perlu banyak belajar dan bimbingan dari rekan2 dan pengawasnya. Semangat terus ya Ky... :)', 'penilai_nrp' => '198706212015032002'],
-            ['id' => '1232', 'penilai_id' => '251', 'catatan' => 'All good. Hasil pekerjaan sudah sesuai dengan arahan dan instruksi. good job mas Iwan!', 'penilai_nrp' => '198706212015032002'],
-            ['id' => '1235', 'penilai_id' => '251', 'catatan' => 'Perkembangan yang sangat baik dari Izal ya. Sudah punya keahlian2 baru. lebih percaya diri atas kemampuan diri ya Zal. Semangat terus ya Zal :)', 'penilai_nrp' => '198706212015032002'],
-            ['id' => '1238', 'penilai_id' => '251', 'catatan' => 'Mas Wahyudin ini tidak pernah membantah/ menolak arahan pengawas/pimpinan. Hasil pekerjaan juga sangat baik karena mampu memahami instruksi pengawas/pimpinan dengan baik. Mampu beradaptasi dengan situasi yang ada dan mampu belajar hal baru dengan cepat bahkan untuk pekerjaan di luar tusi. Makanya mas Wahyudin masuk ke Tim Saber andalan Pak Ses (oh Wooow!!) Semoga mas Wahyudin bisa terus menjaga semangat dan usaha baiknya dalam bekerja ya :)', 'penilai_nrp' => '198706212015032002'],
+            ['id' => '1229', 'penilai_id' => '251', 'catatan' => 'Sebagai anak baru Rizky menunjukkan kemauan belajar yang tinggi, hasil pekerjaannya juga cukup baik.
+            Masih perlu banyak belajar dan bimbingan dari rekan2 dan pengawasnya.
+            Semangat terus ya Ky... :)', 'penilai_nrp' => '198706212015032002'],
+            ['id' => '1232', 'penilai_id' => '251', 'catatan' => 'All good. Hasil pekerjaan sudah sesuai dengan arahan dan instruksi.
+            good job mas Iwan!', 'penilai_nrp' => '198706212015032002'],
+            ['id' => '1235', 'penilai_id' => '251', 'catatan' => 'Perkembangan yang sangat baik dari Izal ya. Sudah punya keahlian2 baru.
+            lebih percaya diri atas kemampuan diri ya Zal.
+            Semangat terus ya Zal :)', 'penilai_nrp' => '198706212015032002'],
+            ['id' => '1238', 'penilai_id' => '251', 'catatan' => 'Mas Wahyudin ini tidak pernah membantah/ menolak arahan pengawas/pimpinan.
+            Hasil pekerjaan juga sangat baik karena mampu memahami instruksi pengawas/pimpinan dengan baik.
+            Mampu beradaptasi dengan situasi yang ada dan mampu belajar hal baru dengan cepat bahkan untuk pekerjaan di luar tusi. Makanya mas Wahyudin masuk ke Tim Saber andalan Pak Ses (oh Wooow!!)
+
+            Semoga mas Wahyudin bisa terus menjaga semangat dan usaha baiknya dalam bekerja ya :)', 'penilai_nrp' => '198706212015032002'],
             ['id' => '773', 'penilai_id' => '252', 'catatan' => 'Sudah sangat baik, pelayanan prima dan mampu menjalankan tugas dengan efektif dan efisien', 'penilai_nrp' => '199404062019021001'],
             ['id' => '776', 'penilai_id' => '253', 'catatan' => '', 'penilai_nrp' => '199606032018012001'],
             ['id' => '779', 'penilai_id' => '253', 'catatan' => '', 'penilai_nrp' => '199606032018012001'],
@@ -687,8 +709,8 @@ class NilaiVersion1Seeder extends Seeder
             ['id' => '923', 'penilai_id' => '283', 'catatan' => 'kinerja Hanindita sangat baik. Ke depan, bisa dipertahankan kerja sama dan komunikasi yang baik ini. terima kasih.', 'penilai_nrp' => '198409182008012004'],
             ['id' => '926', 'penilai_id' => '284', 'catatan' => 'Tingkatkan pengetahuan', 'penilai_nrp' => '196906101996031001'],
             ['id' => '929', 'penilai_id' => '285', 'catatan' => 'Tingkatkan inisiatif kerja, asah terus skill pemrograman, kembangkan relasi lebih luas lagi, jalin komunikasi yang baik dengan seluruh pihak namun tetap humble, dan santun. Keep ngulik, creative dan impactful !!', 'penilai_nrp' => '198005012008012015'],
-            ['id' => '833', 'penilai_id' => '286', 'catatan' => 'Outsourcing perlu diberikan pelatihan untuk menambah kompetensi diri dan memaksimalkan kemampuan', 'penilai_nrp' => 'erUYO7BZta5fAjUAB6MPqHcj8ZKjTs6eFpjxJUoU']
-        ];
+            ['id' => '833', 'penilai_id' => '286', 'catatan' => 'Outsourcing perlu diberikan pelatihan untuk menambah kompetensi diri dan memaksimalkan kemampuan', 'penilai_nrp' => '198007052005012001']
+            ];
 
         $view_os = [
             ['id' => '619', 'outsourcing_id' => '2', 'outsourcing_nrp' => 'NA201111198701'],
@@ -796,48 +818,48 @@ class NilaiVersion1Seeder extends Seeder
             ['id' => '721', 'outsourcing_id' => '36', 'outsourcing_nrp' => 'NA201411199001'],
             ['id' => '722', 'outsourcing_id' => '36', 'outsourcing_nrp' => 'NA201411199001'],
             ['id' => '723', 'outsourcing_id' => '36', 'outsourcing_nrp' => 'NA201411199001'],
-            ['id' => '724', 'outsourcing_id' => '37', 'outsourcing_nrp' => 'vKzqnrb3RbqQttbuXFPPlCDyR9b0ApIwJ0XMlqdp'],
-            ['id' => '725', 'outsourcing_id' => '37', 'outsourcing_nrp' => 'vKzqnrb3RbqQttbuXFPPlCDyR9b0ApIwJ0XMlqdp'],
-            ['id' => '726', 'outsourcing_id' => '37', 'outsourcing_nrp' => 'vKzqnrb3RbqQttbuXFPPlCDyR9b0ApIwJ0XMlqdp'],
-            ['id' => '727', 'outsourcing_id' => '38', 'outsourcing_nrp' => 'DBNgMHHpv2ECHib4gDenO8Wzk7V1acK3zKohPIOl'],
-            ['id' => '728', 'outsourcing_id' => '38', 'outsourcing_nrp' => 'DBNgMHHpv2ECHib4gDenO8Wzk7V1acK3zKohPIOl'],
-            ['id' => '729', 'outsourcing_id' => '38', 'outsourcing_nrp' => 'DBNgMHHpv2ECHib4gDenO8Wzk7V1acK3zKohPIOl'],
-            ['id' => '730', 'outsourcing_id' => '39', 'outsourcing_nrp' => '0IIwamTADxw0lx2bxD03GYZUV0jBK0pgj2E0Lt5P'],
-            ['id' => '731', 'outsourcing_id' => '39', 'outsourcing_nrp' => '0IIwamTADxw0lx2bxD03GYZUV0jBK0pgj2E0Lt5P'],
-            ['id' => '732', 'outsourcing_id' => '39', 'outsourcing_nrp' => '0IIwamTADxw0lx2bxD03GYZUV0jBK0pgj2E0Lt5P'],
-            ['id' => '733', 'outsourcing_id' => '40', 'outsourcing_nrp' => 'XOHeYmceCKUj7okPaCXtMSnNnJdTYczFglDbQSD6'],
-            ['id' => '734', 'outsourcing_id' => '40', 'outsourcing_nrp' => 'XOHeYmceCKUj7okPaCXtMSnNnJdTYczFglDbQSD6'],
-            ['id' => '735', 'outsourcing_id' => '40', 'outsourcing_nrp' => 'XOHeYmceCKUj7okPaCXtMSnNnJdTYczFglDbQSD6'],
-            ['id' => '736', 'outsourcing_id' => '41', 'outsourcing_nrp' => 'mc5XbCe7eaPQYBG9QSz4dThvTj3dUJO5REyfp6ZB'],
-            ['id' => '737', 'outsourcing_id' => '41', 'outsourcing_nrp' => 'mc5XbCe7eaPQYBG9QSz4dThvTj3dUJO5REyfp6ZB'],
-            ['id' => '738', 'outsourcing_id' => '41', 'outsourcing_nrp' => 'mc5XbCe7eaPQYBG9QSz4dThvTj3dUJO5REyfp6ZB'],
-            ['id' => '739', 'outsourcing_id' => '42', 'outsourcing_nrp' => 'JZhqvfU2MQAcEFbD6X2pL39unVbDhlPEUxkNFxMP'],
-            ['id' => '740', 'outsourcing_id' => '42', 'outsourcing_nrp' => 'JZhqvfU2MQAcEFbD6X2pL39unVbDhlPEUxkNFxMP'],
-            ['id' => '741', 'outsourcing_id' => '42', 'outsourcing_nrp' => 'JZhqvfU2MQAcEFbD6X2pL39unVbDhlPEUxkNFxMP'],
-            ['id' => '742', 'outsourcing_id' => '43', 'outsourcing_nrp' => 'oexGtckvV9FWqZ16wOo5X72CkSRu5g2SyuZLk5z4'],
-            ['id' => '743', 'outsourcing_id' => '43', 'outsourcing_nrp' => 'oexGtckvV9FWqZ16wOo5X72CkSRu5g2SyuZLk5z4'],
-            ['id' => '744', 'outsourcing_id' => '43', 'outsourcing_nrp' => 'oexGtckvV9FWqZ16wOo5X72CkSRu5g2SyuZLk5z4'],
-            ['id' => '745', 'outsourcing_id' => '44', 'outsourcing_nrp' => 'NotG090HzyjJATirFrry8c1DOE5Lwb8BvqMqggX1'],
-            ['id' => '746', 'outsourcing_id' => '44', 'outsourcing_nrp' => 'NotG090HzyjJATirFrry8c1DOE5Lwb8BvqMqggX1'],
-            ['id' => '747', 'outsourcing_id' => '44', 'outsourcing_nrp' => 'NotG090HzyjJATirFrry8c1DOE5Lwb8BvqMqggX1'],
-            ['id' => '748', 'outsourcing_id' => '45', 'outsourcing_nrp' => '0GLZzEXfRDQnoNygeeQWOCo3b41iUXAGPfFhkLjQ'],
-            ['id' => '749', 'outsourcing_id' => '45', 'outsourcing_nrp' => '0GLZzEXfRDQnoNygeeQWOCo3b41iUXAGPfFhkLjQ'],
-            ['id' => '750', 'outsourcing_id' => '45', 'outsourcing_nrp' => '0GLZzEXfRDQnoNygeeQWOCo3b41iUXAGPfFhkLjQ'],
-            ['id' => '751', 'outsourcing_id' => '46', 'outsourcing_nrp' => 'qRIuXbee6CDjru2if1d45dyS8HZy1Fwf3fOO2s7p'],
-            ['id' => '752', 'outsourcing_id' => '46', 'outsourcing_nrp' => 'qRIuXbee6CDjru2if1d45dyS8HZy1Fwf3fOO2s7p'],
-            ['id' => '753', 'outsourcing_id' => '46', 'outsourcing_nrp' => 'qRIuXbee6CDjru2if1d45dyS8HZy1Fwf3fOO2s7p'],
-            ['id' => '754', 'outsourcing_id' => '47', 'outsourcing_nrp' => 'S5kKuhMgVOO64ZXLKXauHDsjlIY1S2SfOr72aGXr'],
-            ['id' => '755', 'outsourcing_id' => '47', 'outsourcing_nrp' => 'S5kKuhMgVOO64ZXLKXauHDsjlIY1S2SfOr72aGXr'],
-            ['id' => '756', 'outsourcing_id' => '47', 'outsourcing_nrp' => 'S5kKuhMgVOO64ZXLKXauHDsjlIY1S2SfOr72aGXr'],
-            ['id' => '757', 'outsourcing_id' => '48', 'outsourcing_nrp' => 'hX3wJ9ctUOry6fqbn8QWlQUcBmmi6eOvOfGuBZW0'],
-            ['id' => '758', 'outsourcing_id' => '48', 'outsourcing_nrp' => 'hX3wJ9ctUOry6fqbn8QWlQUcBmmi6eOvOfGuBZW0'],
-            ['id' => '759', 'outsourcing_id' => '48', 'outsourcing_nrp' => 'hX3wJ9ctUOry6fqbn8QWlQUcBmmi6eOvOfGuBZW0'],
-            ['id' => '760', 'outsourcing_id' => '49', 'outsourcing_nrp' => 'krdODocEbyQoQO88vI2cvstaRz8O63kqOYbPMoVd'],
-            ['id' => '761', 'outsourcing_id' => '49', 'outsourcing_nrp' => 'krdODocEbyQoQO88vI2cvstaRz8O63kqOYbPMoVd'],
-            ['id' => '762', 'outsourcing_id' => '49', 'outsourcing_nrp' => 'krdODocEbyQoQO88vI2cvstaRz8O63kqOYbPMoVd'],
-            ['id' => '763', 'outsourcing_id' => '50', 'outsourcing_nrp' => 'XxyWEJTvJ0qSGqsUPy5wBAQKjSdrxSggunJVz5ei'],
-            ['id' => '764', 'outsourcing_id' => '50', 'outsourcing_nrp' => 'XxyWEJTvJ0qSGqsUPy5wBAQKjSdrxSggunJVz5ei'],
-            ['id' => '765', 'outsourcing_id' => '50', 'outsourcing_nrp' => 'XxyWEJTvJ0qSGqsUPy5wBAQKjSdrxSggunJVz5ei'],
+            ['id' => '724', 'outsourcing_id' => '37', 'outsourcing_nrp' => 'NA202504199401'],
+            ['id' => '725', 'outsourcing_id' => '37', 'outsourcing_nrp' => 'NA202504199401'],
+            ['id' => '726', 'outsourcing_id' => '37', 'outsourcing_nrp' => 'NA202504199401'],
+            ['id' => '727', 'outsourcing_id' => '38', 'outsourcing_nrp' => 'NA202505198701'],
+            ['id' => '728', 'outsourcing_id' => '38', 'outsourcing_nrp' => 'NA202505198701'],
+            ['id' => '729', 'outsourcing_id' => '38', 'outsourcing_nrp' => 'NA202505198701'],
+            ['id' => '730', 'outsourcing_id' => '39', 'outsourcing_nrp' => 'NA202512199001'],
+            ['id' => '731', 'outsourcing_id' => '39', 'outsourcing_nrp' => 'NA202512199001'],
+            ['id' => '732', 'outsourcing_id' => '39', 'outsourcing_nrp' => 'NA202512199001'],
+            ['id' => '733', 'outsourcing_id' => '40', 'outsourcing_nrp' => 'NA202506198201'],
+            ['id' => '734', 'outsourcing_id' => '40', 'outsourcing_nrp' => 'NA202506198201'],
+            ['id' => '735', 'outsourcing_id' => '40', 'outsourcing_nrp' => 'NA202506198201'],
+            ['id' => '736', 'outsourcing_id' => '41', 'outsourcing_nrp' => 'NA202507198901'],
+            ['id' => '737', 'outsourcing_id' => '41', 'outsourcing_nrp' => 'NA202507198901'],
+            ['id' => '738', 'outsourcing_id' => '41', 'outsourcing_nrp' => 'NA202507198901'],
+            ['id' => '739', 'outsourcing_id' => '42', 'outsourcing_nrp' => 'NA202507197301'],
+            ['id' => '740', 'outsourcing_id' => '42', 'outsourcing_nrp' => 'NA202507197301'],
+            ['id' => '741', 'outsourcing_id' => '42', 'outsourcing_nrp' => 'NA202507197301'],
+            ['id' => '742', 'outsourcing_id' => '43', 'outsourcing_nrp' => 'NA202502199501'],
+            ['id' => '743', 'outsourcing_id' => '43', 'outsourcing_nrp' => 'NA202502199501'],
+            ['id' => '744', 'outsourcing_id' => '43', 'outsourcing_nrp' => 'NA202502199501'],
+            ['id' => '745', 'outsourcing_id' => '44', 'outsourcing_nrp' => 'NA202501199001'],
+            ['id' => '746', 'outsourcing_id' => '44', 'outsourcing_nrp' => 'NA202501199001'],
+            ['id' => '747', 'outsourcing_id' => '44', 'outsourcing_nrp' => 'NA202501199001'],
+            ['id' => '748', 'outsourcing_id' => '45', 'outsourcing_nrp' => 'NA202501200101'],
+            ['id' => '749', 'outsourcing_id' => '45', 'outsourcing_nrp' => 'NA202501200101'],
+            ['id' => '750', 'outsourcing_id' => '45', 'outsourcing_nrp' => 'NA202501200101'],
+            ['id' => '751', 'outsourcing_id' => '46', 'outsourcing_nrp' => 'NA202501200201'],
+            ['id' => '752', 'outsourcing_id' => '46', 'outsourcing_nrp' => 'NA202501200201'],
+            ['id' => '753', 'outsourcing_id' => '46', 'outsourcing_nrp' => 'NA202501200201'],
+            ['id' => '754', 'outsourcing_id' => '47', 'outsourcing_nrp' => 'NA202511199501'],
+            ['id' => '755', 'outsourcing_id' => '47', 'outsourcing_nrp' => 'NA202511199501'],
+            ['id' => '756', 'outsourcing_id' => '47', 'outsourcing_nrp' => 'NA202511199501'],
+            ['id' => '757', 'outsourcing_id' => '48', 'outsourcing_nrp' => 'NA202509198901'],
+            ['id' => '758', 'outsourcing_id' => '48', 'outsourcing_nrp' => 'NA202509198901'],
+            ['id' => '759', 'outsourcing_id' => '48', 'outsourcing_nrp' => 'NA202509198901'],
+            ['id' => '760', 'outsourcing_id' => '49', 'outsourcing_nrp' => 'NA202502200001'],
+            ['id' => '761', 'outsourcing_id' => '49', 'outsourcing_nrp' => 'NA202502200001'],
+            ['id' => '762', 'outsourcing_id' => '49', 'outsourcing_nrp' => 'NA202502200001'],
+            ['id' => '763', 'outsourcing_id' => '50', 'outsourcing_nrp' => 'NA202506200408'],
+            ['id' => '764', 'outsourcing_id' => '50', 'outsourcing_nrp' => 'NA202506200408'],
+            ['id' => '765', 'outsourcing_id' => '50', 'outsourcing_nrp' => 'NA202506200408'],
             ['id' => '766', 'outsourcing_id' => '51', 'outsourcing_nrp' => 'NA200705197801'],
             ['id' => '767', 'outsourcing_id' => '51', 'outsourcing_nrp' => 'NA200705197801'],
             ['id' => '768', 'outsourcing_id' => '51', 'outsourcing_nrp' => 'NA200705197801'],
@@ -1000,9 +1022,9 @@ class NilaiVersion1Seeder extends Seeder
             ['id' => '925', 'outsourcing_id' => '104', 'outsourcing_nrp' => 'NA202412200201'],
             ['id' => '926', 'outsourcing_id' => '104', 'outsourcing_nrp' => 'NA202412200201'],
             ['id' => '927', 'outsourcing_id' => '104', 'outsourcing_nrp' => 'NA202412200201'],
-            ['id' => '928', 'outsourcing_id' => '105', 'outsourcing_nrp' => 'BI65qYn1GjYWUZR2wUkHA1lBkW0GJoV3zXHs8j7H'],
-            ['id' => '929', 'outsourcing_id' => '105', 'outsourcing_nrp' => 'BI65qYn1GjYWUZR2wUkHA1lBkW0GJoV3zXHs8j7H'],
-            ['id' => '930', 'outsourcing_id' => '105', 'outsourcing_nrp' => 'BI65qYn1GjYWUZR2wUkHA1lBkW0GJoV3zXHs8j7H'],
+            ['id' => '928', 'outsourcing_id' => '105', 'outsourcing_nrp' => 'NA202506199903'],
+            ['id' => '929', 'outsourcing_id' => '105', 'outsourcing_nrp' => 'NA202506199903'],
+            ['id' => '930', 'outsourcing_id' => '105', 'outsourcing_nrp' => 'NA202506199903'],
             ['id' => '931', 'outsourcing_id' => '106', 'outsourcing_nrp' => 'NA200008197701'],
             ['id' => '932', 'outsourcing_id' => '106', 'outsourcing_nrp' => 'NA200008197701'],
             ['id' => '933', 'outsourcing_id' => '106', 'outsourcing_nrp' => 'NA200008197701'],
@@ -1075,9 +1097,9 @@ class NilaiVersion1Seeder extends Seeder
             ['id' => '1000', 'outsourcing_id' => '129', 'outsourcing_nrp' => 'NA201209198501'],
             ['id' => '1001', 'outsourcing_id' => '129', 'outsourcing_nrp' => 'NA201209198501'],
             ['id' => '1002', 'outsourcing_id' => '129', 'outsourcing_nrp' => 'NA201209198501'],
-            ['id' => '1003', 'outsourcing_id' => '130', 'outsourcing_nrp' => '09SebWo84MiZJG4HcwZN43jHo3ySUj5pJk2tNj12'],
-            ['id' => '1004', 'outsourcing_id' => '130', 'outsourcing_nrp' => '09SebWo84MiZJG4HcwZN43jHo3ySUj5pJk2tNj12'],
-            ['id' => '1005', 'outsourcing_id' => '130', 'outsourcing_nrp' => '09SebWo84MiZJG4HcwZN43jHo3ySUj5pJk2tNj12'],
+            ['id' => '1003', 'outsourcing_id' => '130', 'outsourcing_nrp' => 'NA20250000001'],
+            ['id' => '1004', 'outsourcing_id' => '130', 'outsourcing_nrp' => 'NA20250000001'],
+            ['id' => '1005', 'outsourcing_id' => '130', 'outsourcing_nrp' => 'NA20250000001'],
             ['id' => '1006', 'outsourcing_id' => '131', 'outsourcing_nrp' => 'NA200503198301'],
             ['id' => '1007', 'outsourcing_id' => '131', 'outsourcing_nrp' => 'NA200503198301'],
             ['id' => '1008', 'outsourcing_id' => '131', 'outsourcing_nrp' => 'NA200503198301'],
@@ -1246,9 +1268,9 @@ class NilaiVersion1Seeder extends Seeder
             ['id' => '1171', 'outsourcing_id' => '186', 'outsourcing_nrp' => 'NA201411197501'],
             ['id' => '1172', 'outsourcing_id' => '186', 'outsourcing_nrp' => 'NA201411197501'],
             ['id' => '1173', 'outsourcing_id' => '186', 'outsourcing_nrp' => 'NA201411197501'],
-            ['id' => '1174', 'outsourcing_id' => '187', 'outsourcing_nrp' => 'uc6EvZc8vd7zZcPUe7D1a5pRlDd4pRNnLyHtbw8H'],
-            ['id' => '1175', 'outsourcing_id' => '187', 'outsourcing_nrp' => 'uc6EvZc8vd7zZcPUe7D1a5pRlDd4pRNnLyHtbw8H'],
-            ['id' => '1176', 'outsourcing_id' => '187', 'outsourcing_nrp' => 'uc6EvZc8vd7zZcPUe7D1a5pRlDd4pRNnLyHtbw8H'],
+            ['id' => '1174', 'outsourcing_id' => '187', 'outsourcing_nrp' => 'NA202403199301'],
+            ['id' => '1175', 'outsourcing_id' => '187', 'outsourcing_nrp' => 'NA202403199301'],
+            ['id' => '1176', 'outsourcing_id' => '187', 'outsourcing_nrp' => 'NA202403199301'],
             ['id' => '1177', 'outsourcing_id' => '188', 'outsourcing_nrp' => 'NA201004197101'],
             ['id' => '1178', 'outsourcing_id' => '188', 'outsourcing_nrp' => 'NA201004197101'],
             ['id' => '1179', 'outsourcing_id' => '188', 'outsourcing_nrp' => 'NA201004197101'],
@@ -1294,15 +1316,15 @@ class NilaiVersion1Seeder extends Seeder
             ['id' => '1219', 'outsourcing_id' => '202', 'outsourcing_nrp' => 'NA200504197801'],
             ['id' => '1220', 'outsourcing_id' => '202', 'outsourcing_nrp' => 'NA200504197801'],
             ['id' => '1221', 'outsourcing_id' => '202', 'outsourcing_nrp' => 'NA200504197801'],
-            ['id' => '1222', 'outsourcing_id' => '203', 'outsourcing_nrp' => 'uBYBwKcvf1LqNhy0fuNEipVuKZLi8lf8tL7jMzup'],
-            ['id' => '1223', 'outsourcing_id' => '203', 'outsourcing_nrp' => 'uBYBwKcvf1LqNhy0fuNEipVuKZLi8lf8tL7jMzup'],
-            ['id' => '1224', 'outsourcing_id' => '203', 'outsourcing_nrp' => 'uBYBwKcvf1LqNhy0fuNEipVuKZLi8lf8tL7jMzup'],
+            ['id' => '1222', 'outsourcing_id' => '203', 'outsourcing_nrp' => 'NA123456789'],
+            ['id' => '1223', 'outsourcing_id' => '203', 'outsourcing_nrp' => 'NA123456789'],
+            ['id' => '1224', 'outsourcing_id' => '203', 'outsourcing_nrp' => 'NA123456789'],
             ['id' => '1225', 'outsourcing_id' => '204', 'outsourcing_nrp' => 'NA202307200201'],
             ['id' => '1226', 'outsourcing_id' => '204', 'outsourcing_nrp' => 'NA202307200201'],
             ['id' => '1227', 'outsourcing_id' => '204', 'outsourcing_nrp' => 'NA202307200201'],
-            ['id' => '1228', 'outsourcing_id' => '205', 'outsourcing_nrp' => 'eEbDwKv6v3n7OBk614ivEYNx3pbR8z3Aac2xnHG7'],
-            ['id' => '1229', 'outsourcing_id' => '205', 'outsourcing_nrp' => 'eEbDwKv6v3n7OBk614ivEYNx3pbR8z3Aac2xnHG7'],
-            ['id' => '1230', 'outsourcing_id' => '205', 'outsourcing_nrp' => 'eEbDwKv6v3n7OBk614ivEYNx3pbR8z3Aac2xnHG7'],
+            ['id' => '1228', 'outsourcing_id' => '205', 'outsourcing_nrp' => 'NA20250501001'],
+            ['id' => '1229', 'outsourcing_id' => '205', 'outsourcing_nrp' => 'NA20250501001'],
+            ['id' => '1230', 'outsourcing_id' => '205', 'outsourcing_nrp' => 'NA20250501001'],
             ['id' => '1231', 'outsourcing_id' => '206', 'outsourcing_nrp' => 'NA201701199501'],
             ['id' => '1232', 'outsourcing_id' => '206', 'outsourcing_nrp' => 'NA201701199501'],
             ['id' => '1233', 'outsourcing_id' => '206', 'outsourcing_nrp' => 'NA201701199501'],

@@ -22,9 +22,15 @@ Route::middleware(['auth', 'verified', 'role:operator'])->group(function () {
     Route::get('/dashboard', [PenilaianController::class, 'rekaphasil'])->name('dashboard');
     Route::get('/dashboard/ranking-skor', [PenilaianController::class, 'ranking'])->name('os.ranking');
 
+    Route::get('/dashboard/saran-perbaikan-outsourcing', [PenugasanPenilaiController::class, 'saranPerbaikan'])->name('os.saranEvaluator');
+
     Route::get('/dashboard/penugasan-peer', [PenugasanPenilaiController::class, 'index'])->name('penugasan.index');
     Route::post('/dashboard/penugasan-peer/store/{outsourcing:uuid}', [PenugasanPenilaiController::class, 'store'])->name('penugasan.store');
-    Route::get('/dashboard/saran-perbaikan-outsourcing', [PenugasanPenilaiController::class, 'saranPerbaikan'])->name('os.saranEvaluator');
+
+    Route::get('/dashboard/status-penilaian', [PenugasanPenilaiController::class, 'statusPenilaian'])->name('penugasan.statuspenilaian');
+    Route::get('/dashboard/status-penilaian-by-evaluators', [PenugasanPenilaiController::class, 'byEvaluators'])->name('penugasan.evaluators');
+    Route::get('/dashboard/status-penilaian-by-outsourcing', [PenugasanPenilaiController::class, 'byOutsourcings'])->name('penugasan.outsourcings');
+
 
     Route::get('/dashboard/user-management/{user}', [UserController::class, 'index'])->name('user.index');
 
@@ -43,9 +49,6 @@ Route::middleware(['auth', 'verified', 'role:administrator'])->group(function ()
 
     Route::get('/dashboard/penugasan-peer', [PenugasanPenilaiController::class, 'index'])->name('penugasan.index');
     Route::post('/dashboard/penugasan-peer/store/{outsourcing:uuid}', [PenugasanPenilaiController::class, 'store'])->name('penugasan.store');
-    Route::get('/dashboard/status-penilaian', [PenugasanPenilaiController::class, 'statusPenilaian'])->name('penugasan.statuspenilaian');
-    Route::get('/dashboard/status-penilaian-by-evaluators', [PenugasanPenilaiController::class, 'byEvaluators'])->name('penugasan.evaluators');
-    Route::get('/dashboard/status-penilaian-by-outsourcing', [PenugasanPenilaiController::class, 'byOutsourcings'])->name('penugasan.outsourcings');
 
     Route::post('/dashboard/penugasan-peer/reset/{PenugasanPenilai:uuid}', [PenugasanPenilaiController::class, 'reset'])->name('penugasan.reset');
 

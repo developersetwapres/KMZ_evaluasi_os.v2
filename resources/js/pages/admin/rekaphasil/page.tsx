@@ -45,8 +45,6 @@ export default function ResultsRecapPage({
 
     const units = [...new Set(evaluationResults.map((r: any) => r.biro))];
 
-    console.log(filteredResults);
-
     return (
         <AdminLayout>
             <div className="space-y-6">

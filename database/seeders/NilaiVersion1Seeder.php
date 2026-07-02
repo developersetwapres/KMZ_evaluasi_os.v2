@@ -84,7 +84,7 @@ class NilaiVersion1Seeder extends Seeder
             ['id' => '858', 'penilai_id' => '67', 'catatan' => 'Ditingkatkan lagi dalam melaksanakan tugas', 'penilai_nrp' => 'NA200907197901'],
             ['id' => '837', 'penilai_id' => '68', 'catatan' => '', 'penilai_nrp' => 'NA201403199001'],
             ['id' => '834', 'penilai_id' => '69', 'catatan' => '', 'penilai_nrp' => 'NA200512198301'],
-            ['id' => '828', 'penilai_id' => '70', 'catatan' => 'Selalu tetap kompak dalam bekerja\' tanpa kekompakan kerjaan akan jadi hasil yang kurang memuaskan...', 'penilai_nrp' => 'NA201508199001'],
+            ['id' => '828', 'penilai_id' => '70', 'catatan' => 'Selalu tetap kompak dalam bekerja tanpa kekompakan kerjaan akan jadi hasil yang kurang memuaskan...', 'penilai_nrp' => 'NA201508199001'],
             ['id' => '831', 'penilai_id' => '71', 'catatan' => 'Agar lebih giat lagi dalam menjalankan tugas dan tetep semangat dalam bekerja', 'penilai_nrp' => 'NA201411198801'],
             ['id' => '861', 'penilai_id' => '72', 'catatan' => '', 'penilai_nrp' => 'NA201805199901'],
             ['id' => '864', 'penilai_id' => '73', 'catatan' => '', 'penilai_nrp' => 'NA201505197201'],
